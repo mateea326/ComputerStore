@@ -41,4 +41,4 @@ Run tests: mvn test
 - `POST /api/v1/customers/login` - User login
 - `GET /api/v1/products` - Get all products
 - `GET /api/v1/products/filter?type={type}` - Filter products
-- `GET /api/v1/orders/history/{customerId}` - Order hist
+- `GET /api/v1/orders/history/{customerId}` - Order history
