@@ -36,20 +36,22 @@ public class Order {
     @Min(value = 0, message = "Total price has to be positive")
     private double totalPrice;
 
-    // relatie cu OrderItem 1:M
+    // Relație cu OrderItem (ONE Order -> MANY OrderItems)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    // relatie cu Card 1:1
+    // Relație cu Card (ONE Order -> ONE Card)
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Card card;
 
+    // Helper method pentru a adăuga items
     public void addOrderItem(OrderItem item) {
         orderItems.add(item);
         item.setOrder(this);
     }
 
+    // Helper method pentru a obține productQuantities din orderItems
     @Transient
     public Map<Integer, Integer> getProductQuantities() {
         if (orderItems == null || orderItems.isEmpty()) {

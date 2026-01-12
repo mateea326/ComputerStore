@@ -18,19 +18,21 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderItemId;
 
-    // relatie N:1 cu Order
+    // Relație: N:1 cu Order
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     @JsonIgnore
     private Order order;
 
-    // relatie N:1 cu Product
+    // Relație: N:1 cu Product
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    // Cantitatea
     @Min(value = 1, message = "Cantitatea trebuie să fie minim 1.")
     private Integer quantity;
 
+    // Prețul la momentul cumpărării
     private double unitPriceAtPurchase;
 }

@@ -188,12 +188,15 @@
     </style>
 </head>
 <body>
+
 <nav class="navbar">
     <h1>🖥️ Computer Store</h1>
     <div class="navbar-right">
         <span th:text="'Welcome, ' + ${customerName}"></span>
         <a href="/products">Products</a>
-        <a href="/cart">🛒 Cart</a>
+        <a href="/cart">Cart</a>
+        <a href="/order-history">Orders</a>
+        <a href="/account-settings">Edit account</a>
         <a href="/logout">Logout</a>
     </div>
 </nav>

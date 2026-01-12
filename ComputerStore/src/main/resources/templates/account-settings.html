@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - PC Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Georgia", serif;
+            background: #f5f7fa;
+        }
+        .navbar {
+            background: #7bb8b4;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar h1 {
+            font-size: 24px;
+        }
+        .navbar-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .navbar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .settings-card {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #7bb8b4;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #7bb8b4;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #619e9a;
+        }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        .danger-zone {
+            background: #fff5f5;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #fee;
+        }
+        .danger-zone h3 {
+            color: #dc3580;
+            margin-bottom: 15px;
+        }
+        .danger-zone p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .btn-danger {
+            background: #dc3580;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-danger:hover {
+            background: #bc1e65;
+        }
+        .error {
+            background: #fee;
+            color: #dc3580;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3580;
+        }
+        .success {
+            background: #efe;
+            color: #6bc689;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #6bc689;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            color: #dc3580;
+            margin-bottom: 15px;
+        }
+        .modal-body {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .btn-confirm {
+            background: #dc3580;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <h1>🖥️ Computer Store</h1>
+    <div class="navbar-right">
+        <span th:text="'Welcome, ' + ${customerName}"></span>
+        <a href="/products">Products</a>
+        <a href="/cart">Cart</a>
+        <a href="/order-history">Orders</a>
+        <a href="/account-settings">Edit account</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<br>
+
+<div class="container">
+    <!-- Update Account Section -->
+    <div class="settings-card">
+        <h2>⚙️ Account Settings</h2>
+
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+        <div th:if="${success}" class="success" th:text="${success}"></div>
+
+        <form method="post" action="/account-settings/update">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName"
+                       th:value="${customer?.firstName}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName"
+                       th:value="${customer?.lastName}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email"
+                       th:value="${customer?.email}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="text" id="phoneNumber" name="phoneNumber"
+                       th:value="${customer?.phoneNumber}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address"
+                       th:value="${customer?.address}" required>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="/products" class="btn btn-secondary" style="text-align: center; line-height: 1.5; text-decoration: none;">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Danger Zone - Delete Account -->
+    <div class="danger-zone">
+        <h3>⚠️ Delete Account</h3>
+        <p>This will permanently delete all your data.</p>
+        <button class="btn-danger" onclick="showDeleteModal()">Delete Account</button>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">Confirm Account Deletion</div>
+        <div class="modal-body">
+            Are you sure you want to delete your account? This action cannot be undone.
+        </div>
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="hideDeleteModal()">Cancel</button>
+            <form method="post" action="/account-settings/delete" style="display: inline;">
+                <button type="submit" class="btn-confirm">Delete My Account</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'block';
+    }
+
+    function hideDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
