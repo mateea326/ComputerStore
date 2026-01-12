@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - PC Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Georgia", serif;
+            background: #f5f7fa;
+        }
+        .navbar {
+            background: #7bb8b4;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar h1 {
+            font-size: 24px;
+        }
+        .navbar-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .navbar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .checkout-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .checkout-header h2 {
+            color: #333;
+        }
+        .order-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .order-summary h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .item-details {
+            flex: 1;
+        }
+        .item-name {
+            font-weight: 600;
+            color: #333;
+        }
+        .item-quantity {
+            font-size: 14px;
+            color: #666;
+            margin-top: 3px;
+        }
+        .item-price {
+            font-weight: bold;
+            color: #7bb8b4;
+        }
+        .total-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-top: 2px solid #7bb8b4;
+        }
+        .total-label {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+        .total-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #7bb8b4;
+        }
+        .payment-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .payment-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #7bb8b4;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+        }
+        .place-order-btn {
+            width: 100%;
+            padding: 18px;
+            background: #6bc689;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .place-order-btn:hover {
+            background: #64b57d;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 20px;
+            color: #7bb8b4;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            color: #619e9a;
+        }
+        .error {
+            background: #fee;
+            color: #dc3580;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3580;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <h1>🖥️ Computer Store</h1>
+    <div class="navbar-right">
+        <span th:text="'Welcome, ' + ${customerName}"></span>
+        <a href="/products">Products</a>
+        <a href="/cart">🛒 Cart</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="checkout-header">
+        <h2>Checkout</h2>
+    </div>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="order-item" th:each="product : ${cartProducts}">
+            <div class="item-details">
+                <div class="item-name" th:text="${product.name}"></div>
+                <div class="item-quantity" th:text="'Quantity: ' + ${cart.get(product.productId)}"></div>
+            </div>
+            <div class="item-price" th:text="'$' + ${#numbers.formatDecimal(product.price * cart.get(product.productId), 1, 2)}"></div>
+        </div>
+    </div>
+
+    <div class="total-section">
+        <div class="total-row">
+            <span class="total-label">Total Amount:</span>
+            <span class="total-amount" th:text="'$' + ${#numbers.formatDecimal(total, 1, 2)}"></span>
+        </div>
+    </div>
+
+    <div class="payment-section">
+        <h3>💳 Payment Information</h3>
+        <form method="post" action="/checkout">
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" id="cardNumber" name="cardNumber"
+                       placeholder="1234 5678 9012 3456"
+                       minlength="10" maxlength="20" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cardName">Cardholder Name</label>
+                <input type="text" id="cardName" name="cardName"
+                       placeholder="JOHN DOE"
+                       minlength="5" maxlength="100" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="expiryDate">Expiry Date</label>
+                    <input type="text" id="expiryDate" name="expiryDate"
+                           placeholder="MM/YY"
+                           minlength="5" maxlength="20" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv"
+                           placeholder="123"
+                           minlength="3" maxlength="4" required>
+                </div>
+            </div>
+
+            <button type="submit" class="place-order-btn">Place Order</button>
+        </form>
+    </div>
+
+    <a href="/cart" class="back-link">← Back to Cart</a>
+</div>
+</body>
+</html>
