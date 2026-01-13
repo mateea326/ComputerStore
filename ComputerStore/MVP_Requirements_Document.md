@@ -254,7 +254,7 @@
 - Shopping cart maintains state throughout session
 - Orders are created and persisted correctly
 - All API endpoints return appropriate responses
-- All unit tests pass (55+ tests)
+- All unit tests pass (52 tests)
 
 ---
 

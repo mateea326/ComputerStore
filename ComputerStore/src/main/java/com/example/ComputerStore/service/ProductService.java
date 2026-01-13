@@ -53,7 +53,6 @@ public class ProductService {
 
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setPrice(updatedProduct.getPrice());
-        // existingProduct.setType(updatedProduct.getType());
 
         return productRepository.save(existingProduct);
     }
@@ -75,4 +74,5 @@ public class ProductService {
             default -> throw new IllegalArgumentException("Type of product " + type + " is not valid");
         };
     }
+
 }

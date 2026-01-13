@@ -35,7 +35,7 @@ public class SessionCartService {
         if (cart == null) {
             cart = new HashMap<>();
             session.setAttribute(CART_SESSION_KEY, cart);
-        }
+        } // se memoreaza temporar ce vrea userul sa cumpere
         return cart;
     }
 
@@ -67,7 +67,6 @@ public class SessionCartService {
                 cardNumber, cardName, expiryDate, cvv);
 
         clearCart(session);
-
         return savedOrder;
     }
 }
