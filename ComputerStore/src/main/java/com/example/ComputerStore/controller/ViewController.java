@@ -38,19 +38,17 @@ public class ViewController {
         this.orderService = orderService;
     }
 
-    // Homepage - redirect to login
+    // homepage - redirect catre login
     @GetMapping("/")
     public String home() {
         return "redirect:/login";
     }
 
-    // Login page
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
 
-    // Handle login
     @PostMapping("/login")
     public String login(@RequestParam String username,
                         @RequestParam String password,
@@ -67,13 +65,12 @@ public class ViewController {
         }
     }
 
-    // Register page
+    // pagina de inregistrare
     @GetMapping("/register")
     public String registerPage() {
         return "register";
     }
 
-    // Handle registration
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute Customer customer,
                            BindingResult result,
@@ -97,7 +94,6 @@ public class ViewController {
         }
     }
 
-    // Products page
     @GetMapping("/products")
     public String productsPage(@RequestParam(required = false) String type,
                                Model model,
@@ -120,7 +116,7 @@ public class ViewController {
         return "products";
     }
 
-    // Add to cart
+    // add to cart
     @PostMapping("/cart/add/{productId}")
     public String addToCart(@PathVariable Integer productId,
                             @RequestParam(required = false) String returnType,
@@ -140,7 +136,7 @@ public class ViewController {
         return "redirect:/products";
     }
 
-    // View cart
+    // view cart
     @GetMapping("/cart")
     public String cartPage(Model model, HttpSession session) {
         Integer customerId = (Integer) session.getAttribute("customerId");
@@ -164,7 +160,7 @@ public class ViewController {
         return "cart";
     }
 
-    // Remove from cart
+    // remove from cart
     @PostMapping("/cart/remove/{productId}")
     public String removeFromCart(@PathVariable Integer productId,
                                  HttpSession session) {
@@ -172,7 +168,6 @@ public class ViewController {
         return "redirect:/cart";
     }
 
-    // Checkout page
     @GetMapping("/checkout")
     public String checkoutPage(Model model, HttpSession session) {
         Integer customerId = (Integer) session.getAttribute("customerId");
@@ -200,7 +195,6 @@ public class ViewController {
         return "checkout";
     }
 
-    // Process checkout
     @PostMapping("/checkout")
     public String processCheckout(@RequestParam String cardNumber,
                                   @RequestParam String cardName,
@@ -223,7 +217,7 @@ public class ViewController {
         }
     }
 
-    // Order History page
+    // istoria comenzilor
     @GetMapping("/order-history")
     public String orderHistory(Model model, HttpSession session) {
         Integer customerId = (Integer) session.getAttribute("customerId");
@@ -267,9 +261,6 @@ public class ViewController {
         return "order-history";
     }
 
-    // ========== ACCOUNT SETTINGS ENDPOINTS ==========
-
-    // Account settings page
     @GetMapping("/account-settings")
     public String accountSettingsPage(Model model, HttpSession session) {
         Integer customerId = (Integer) session.getAttribute("customerId");
@@ -288,7 +279,7 @@ public class ViewController {
         return "account-settings";
     }
 
-    // Handle account update
+    // editarea contului
     @PostMapping("/account-settings/update")
     public String updateAccount(@RequestParam String firstName,
                                 @RequestParam String lastName,
@@ -312,7 +303,7 @@ public class ViewController {
 
             customerService.updateCustomer(customerId, updatedDetails);
 
-            // Update session with new name
+            // updatam sesiunea cu noul nume
             session.setAttribute("customerName", firstName);
 
             redirectAttributes.addFlashAttribute("success", "Account updated successfully!");
@@ -323,7 +314,7 @@ public class ViewController {
         return "redirect:/account-settings";
     }
 
-    // Handle account deletion
+    // stergerea contului
     @PostMapping("/account-settings/delete")
     public String deleteAccount(HttpSession session, RedirectAttributes redirectAttributes) {
         Integer customerId = (Integer) session.getAttribute("customerId");
@@ -342,7 +333,6 @@ public class ViewController {
         }
     }
 
-    // Logout
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

@@ -3,7 +3,6 @@ package com.example.ComputerStore.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,15 +19,15 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
 
+    // mai multe comenzi pot apartine unui client
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnore
-    private Customer customer;
+    private Customer customer; // foreign key
 
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate = LocalDateTime.now();
@@ -36,23 +35,23 @@ public class Order {
     @Min(value = 0, message = "Total price has to be positive")
     private double totalPrice;
 
-    // Relație cu OrderItem (ONE Order -> MANY OrderItems)
+    // o comanda are mai multe produse (1:M)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    // Relație cu Card (ONE Order -> ONE Card)
+    // relatie 1:1 cu card
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Card card;
 
-    // Helper method pentru a adăuga items
+    // metoda pentru a adauga produse
     public void addOrderItem(OrderItem item) {
         orderItems.add(item);
         item.setOrder(this);
     }
 
-    // Helper method pentru a obține productQuantities din orderItems
-    @Transient
+    // metoda pentru a obtine productQuantities din orderItems
+    @Transient // nu se salveaza in bd
     public Map<Integer, Integer> getProductQuantities() {
         if (orderItems == null || orderItems.isEmpty()) {
             return Map.of();
@@ -60,7 +59,7 @@ public class Order {
         return orderItems.stream()
                 .collect(Collectors.toMap(
                         item -> item.getProduct().getProductId(),
-                        OrderItem::getQuantity
+                        OrderItem::getQuantity // map product id - quantity
                 ));
     }
 }

@@ -91,6 +91,17 @@
             font-weight: 600;
             color: #7bb8b4;
         }
+        .shop-link {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 20px;
+            color: #7bb8b4;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .shop-link:hover {
+            color: #619e9a;
+        }
     </style>
 </head>
 <body>
@@ -115,8 +126,8 @@
     <!-- Empty State -->
     <div th:if="${orders == null or orders.isEmpty()}" class="empty-history">
         <h3>No orders yet</h3>
-        <p>Start shopping to see your order history here!</p>
-        <a href="/products">Shop Now</a>
+        <br>
+        <a href="/products" class="shop-link">Shop Now</a>
     </div>
 
     <!-- Orders List -->
@@ -125,7 +136,7 @@
             <div class="order-header">
                 <div>
                     <div class="order-id">
-                        Comanda #<span th:text="${iterStat.count}"></span>
+                        Order #<span th:text="${iterStat.count}"></span>
                     </div>
                     <div class="order-date"
                          th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy, HH:mm')}">

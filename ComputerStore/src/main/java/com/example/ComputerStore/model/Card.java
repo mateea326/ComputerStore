@@ -37,5 +37,5 @@ public class Card {
     @OneToOne
     @JoinColumn(name = "order_id")
     @JsonIgnore
-    private Order order;
+    private Order order; // foreign key -> un card e asociat unei comenzi
 }

@@ -197,26 +197,30 @@ class CardServiceTest {
 
     @Test
     void processPayment_ValidMinimumLength_Success() {
-
+        // Arrange
         when(cardRepository.save(any(Card.class))).thenReturn(testCard);
 
+        // Act
         Card result = cardService.processPayment(
                 testOrder, "1234567890", "John", "12/25", "123"
         );
 
+        // Assert
         assertNotNull(result);
         verify(cardRepository, times(1)).save(any(Card.class));
     }
 
     @Test
     void processPayment_ValidMaximumLength_Success() {
-
+        // Arrange
         when(cardRepository.save(any(Card.class))).thenReturn(testCard);
 
+        // Act
         Card result = cardService.processPayment(
                 testOrder, "12345678901234567890", "John Doe", "12/2025 Extra Info", "1234"
         );
 
+        // Assert
         assertNotNull(result);
         verify(cardRepository, times(1)).save(any(Card.class));
     }
