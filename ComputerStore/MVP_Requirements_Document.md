@@ -15,7 +15,7 @@
 
 ### Database Schema (9 Entities)
 
-![Database ERD](./er-diagram.jpeg)
+![Database ERD](./er_diagram.jpeg)
 
 **Entities:**
 1. **customers** - User accounts (customer_id, first_name, last_name, phone_number, address, email, username, password)
