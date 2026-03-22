@@ -11,6 +11,36 @@
 
 ---
 
+## Technical Architecture
+
+### Database Schema (9 Entities)
+
+![Database ERD](./er-diagram.jpeg)
+
+**Entities:**
+1. **customers** - User accounts (customer_id, first_name, last_name, phone_number, address, email, username, password)
+2. **products** - Base product information (product_id, name, price)
+3. **processors** - CPU-specific specs (product_id FK, core_count, core_clock, socket)
+4. **graphicscards** - GPU-specific specs (product_id FK, memory_size, core_clock, memory_clock)
+5. **motherboards** - Motherboard-specific specs (product_id FK, slots, cpu_socket, chipset)
+6. **cases** - Case-specific specs (product_id FK, vents, type, format)
+7. **orders** - Purchase orders (order_id, customer_id FK, order_date, total_price)
+8. **order_items** - Order line items (order_item_id, order_id FK, product_id FK, quantity, unit_price_at_purchase)
+9. **cards** - Payment card information (card_id, order_id FK, card_number, card_name, expiry_date, CVV)
+
+### Key Relationships
+1. **Customer → Orders** (One-to-Many) - One customer can have multiple orders
+2. **Order → OrderItems** (One-to-Many) - One order contains multiple items
+3. **OrderItem → Product** (Many-to-One) - Multiple order items can reference the same product
+4. **Order → Card** (One-to-One) - Each order has one payment card
+5. **Product → Subclasses** (Inheritance: JOINED strategy) - Product types inherit from base Product entity
+
+**Cascade Deletion:**
+- Deleting a Customer cascades to Orders → OrderItems and Cards
+- Ensures data integrity and orphan prevention
+
+---
+
 ## Business Requirements
 
 ### 1. User Account Management
@@ -223,28 +253,6 @@
 **User Story:** As a customer, I want to view my past orders so that I can track my purchases and reference my order details.
 
 **Priority:** High (P1) - Important for customer satisfaction
-
----
-
-## Technical Architecture
-
-### Database Schema (6+ Entities)
-1. **customers** - User accounts
-2. **products** - Base product information
-3. **processors** - CPU-specific specs (inherits from products)
-4. **graphicscards** - GPU-specific specs (inherits from products)
-5. **motherboards** - Motherboard-specific specs (inherits from products)
-6. **cases** - Case-specific specs (inherits from products)
-7. **orders** - Purchase orders
-8. **order_items** - Order line items (junction table)
-9. **cards** - Payment card information
-
-### Key Relationships (4+)
-1. Customer → Orders (One-to-Many)
-2. Order → OrderItems (One-to-Many)
-3. OrderItem → Product (Many-to-One)
-4. Order → Card (One-to-One)
-5. Product → Subclasses (Inheritance: JOINED strategy)
 
 ---
 
