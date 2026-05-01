@@ -29,7 +29,7 @@
 9. **cards** - Payment card information (card_id, order_id FK, card_number, card_name, expiry_date, CVV)
 
 ### Key Relationships
-1. **Customer → Orders** (One-to-Many) - One customer can have multiple orders
+1. **Customer → Orders** (One-to-Many) - One user can have multiple orders
 2. **Order → OrderItems** (One-to-Many) - One order contains multiple items
 3. **OrderItem → Product** (Many-to-One) - Multiple order items can reference the same product
 4. **Order → Card** (One-to-One) - Each order has one payment card
@@ -189,7 +189,7 @@
 - Database: `customers` table with validated fields
 - Frontend: Login and registration pages with Thymeleaf
 
-**User Story:** As a customer, I want to create an account and login so that I can make purchases and track my orders.
+**User Story:** As a user, I want to create an account and login so that I can make purchases and track my orders.
 
 **Priority:** Critical (P0) - Required for all other features
 
@@ -204,7 +204,7 @@
 - Database: `products` parent table with child tables (processors, graphicscards, motherboards, cases)
 - Frontend: Product grid with filter buttons and detailed specifications
 
-**User Story:** As a customer, I want to browse computer components by category so that I can find the parts I need for my build.
+**User Story:** As a user, I want to browse computer components by category so that I can find the parts I need for my build.
 
 **Priority:** Critical (P0) - Core shopping functionality
 
@@ -219,7 +219,7 @@
 - Frontend: Cart page showing items, quantities, and total price
 - Session persistence: Cart maintained during user session
 
-**User Story:** As a customer, I want to add multiple items to my cart and review them before checkout so that I can ensure I'm buying everything I need.
+**User Story:** As a user, I want to add multiple items to my cart and review them before checkout so that I can ensure I'm buying everything I need.
 
 **Priority:** Critical (P0) - Required for purchasing
 
@@ -235,7 +235,7 @@
 - Frontend: Checkout page with card input form and order summary
 - Validation: Card number (10-20 chars), CVV (3-4 digits), expiry date format
 
-**User Story:** As a customer, I want to securely enter my payment information and complete my purchase so that I can receive my computer components.
+**User Story:** As a user, I want to securely enter my payment information and complete my purchase so that I can receive my computer components.
 
 **Priority:** Critical (P0) - Revenue generation
 
@@ -246,13 +246,13 @@
 
 **Technical Implementation:**
 - REST endpoint: GET `/api/v1/orders/history/{customerId}`
-- Service: `OrderService` retrieves orders by customer
+- Service: `OrderService` retrieves orders by user
 - Database: Queries `orders` joined with `order_items` and `customers`
 - Frontend: Order history page
 
-**User Story:** As a customer, I want to view my past orders so that I can track my purchases and reference my order details.
+**User Story:** As a user, I want to view my past orders so that I can track my purchases and reference my order details.
 
-**Priority:** High (P1) - Important for customer satisfaction
+**Priority:** High (P1) - Important for user satisfaction
 
 ---
 

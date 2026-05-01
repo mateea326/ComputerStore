@@ -26,8 +26,8 @@ public class OrderController {
     }
 
     @Operation(
-            summary = "Get customer order history",
-            description = "Retrieve all orders placed by a specific customer, including order details and purchased items"
+            summary = "Get user order history",
+            description = "Retrieve all orders placed by a specific user, including order details and purchased items"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -37,14 +37,14 @@ public class OrderController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Customer not found"
+                    description = "User not found"
             )
     })
-    @GetMapping("/history/{customerId}")
+    @GetMapping("/history/{userId}")
     public ResponseEntity<List<Order>> getOrderHistory(
-            @Parameter(description = "ID of the customer", required = true, example = "1")
-            @PathVariable Integer customerId) {
-        List<Order> orders = orderService.getOrderHistory(customerId);
+            @Parameter(description = "ID of the user", required = true, example = "1")
+            @PathVariable Integer userId) {
+        List<Order> orders = orderService.getOrderHistory(userId);
         return ResponseEntity.ok(orders);
     }
 

@@ -1,7 +1,7 @@
 package com.example.ComputerStore.service;
 
-import com.example.ComputerStore.model.Customer;
-import com.example.ComputerStore.repo.CustomerRepository;
+import com.example.ComputerStore.model.User;
+import com.example.ComputerStore.repo.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,90 +16,90 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CustomerServiceTest {
+class UserServiceTest {
 
     @Mock
-    private CustomerRepository customerRepository;
+    private UserRepository customerRepository;
 
     @InjectMocks
-    private CustomerService customerService;
+    private UserService userService;
 
-    private Customer testCustomer;
+    private User testUser;
 
     @BeforeEach
     void setUp() {
-        testCustomer = new Customer();
-        testCustomer.setCustomerId(1);
-        testCustomer.setFirstName("John");
-        testCustomer.setLastName("Doe");
-        testCustomer.setEmail("john@example.com");
-        testCustomer.setUsername("johndoe");
-        testCustomer.setPassword("password123");
-        testCustomer.setPhoneNumber("1234567890");
-        testCustomer.setAddress("123 Main St");
+        testUser = new User();
+        testUser.setCustomerId(1);
+        testUser.setFirstName("John");
+        testUser.setLastName("Doe");
+        testUser.setEmail("john@example.com");
+        testUser.setUsername("johndoe");
+        testUser.setPassword("password123");
+        testUser.setPhoneNumber("1234567890");
+        testUser.setAddress("123 Main St");
     }
 
     @Test
     void registerNewCustomer_Success() {
         // Arrange
-        when(customerRepository.findByUsername(testCustomer.getUsername())).thenReturn(Optional.empty());
-        when(customerRepository.findByEmail(testCustomer.getEmail())).thenReturn(Optional.empty());
-        when(customerRepository.save(any(Customer.class))).thenReturn(testCustomer);
+        when(customerRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.empty());
+        when(customerRepository.findByEmail(testUser.getEmail())).thenReturn(Optional.empty());
+        when(customerRepository.save(any(User.class))).thenReturn(testUser);
 
         // Act
-        Customer result = customerService.registerNewCustomer(testCustomer);
+        User result = userService.registerNewCustomer(testUser);
 
         // Assert
         assertNotNull(result);
-        assertEquals(testCustomer.getUsername(), result.getUsername());
-        verify(customerRepository, times(1)).save(any(Customer.class));
+        assertEquals(testUser.getUsername(), result.getUsername());
+        verify(customerRepository, times(1)).save(any(User.class));
     }
 
     @Test
     void registerNewCustomer_UsernameAlreadyExists_ThrowsException() {
         // Arrange
-        when(customerRepository.findByUsername(testCustomer.getUsername()))
-                .thenReturn(Optional.of(testCustomer));
+        when(customerRepository.findByUsername(testUser.getUsername()))
+                .thenReturn(Optional.of(testUser));
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> customerService.registerNewCustomer(testCustomer)
+                () -> userService.registerNewCustomer(testUser)
         );
         assertEquals("Username already taken", exception.getMessage());
-        verify(customerRepository, never()).save(any(Customer.class));
+        verify(customerRepository, never()).save(any(User.class));
     }
 
     @Test
     void registerNewCustomer_EmailAlreadyExists_ThrowsException() {
         // Arrange
-        when(customerRepository.findByUsername(testCustomer.getUsername())).thenReturn(Optional.empty());
-        when(customerRepository.findByEmail(testCustomer.getEmail()))
-                .thenReturn(Optional.of(testCustomer));
+        when(customerRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.empty());
+        when(customerRepository.findByEmail(testUser.getEmail()))
+                .thenReturn(Optional.of(testUser));
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> customerService.registerNewCustomer(testCustomer)
+                () -> userService.registerNewCustomer(testUser)
         );
         assertEquals("Email already taken", exception.getMessage());
-        verify(customerRepository, never()).save(any(Customer.class));
+        verify(customerRepository, never()).save(any(User.class));
     }
 
     @Test
     void login_Success() {
         // Arrange
-        String hashedPassword = customerService.hashMe("password123");
-        testCustomer.setPassword(hashedPassword);
-        when(customerRepository.findByUsername(testCustomer.getUsername()))
-                .thenReturn(Optional.of(testCustomer));
+        String hashedPassword = userService.hashMe("password123");
+        testUser.setPassword(hashedPassword);
+        when(customerRepository.findByUsername(testUser.getUsername()))
+                .thenReturn(Optional.of(testUser));
 
         // Act
-        Customer result = customerService.login("johndoe", "password123");
+        User result = userService.login("johndoe", "password123");
 
         // Assert
         assertNotNull(result);
-        assertEquals(testCustomer.getUsername(), result.getUsername());
+        assertEquals(testUser.getUsername(), result.getUsername());
     }
 
     @Test
@@ -110,7 +110,7 @@ class CustomerServiceTest {
         // Act & Assert
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> customerService.login("nonexistent", "password")
+                () -> userService.login("nonexistent", "password")
         );
         assertEquals("User not found. Please create an account", exception.getMessage());
     }
@@ -118,15 +118,15 @@ class CustomerServiceTest {
     @Test
     void login_IncorrectPassword_ThrowsException() {
         // Arrange
-        String hashedPassword = customerService.hashMe("password123");
-        testCustomer.setPassword(hashedPassword);
-        when(customerRepository.findByUsername(testCustomer.getUsername()))
-                .thenReturn(Optional.of(testCustomer));
+        String hashedPassword = userService.hashMe("password123");
+        testUser.setPassword(hashedPassword);
+        when(customerRepository.findByUsername(testUser.getUsername()))
+                .thenReturn(Optional.of(testUser));
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> customerService.login("johndoe", "wrongpassword")
+                () -> userService.login("johndoe", "wrongpassword")
         );
         assertEquals("Incorrect password", exception.getMessage());
     }
@@ -134,14 +134,14 @@ class CustomerServiceTest {
     @Test
     void findCustomerById_Success() {
         // Arrange
-        when(customerRepository.findById(1)).thenReturn(Optional.of(testCustomer));
+        when(customerRepository.findById(1)).thenReturn(Optional.of(testUser));
 
         // Act
-        Customer result = customerService.findCustomerById(1);
+        User result = userService.findCustomerById(1);
 
         // Assert
         assertNotNull(result);
-        assertEquals(testCustomer.getCustomerId(), result.getCustomerId());
+        assertEquals(testUser.getCustomerId(), result.getCustomerId());
     }
 
     @Test
@@ -152,7 +152,7 @@ class CustomerServiceTest {
         // Act & Assert
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> customerService.findCustomerById(999)
+                () -> userService.findCustomerById(999)
         );
         assertTrue(exception.getMessage().contains("was not found"));
     }
@@ -160,23 +160,23 @@ class CustomerServiceTest {
     @Test
     void updateCustomer_Success() {
         // Arrange
-        Customer updatedDetails = new Customer();
+        User updatedDetails = new User();
         updatedDetails.setFirstName("Jane");
         updatedDetails.setLastName("Smith");
         updatedDetails.setEmail("jane@example.com");
         updatedDetails.setPhoneNumber("0987654321");
         updatedDetails.setAddress("456 Oak Ave");
 
-        when(customerRepository.findById(1)).thenReturn(Optional.of(testCustomer));
-        when(customerRepository.save(any(Customer.class))).thenReturn(testCustomer);
+        when(customerRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(customerRepository.save(any(User.class))).thenReturn(testUser);
 
         // Act
-        Customer result = customerService.updateCustomer(1, updatedDetails);
+        User result = userService.updateCustomer(1, updatedDetails);
 
         // Assert
         assertNotNull(result);
         assertEquals("Jane", result.getFirstName());
-        verify(customerRepository, times(1)).save(any(Customer.class));
+        verify(customerRepository, times(1)).save(any(User.class));
     }
 
     @Test
@@ -185,7 +185,7 @@ class CustomerServiceTest {
         doNothing().when(customerRepository).deleteById(1);
 
         // Act
-        customerService.deleteCustomer(1);
+        userService.deleteCustomer(1);
 
         // Assert
         verify(customerRepository, times(1)).deleteById(1);

@@ -1,30 +1,24 @@
 package com.example.ComputerStore.service;
 
-import com.example.ComputerStore.model.Customer;
 import com.example.ComputerStore.model.Order;
-import com.example.ComputerStore.model.Product;
-import com.example.ComputerStore.repo.OrderRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class SessionCartService {
+public class CartService {
 
     private static final String CART_SESSION_KEY = "USER_CART";
 
     private final OrderService orderService;
     private final ProductService productService;
 
-    public SessionCartService(OrderService orderService,
-                              ProductService productService) {
+    public CartService(OrderService orderService,
+                       ProductService productService) {
         this.orderService = orderService;
         this.productService = productService;
     }
@@ -55,7 +49,7 @@ public class SessionCartService {
         cart.clear();
     }
 
-    public Order checkout(HttpSession session, Integer customerId,
+    public Order checkout(HttpSession session, Integer userId,
                           String cardNumber, String cardName, String expiryDate, String cvv) {
         Map<Integer, Integer> cart = getCart(session);
 
@@ -63,7 +57,7 @@ public class SessionCartService {
             throw new IllegalStateException("Cart is empty");
         }
 
-        Order savedOrder = orderService.createOrderWithCard(customerId, cart,
+        Order savedOrder = orderService.createOrderWithCard(userId, cart,
                 cardNumber, cardName, expiryDate, cvv);
 
         clearCart(session);

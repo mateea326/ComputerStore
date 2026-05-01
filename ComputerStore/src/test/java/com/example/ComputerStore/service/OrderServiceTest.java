@@ -24,14 +24,14 @@ class OrderServiceTest {
     @Mock
     private CardService cardService;
     @Mock
-    private CustomerService customerService;
+    private UserService userService;
     @Mock
     private ProductService productService;
 
     @InjectMocks
     private OrderService orderService;
 
-    private Customer testCustomer;
+    private User testUser;
     private Product testProduct1;
     private Product testProduct2;
     private Order testOrder;
@@ -39,10 +39,10 @@ class OrderServiceTest {
 
     @BeforeEach
     void setUp() {
-        testCustomer = new Customer();
-        testCustomer.setCustomerId(1);
-        testCustomer.setUsername("testuser");
-        testCustomer.setEmail("test@example.com");
+        testUser = new User();
+        testUser.setCustomerId(1);
+        testUser.setUsername("testuser");
+        testUser.setEmail("test@example.com");
 
         testProduct1 = new Product();
         testProduct1.setProductId(1);
@@ -60,7 +60,7 @@ class OrderServiceTest {
 
         testOrder = new Order();
         testOrder.setOrderId(1);
-        testOrder.setCustomer(testCustomer);
+        testOrder.setUser(testUser);
         testOrder.setOrderDate(LocalDateTime.now());
         testOrder.setTotalPrice(700.0);
     }
@@ -68,7 +68,7 @@ class OrderServiceTest {
     @Test
     void createOrder_Success() {
         // Arrange
-        when(customerService.findCustomerById(1)).thenReturn(testCustomer);
+        when(userService.findCustomerById(1)).thenReturn(testUser);
         when(productService.getProductDetails(1)).thenReturn(testProduct1);
         when(productService.getProductDetails(2)).thenReturn(testProduct2);
         when(orderRepository.save(any(Order.class))).thenReturn(testOrder);
@@ -78,9 +78,9 @@ class OrderServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(testCustomer, result.getCustomer());
+        assertEquals(testUser, result.getUser());
         verify(orderRepository, times(1)).save(any(Order.class));
-        verify(customerService, times(1)).findCustomerById(1);
+        verify(userService, times(1)).findCustomerById(1);
         verify(productService, times(1)).getProductDetails(1);
         verify(productService, times(1)).getProductDetails(2);
     }
@@ -113,7 +113,7 @@ class OrderServiceTest {
     @Test
     void createOrderWithCard_Success() {
         // Arrange
-        when(customerService.findCustomerById(1)).thenReturn(testCustomer);
+        when(userService.findCustomerById(1)).thenReturn(testUser);
         when(productService.getProductDetails(1)).thenReturn(testProduct1);
         when(productService.getProductDetails(2)).thenReturn(testProduct2);
         when(orderRepository.save(any(Order.class))).thenReturn(testOrder);
@@ -130,7 +130,7 @@ class OrderServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(testCustomer, result.getCustomer());
+        assertEquals(testUser, result.getUser());
         verify(orderRepository, times(1)).save(any(Order.class));
         verify(cardService, times(1)).processPayment(
                 any(Order.class), eq("1234567890123456"), eq("John Doe"), eq("12/25"), eq("123")
@@ -155,8 +155,8 @@ class OrderServiceTest {
     void getOrderHistory_Success() {
         // Arrange
         List<Order> orders = Arrays.asList(testOrder);
-        when(customerService.findCustomerById(1)).thenReturn(testCustomer);
-        when(orderRepository.findByCustomer(testCustomer)).thenReturn(orders);
+        when(userService.findCustomerById(1)).thenReturn(testUser);
+        when(orderRepository.findByCustomer(testUser)).thenReturn(orders);
 
         // Act
         List<Order> result = orderService.getOrderHistory(1);
@@ -165,7 +165,7 @@ class OrderServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(testOrder, result.get(0));
-        verify(orderRepository, times(1)).findByCustomer(testCustomer);
+        verify(orderRepository, times(1)).findByCustomer(testUser);
     }
 
     @Test
@@ -213,7 +213,7 @@ class OrderServiceTest {
     @Test
     void createOrder_CalculatesTotalPriceCorrectly() {
         // Arrange
-        when(customerService.findCustomerById(1)).thenReturn(testCustomer);
+        when(userService.findCustomerById(1)).thenReturn(testUser);
         when(productService.getProductDetails(1)).thenReturn(testProduct1);
         when(productService.getProductDetails(2)).thenReturn(testProduct2);
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
