@@ -1,13 +1,14 @@
 package com.example.ComputerStore.repo;
 
 import com.example.ComputerStore.model.User;
-import com.example.ComputerStore.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Integer> {
-    List<Order> findByUser(User user);
+public interface UserRepository extends JpaRepository<User, Integer> {
+
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findByEmail(String email);
 }

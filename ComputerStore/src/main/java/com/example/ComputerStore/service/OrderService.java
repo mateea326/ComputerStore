@@ -14,34 +14,34 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CardService cardService;
-    private final CustomerService customerService;
+    private final UserService userService;
     private final ProductService productService;
 
     public OrderService(OrderRepository orderRepository,
                         CardService cardService,
-                        CustomerService customerService,
+                        UserService userService,
                         ProductService productService) {
         this.orderRepository = orderRepository;
         this.cardService = cardService;
-        this.customerService = customerService;
+        this.userService = userService;
         this.productService = productService;
     }
 
-    public List<Order> getOrderHistory(Integer customerId) {
-        Customer customer = customerService.findCustomerById(customerId);
-        return orderRepository.findByCustomer(customer);
+    public List<Order> getOrderHistory(Integer userId) {
+        User user = userService.findUserById(userId);
+        return orderRepository.findByUser(user);
     }
 
-    public Order createOrder(Integer customerId, Map<Integer, Integer> cart) {
+    public Order createOrder(Integer userId, Map<Integer, Integer> cart) {
         if (cart == null || cart.isEmpty()) {
             throw new IllegalStateException("Cart is empty");
         }
 
-        Customer customer = customerService.findCustomerById(customerId);
+        User user = userService.findUserById(userId);
 
         // creare comanda
         Order order = new Order();
-        order.setCustomer(customer);
+        order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
 
         double totalPrice = 0.0;
@@ -67,18 +67,18 @@ public class OrderService {
     }
 
     // creare comanda cu card (folosit de SessionCartService la checkout)
-    public Order createOrderWithCard(Integer customerId, Map<Integer, Integer> cart,
+    public Order createOrderWithCard(Integer userId, Map<Integer, Integer> cart,
                                      String cardNumber, String cardName,
                                      String expiryDate, String cvv) {
         if (cart == null || cart.isEmpty()) {
             throw new IllegalStateException("Cart is empty");
         }
 
-        Customer customer = customerService.findCustomerById(customerId);
+        User user = userService.findUserById(userId);
 
         // creare comanda
         Order order = new Order();
-        order.setCustomer(customer);
+        order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
 
         double totalPrice = 0.0;

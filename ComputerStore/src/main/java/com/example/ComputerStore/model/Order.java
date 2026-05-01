@@ -25,9 +25,9 @@ public class Order {
 
     // mai multe comenzi pot apartine unui client
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
-    private Customer customer; // foreign key
+    private User user; // foreign key
 
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate = LocalDateTime.now();

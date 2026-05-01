@@ -34,7 +34,7 @@ class SessionCartServiceTest {
     private HttpSession mockSession;
 
     @InjectMocks
-    private SessionCartService sessionCartService;
+    private CartService sessionCartService;
 
     private Map<Integer, Integer> testCart;
 

@@ -6,21 +6,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "customers")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class User {
     @Id // cheie primara
     @GeneratedValue(strategy = GenerationType.IDENTITY) // valoarea e generata de bd
-    private int customerId;
+    private int userId;
 
     @NotBlank(message = "Input first name")
     @Size(max = 50)
@@ -52,7 +51,7 @@ public class Customer {
     private String password;
 
     // un client poate face mai multe comenzi
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Order> orders;
 }

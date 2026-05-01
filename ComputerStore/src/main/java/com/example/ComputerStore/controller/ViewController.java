@@ -1,11 +1,11 @@
 package com.example.ComputerStore.controller;
 
-import com.example.ComputerStore.model.Customer;
+import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.model.Product;
 import com.example.ComputerStore.model.Order;
-import com.example.ComputerStore.service.CustomerService;
+import com.example.ComputerStore.service.UserService;
 import com.example.ComputerStore.service.ProductService;
-import com.example.ComputerStore.service.SessionCartService;
+import com.example.ComputerStore.service.CartService;
 import com.example.ComputerStore.service.OrderService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,16 +23,16 @@ import java.util.ArrayList;
 @Controller
 public class ViewController {
 
-    private final CustomerService customerService;
+    private final UserService userService;
     private final ProductService productService;
-    private final SessionCartService cartService;
+    private final CartService cartService;
     private final OrderService orderService;
 
-    public ViewController(CustomerService customerService,
+    public ViewController(UserService userService,
                           ProductService productService,
-                          SessionCartService cartService,
+                          CartService cartService,
                           OrderService orderService) {
-        this.customerService = customerService;
+        this.userService = userService;
         this.productService = productService;
         this.cartService = cartService;
         this.orderService = orderService;
@@ -55,9 +55,9 @@ public class ViewController {
                         HttpSession session,
                         RedirectAttributes redirectAttributes) {
         try {
-            Customer customer = customerService.login(username, password);
-            session.setAttribute("customerId", customer.getCustomerId());
-            session.setAttribute("customerName", customer.getFirstName());
+            User user = userService.login(username, password);
+            session.setAttribute("userId", user.getUserId());
+            session.setAttribute("userName", user.getFirstName());
             return "redirect:/products";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -72,7 +72,7 @@ public class ViewController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute Customer customer,
+    public String register(@Valid @ModelAttribute User user,
                            BindingResult result,
                            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -85,7 +85,7 @@ public class ViewController {
         }
 
         try {
-            customerService.registerNewCustomer(customer);
+            userService.registerNewUser(user);
             redirectAttributes.addFlashAttribute("success", "Account created! Please login.");
             return "redirect:/login";
         } catch (Exception e) {
@@ -98,8 +98,8 @@ public class ViewController {
     public String productsPage(@RequestParam(required = false) String type,
                                Model model,
                                HttpSession session) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
@@ -111,7 +111,7 @@ public class ViewController {
         }
 
         model.addAttribute("products", products);
-        model.addAttribute("customerName", session.getAttribute("customerName"));
+        model.addAttribute("userName", session.getAttribute("userName"));
         model.addAttribute("selectedType", type);
         return "products";
     }
@@ -122,8 +122,8 @@ public class ViewController {
                             @RequestParam(required = false) String returnType,
                             HttpSession session,
                             RedirectAttributes redirectAttributes) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
@@ -139,8 +139,8 @@ public class ViewController {
     // view cart
     @GetMapping("/cart")
     public String cartPage(Model model, HttpSession session) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
@@ -156,7 +156,7 @@ public class ViewController {
         model.addAttribute("cartProducts", cartProducts);
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
-        model.addAttribute("customerName", session.getAttribute("customerName"));
+        model.addAttribute("userName", session.getAttribute("userName"));
         return "cart";
     }
 
@@ -170,8 +170,8 @@ public class ViewController {
 
     @GetMapping("/checkout")
     public String checkoutPage(Model model, HttpSession session) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
@@ -191,7 +191,7 @@ public class ViewController {
         model.addAttribute("cartProducts", cartProducts);
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
-        model.addAttribute("customerName", session.getAttribute("customerName"));
+        model.addAttribute("userName", session.getAttribute("userName"));
         return "checkout";
     }
 
@@ -202,13 +202,13 @@ public class ViewController {
                                   @RequestParam String cvv,
                                   HttpSession session,
                                   RedirectAttributes redirectAttributes) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
         try {
-            cartService.checkout(session, customerId, cardNumber, cardName, expiryDate, cvv);
+            cartService.checkout(session, userId, cardNumber, cardName, expiryDate, cvv);
             redirectAttributes.addFlashAttribute("success", "Order placed successfully!");
             return "redirect:/products";
         } catch (Exception e) {
@@ -220,13 +220,13 @@ public class ViewController {
     // istoria comenzilor
     @GetMapping("/order-history")
     public String orderHistory(Model model, HttpSession session) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
         try {
-            List<Order> orders = orderService.getOrderHistory(customerId);
+            List<Order> orders = orderService.getOrderHistory(userId);
 
             Map<Integer, String> productNames = new HashMap<>();
             Map<Integer, Float> productPrices = new HashMap<>();
@@ -250,12 +250,12 @@ public class ViewController {
             model.addAttribute("orders", orders);
             model.addAttribute("productNames", productNames);
             model.addAttribute("productPrices", productPrices);
-            model.addAttribute("customerName", session.getAttribute("customerName"));
+            model.addAttribute("userName", session.getAttribute("userName"));
         } catch (Exception e) {
             model.addAttribute("orders", new ArrayList<>());
             model.addAttribute("productNames", new HashMap<>());
             model.addAttribute("productPrices", new HashMap<>());
-            model.addAttribute("customerName", session.getAttribute("customerName"));
+            model.addAttribute("userName", session.getAttribute("userName"));
         }
 
         return "order-history";
@@ -263,15 +263,15 @@ public class ViewController {
 
     @GetMapping("/account-settings")
     public String accountSettingsPage(Model model, HttpSession session) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
         try {
-            Customer customer = customerService.findCustomerById(customerId);
-            model.addAttribute("customer", customer);
-            model.addAttribute("customerName", session.getAttribute("customerName"));
+            User user = userService.findUserById(userId);
+            model.addAttribute("user", user);
+            model.addAttribute("userName", session.getAttribute("userName"));
         } catch (Exception e) {
             model.addAttribute("error", "Could not load account details");
         }
@@ -288,23 +288,23 @@ public class ViewController {
                                 @RequestParam String address,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
         try {
-            Customer updatedDetails = new Customer();
+            User updatedDetails = new User();
             updatedDetails.setFirstName(firstName);
             updatedDetails.setLastName(lastName);
             updatedDetails.setEmail(email);
             updatedDetails.setPhoneNumber(phoneNumber);
             updatedDetails.setAddress(address);
 
-            customerService.updateCustomer(customerId, updatedDetails);
+            userService.updateUser(userId, updatedDetails);
 
             // updatam sesiunea cu noul nume
-            session.setAttribute("customerName", firstName);
+            session.setAttribute("userName", firstName);
 
             redirectAttributes.addFlashAttribute("success", "Account updated successfully!");
         } catch (Exception e) {
@@ -317,13 +317,13 @@ public class ViewController {
     // stergerea contului
     @PostMapping("/account-settings/delete")
     public String deleteAccount(HttpSession session, RedirectAttributes redirectAttributes) {
-        Integer customerId = (Integer) session.getAttribute("customerId");
-        if (customerId == null) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
         try {
-            customerService.deleteCustomer(customerId);
+            userService.deleteUser(userId);
             session.invalidate();
             redirectAttributes.addFlashAttribute("success", "Account deleted successfully");
             return "redirect:/login";
