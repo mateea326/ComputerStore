@@ -2,21 +2,19 @@ package com.example.ComputerStore.service;
 
 import com.example.ComputerStore.dto.UserRegistrationDTO;
 import com.example.ComputerStore.dto.UserResponseDTO;
-import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.exception.DuplicateResourceException;
+import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,8 +30,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
-    // MAPPER: Metodă internă de transformare a Entității în DTO de răspuns
+    // MAPPER: Entity -> DTO răspuns (fără parolă)
     private UserResponseDTO mapToResponseDTO(User user) {
         UserResponseDTO responseDTO = new UserResponseDTO();
         responseDTO.setUserId(user.getUserId());
@@ -46,22 +43,21 @@ public class UserService {
         return responseDTO;
     }
 
-    // comanda new account
+    // CREATE – înregistrare utilizator nou
     public UserResponseDTO registerNewUser(UserRegistrationDTO registrationDTO) {
-        // 1. Verificăm validitatea parolelor (Confirm Password)
+        // Validare parole
         if (!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        // 2. Verificăm unicitatea
+        // Unicitate username și email
         if (userRepository.findByUsername(registrationDTO.getUsername()).isPresent()) {
-            throw new DuplicateResourceException("Username already taken");
+            throw new DuplicateResourceException("User", "username", registrationDTO.getUsername());
         }
         if (userRepository.findByEmail(registrationDTO.getEmail()).isPresent()) {
-            throw new DuplicateResourceException("Email already taken");
+            throw new DuplicateResourceException("User", "email", registrationDTO.getEmail());
         }
 
-        // 3. Creăm entitatea
         User user = new User();
         user.setFirstName(registrationDTO.getFirstName());
         user.setLastName(registrationDTO.getLastName());
@@ -71,12 +67,12 @@ public class UserService {
         user.setUsername(registrationDTO.getUsername());
         user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
 
-        // 4. Salvăm și returnăm versiunea sigură
         User savedUser = userRepository.save(user);
         log.info("New user registered: {}", savedUser.getUsername());
         return mapToResponseDTO(savedUser);
     }
 
+    // READ – autentificare manuală (folosit de API REST, nu de Spring Security)
     public UserResponseDTO login(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid username or password"));
@@ -86,49 +82,48 @@ public class UserService {
             throw new ResourceNotFoundException("Invalid username or password");
         }
 
-        log.info("User logged in: {}", username);
+        log.info("User logged in via API: {}", username);
         return mapToResponseDTO(user);
     }
 
-    // comanda edit account
+    // UPDATE – editare profil utilizator
     public UserResponseDTO updateUser(Integer userId, UserRegistrationDTO updatedDetails) {
         User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         existingUser.setFirstName(updatedDetails.getFirstName());
         existingUser.setLastName(updatedDetails.getLastName());
         existingUser.setPhoneNumber(updatedDetails.getPhoneNumber());
         existingUser.setAddress(updatedDetails.getAddress());
         existingUser.setEmail(updatedDetails.getEmail());
-        // Permitem schimbarea username-ului doar dacă vrem, altfel îl lăsăm nemodificat.
-        // Parolele se schimbă de obicei printr-un alt endpoint specific "change-password".
 
         User savedUser = userRepository.save(existingUser);
         log.info("User updated: id={}", userId);
         return mapToResponseDTO(savedUser);
     }
 
-    // Metodă pentru backend/alte servicii, returnează entitatea
+    // READ – găsire utilizator după ID (pentru alte servicii)
     public User findUserById(Integer id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 
-    // comanda delete user
+    // DELETE – ștergere cont utilizator
     public UserResponseDTO deleteUser(Integer id) {
         User userToDelete = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
         userRepository.delete(userToDelete);
         log.info("User deleted: id={}", id);
         return mapToResponseDTO(userToDelete);
     }
 
-    // metoda pentru a obtine toti utilizatorii
+    // READ – toți utilizatorii (fără paginare)
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    // READ – toți utilizatorii cu paginare și sortare
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }

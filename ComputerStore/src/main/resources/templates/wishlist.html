@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -150,6 +150,7 @@
     <h1>Computer Store</h1>
     <div class="navbar-right">
         <span th:text="'Welcome, ' + ${userName}"></span>
+        <a sec:authorize="hasRole('ADMIN')" href="/admin/users">Admin Panel</a>
         <a href="/products">Products</a>
         <a href="/cart">Cart</a>
         <a href="/order-history">Orders</a>
@@ -179,7 +180,7 @@
             </div>
             <div class="item-actions">
                 <form method="post" th:action="@{/cart/add/{id}(id=${product.productId})}">
-                    <button type="submit" class="add-cart-btn">🛒 Add to Cart</button>
+                    <button type="submit" class="add-cart-btn">Add to Cart</button>
                 </form>
                 <form method="post" th:action="@{/wishlist/toggle/{id}(id=${product.productId})}">
                     <button type="submit" class="remove-btn">Remove</button>

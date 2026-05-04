@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +43,8 @@
         }
         .container {
             max-width: 900px;
-            margin: 0 auto;
+            margin: 30px auto;
+            padding: 0 20px;
         }
         .settings-card {
             background: white;
@@ -76,15 +77,6 @@
         input:focus {
             outline: none;
             border-color: #7bb8b4;
-        }
-        .field-error {
-            color: #dc3580;
-            font-size: 12px;
-            margin-top: 4px;
-            display: none;
-        }
-        input.invalid {
-            border-color: #dc3580;
         }
         .button-group {
             display: flex;
@@ -158,8 +150,6 @@
             margin-bottom: 20px;
             border-left: 4px solid #6bc689;
         }
-
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -217,6 +207,7 @@
     <h1>Computer Store</h1>
     <div class="navbar-right">
         <span th:text="'Welcome, ' + ${userName}"></span>
+        <a sec:authorize="hasRole('ADMIN')" href="/admin/users">Admin Panel</a>
         <a href="/products">Products</a>
         <a href="/cart">Cart</a>
         <a href="/order-history">Orders</a>
@@ -226,41 +217,36 @@
     </div>
 </nav>
 
-<br>
-
 <div class="container">
-    <!-- Update Account Section -->
     <div class="settings-card">
         <h2>Account Settings</h2>
 
         <div th:if="${error}" class="error" th:text="${error}"></div>
         <div th:if="${success}" class="success" th:text="${success}"></div>
 
-        <form method="post" th:action="@{/account-settings/update}" id="accountForm">
+        <form method="post" th:action="@{/account-settings/update}">
             <div class="form-group">
-                <label for="firstName">First Name *</label>
+                <label for="firstName">First Name</label>
                 <input type="text" id="firstName" name="firstName"
-                       th:value="${user?.firstName}" required maxlength="50">
+                       th:value="${user?.firstName}" required>
             </div>
 
             <div class="form-group">
-                <label for="lastName">Last Name *</label>
+                <label for="lastName">Last Name</label>
                 <input type="text" id="lastName" name="lastName"
-                       th:value="${user?.lastName}" required maxlength="50">
+                       th:value="${user?.lastName}" required>
             </div>
 
             <div class="form-group">
-                <label for="email">Email *</label>
+                <label for="email">Email</label>
                 <input type="email" id="email" name="email"
-                       th:value="${user?.email}" required maxlength="50">
-                <div class="field-error" id="emailError">Please enter a valid email</div>
+                       th:value="${user?.email}" required>
             </div>
 
             <div class="form-group">
-                <label for="phoneNumber">Phone Number *</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber"
-                       th:value="${user?.phoneNumber}" required maxlength="20">
-                <div class="field-error" id="phoneError">Phone number should contain only digits</div>
+                <label for="phoneNumber">Phone Number</label>
+                <input type="text" id="phoneNumber" name="phoneNumber"
+                       th:value="${user?.phoneNumber}" required>
             </div>
 
             <div class="form-group">
@@ -276,15 +262,13 @@
         </form>
     </div>
 
-    <!-- Danger Zone - Delete Account -->
     <div class="danger-zone">
-        <h3>⚠️ Delete Account</h3>
+        <h3>Delete Account</h3>
         <p>This will permanently delete all your data.</p>
         <button class="btn-danger" onclick="showDeleteModal()">Delete Account</button>
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">Confirm Account Deletion</div>
@@ -304,41 +288,15 @@
     function showDeleteModal() {
         document.getElementById('deleteModal').style.display = 'block';
     }
-
     function hideDeleteModal() {
         document.getElementById('deleteModal').style.display = 'none';
     }
-
-    // Close modal when clicking outside
     window.onclick = function(event) {
         const modal = document.getElementById('deleteModal');
         if (event.target == modal) {
             modal.style.display = 'none';
         }
     }
-
-    document.getElementById('accountForm').addEventListener('submit', function(e) {
-        var valid = true;
-        document.querySelectorAll('.field-error').forEach(function(el) { el.style.display = 'none'; });
-        document.querySelectorAll('input').forEach(function(el) { el.classList.remove('invalid'); });
-
-        var email = document.getElementById('email');
-        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email.value)) {
-            document.getElementById('email').classList.add('invalid');
-            document.getElementById('emailError').style.display = 'block';
-            valid = false;
-        }
-
-        var phone = document.getElementById('phoneNumber');
-        if (!/^\d+$/.test(phone.value)) {
-            document.getElementById('phoneNumber').classList.add('invalid');
-            document.getElementById('phoneError').style.display = 'block';
-            valid = false;
-        }
-
-        if (!valid) e.preventDefault();
-    });
 </script>
 </body>
 </html>

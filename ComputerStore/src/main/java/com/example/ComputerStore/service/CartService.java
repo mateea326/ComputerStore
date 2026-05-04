@@ -62,7 +62,7 @@ public class CartService {
             throw new EmptyCartException();
         }
 
-        Order savedOrder = orderService.createOrderWithPaymentDetails(userId, cart);
+        Order savedOrder = orderService.createOrder(userId, cart);
 
         clearCart(session);
         return savedOrder;

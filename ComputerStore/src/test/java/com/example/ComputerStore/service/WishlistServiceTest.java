@@ -1,5 +1,6 @@
 package com.example.ComputerStore.service;
 
+import com.example.ComputerStore.exception.DuplicateResourceException;
 import com.example.ComputerStore.model.Product;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.model.Wishlist;
@@ -12,15 +13,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class WishlistServiceTest {
+class WishlistServiceTest {
 
     @Mock
     private WishlistRepository wishlistRepository;
@@ -53,7 +52,7 @@ public class WishlistServiceTest {
     }
 
     @Test
-    void testGetOrCreateWishlist_Existing() {
+    void getOrCreateWishlist_Existing_ReturnsWishlist() {
         when(userService.findUserById(1)).thenReturn(testUser);
         when(wishlistRepository.findByUser(testUser)).thenReturn(Optional.of(testWishlist));
 
@@ -65,7 +64,7 @@ public class WishlistServiceTest {
     }
 
     @Test
-    void testGetOrCreateWishlist_New() {
+    void getOrCreateWishlist_New_CreatesAndReturns() {
         when(userService.findUserById(1)).thenReturn(testUser);
         when(wishlistRepository.findByUser(testUser)).thenReturn(Optional.empty());
         when(wishlistRepository.save(any(Wishlist.class))).thenReturn(testWishlist);
@@ -77,7 +76,7 @@ public class WishlistServiceTest {
     }
 
     @Test
-    void testAddProductToWishlist() {
+    void addProductToWishlist_Success() {
         when(userService.findUserById(1)).thenReturn(testUser);
         when(wishlistRepository.findByUser(testUser)).thenReturn(Optional.of(testWishlist));
         when(productService.getProductDetails(100)).thenReturn(testProduct);
@@ -90,13 +89,13 @@ public class WishlistServiceTest {
     }
 
     @Test
-    void testAddProductToWishlist_AlreadyExists() {
+    void addProductToWishlist_AlreadyExists_ThrowsException() {
         testWishlist.addProduct(testProduct);
         when(userService.findUserById(1)).thenReturn(testUser);
         when(wishlistRepository.findByUser(testUser)).thenReturn(Optional.of(testWishlist));
         when(productService.getProductDetails(100)).thenReturn(testProduct);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(DuplicateResourceException.class, () -> {
             wishlistService.addProductToWishlist(1, 100);
         });
         
@@ -104,7 +103,7 @@ public class WishlistServiceTest {
     }
 
     @Test
-    void testRemoveProductFromWishlist() {
+    void removeProductFromWishlist_Success() {
         testWishlist.addProduct(testProduct);
         when(userService.findUserById(1)).thenReturn(testUser);
         when(wishlistRepository.findByUser(testUser)).thenReturn(Optional.of(testWishlist));
@@ -118,7 +117,7 @@ public class WishlistServiceTest {
     }
 
     @Test
-    void testIsProductInWishlist() {
+    void isProductInWishlist_True() {
         testWishlist.addProduct(testProduct);
         when(userService.findUserById(1)).thenReturn(testUser);
         when(wishlistRepository.findByUser(testUser)).thenReturn(Optional.of(testWishlist));

@@ -25,7 +25,6 @@ public class WishlistService {
         this.productService = productService;
     }
 
-    // obtine sau creeaza wishlist-ul utilizatorului
     public Wishlist getOrCreateWishlist(Integer userId) {
         User user = userService.findUserById(userId);
         return wishlistRepository.findByUser(user)
@@ -35,20 +34,18 @@ public class WishlistService {
                 });
     }
 
-    // adauga un produs in wishlist
     public Wishlist addProductToWishlist(Integer userId, Integer productId) {
         Wishlist wishlist = getOrCreateWishlist(userId);
         Product product = productService.getProductDetails(productId);
 
         if (wishlist.containsProduct(product)) {
-            throw new IllegalArgumentException("Product is already in your wishlist");
+            throw new com.example.ComputerStore.exception.DuplicateResourceException("Product", "wishlist", productId);
         }
 
         wishlist.addProduct(product);
         return wishlistRepository.save(wishlist);
     }
 
-    // sterge un produs din wishlist
     public Wishlist removeProductFromWishlist(Integer userId, Integer productId) {
         Wishlist wishlist = getOrCreateWishlist(userId);
         Product product = productService.getProductDetails(productId);
@@ -56,7 +53,6 @@ public class WishlistService {
         return wishlistRepository.save(wishlist);
     }
 
-    // obtine produsele din wishlist
     public Set<Product> getWishlistProducts(Integer userId) {
         Wishlist wishlist = getOrCreateWishlist(userId);
         return wishlist.getProducts();
@@ -69,7 +65,6 @@ public class WishlistService {
         return wishlist.containsProduct(product);
     }
 
-    // obtine ID-urile produselor din wishlist
     public Set<Integer> getWishlistProductIds(Integer userId) {
         Wishlist wishlist = getOrCreateWishlist(userId);
         return wishlist.getProducts().stream()
@@ -77,3 +72,5 @@ public class WishlistService {
                 .collect(java.util.stream.Collectors.toSet());
     }
 }
+
+
