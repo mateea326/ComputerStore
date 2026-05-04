@@ -286,7 +286,7 @@
         <div class="secure-note">
             🔒 Your payment details are secure and will not be stored.
         </div>
-        <form id="checkoutForm" method="post" action="/checkout" onsubmit="return validatePaymentForm()">
+        <form id="checkoutForm" method="post" th:action="@{/checkout}" onsubmit="return validatePaymentForm()">
             <div class="form-group">
                 <label for="cardNumber">Card Number</label>
                 <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456"

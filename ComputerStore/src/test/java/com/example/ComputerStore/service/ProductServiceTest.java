@@ -93,15 +93,11 @@ class ProductServiceTest {
 
     @Test
     void getProductDetails_NotFound_ThrowsException() {
-        // Arrange
         when(productRepository.findById(999)).thenReturn(Optional.empty());
 
-        // Act & Assert
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> productService.getProductDetails(999)
-        );
-        assertTrue(exception.getMessage().contains("was not found"));
+        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, () -> {
+            productService.getProductDetails(999);
+        });
     }
 
     @Test

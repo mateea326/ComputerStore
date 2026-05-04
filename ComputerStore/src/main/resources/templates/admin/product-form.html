@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Georgia", serif; background: #f5f7fa; }
+        .navbar { background: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h1 { font-size: 24px; }
+        .navbar a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 5px; transition: background 0.3s; }
+        .navbar a:hover { background: rgba(255,255,255,0.2); }
+        .container { max-width: 600px; margin: 30px auto; padding: 0 20px; }
+        .form-card { background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .form-card h2 { margin-bottom: 20px; color: #333; }
+        .error { background: #fee; color: #dc3580; padding: 12px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #dc3580; }
+        .type-selector { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .type-btn { padding: 10px 20px; border: 2px solid #7bb8b4; background: white; color: #7bb8b4; border-radius: 5px; text-decoration: none; font-weight: 600; transition: all 0.3s; }
+        .type-btn:hover, .type-btn.active { background: #7bb8b4; color: white; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 5px; color: #555; font-weight: 500; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        input:focus { outline: none; border-color: #7bb8b4; }
+        .field-error { color: #dc3545; font-size: 12px; margin-top: 4px; }
+        button[type="submit"] { width: 100%; padding: 14px; background: #7bb8b4; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
+        button[type="submit"]:hover { background: #619e9a; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <h1>⚙️ Add Product</h1>
+    <div style="display:flex;gap:20px;">
+        <a href="/admin/products">← Back to Products</a>
+        <a href="/admin">Dashboard</a>
+    </div>
+</nav>
+<div class="container">
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <div class="form-card">
+        <h2>Select Product Type</h2>
+        <div class="type-selector">
+            <a href="/admin/products/add?type=processor" class="type-btn" th:classappend="${productType == 'processor'} ? 'active' : ''">Processor</a>
+            <a href="/admin/products/add?type=gpu" class="type-btn" th:classappend="${productType == 'gpu'} ? 'active' : ''">Graphics Card</a>
+            <a href="/admin/products/add?type=motherboard" class="type-btn" th:classappend="${productType == 'motherboard'} ? 'active' : ''">Motherboard</a>
+            <a href="/admin/products/add?type=case" class="type-btn" th:classappend="${productType == 'case'} ? 'active' : ''">Case</a>
+        </div>
+
+        <!-- Processor Form -->
+        <form th:if="${productType == 'processor'}" method="post" action="/admin/products/add/processor" id="productForm">
+            <h2>Add Processor</h2>
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" required minlength="5" maxlength="100" placeholder="e.g. AMD Ryzen 5 5600X">
+                <div class="field-error" id="nameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="price">Price ($) *</label>
+                <input type="number" id="price" name="price" required min="0" step="0.01" placeholder="199.99">
+                <div class="field-error" id="priceError"></div>
+            </div>
+            <div class="form-group">
+                <label for="coreCount">Core Count</label>
+                <input type="number" id="coreCount" name="coreCount" min="1" placeholder="6">
+            </div>
+            <div class="form-group">
+                <label for="coreClock">Core Clock (GHz)</label>
+                <input type="number" id="coreClock" name="coreClock" min="1" placeholder="4">
+            </div>
+            <div class="form-group">
+                <label for="socket">Socket</label>
+                <input type="text" id="socket" name="socket" placeholder="AM4">
+            </div>
+            <button type="submit">Add Processor</button>
+        </form>
+
+        <!-- Graphics Card Form -->
+        <form th:if="${productType == 'gpu'}" method="post" action="/admin/products/add/gpu" id="productForm">
+            <h2>Add Graphics Card</h2>
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" required minlength="5" maxlength="100" placeholder="e.g. NVIDIA RTX 3060">
+                <div class="field-error" id="nameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="price">Price ($) *</label>
+                <input type="number" id="price" name="price" required min="0" step="0.01" placeholder="399.99">
+                <div class="field-error" id="priceError"></div>
+            </div>
+            <div class="form-group">
+                <label for="memorySize">Memory Size (GB)</label>
+                <input type="number" id="memorySize" name="memorySize" min="1" placeholder="8">
+            </div>
+            <div class="form-group">
+                <label for="coreClock">Core Clock (MHz)</label>
+                <input type="number" id="coreClock" name="coreClock" min="1" placeholder="1800">
+            </div>
+            <div class="form-group">
+                <label for="memoryClock">Memory Clock (MHz)</label>
+                <input type="number" id="memoryClock" name="memoryClock" min="1" placeholder="14000">
+            </div>
+            <button type="submit">Add Graphics Card</button>
+        </form>
+
+        <!-- Motherboard Form -->
+        <form th:if="${productType == 'motherboard'}" method="post" action="/admin/products/add/motherboard" id="productForm">
+            <h2>Add Motherboard</h2>
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" required minlength="5" maxlength="100" placeholder="e.g. ASUS ROG Strix B550">
+                <div class="field-error" id="nameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="price">Price ($) *</label>
+                <input type="number" id="price" name="price" required min="0" step="0.01" placeholder="179.99">
+                <div class="field-error" id="priceError"></div>
+            </div>
+            <div class="form-group">
+                <label for="slots">RAM Slots</label>
+                <input type="number" id="slots" name="slots" min="1" placeholder="4">
+            </div>
+            <div class="form-group">
+                <label for="cpu_socket">CPU Socket</label>
+                <input type="text" id="cpu_socket" name="cpu_socket" placeholder="AM4">
+            </div>
+            <div class="form-group">
+                <label for="chipset">Chipset</label>
+                <input type="text" id="chipset" name="chipset" placeholder="B550">
+            </div>
+            <button type="submit">Add Motherboard</button>
+        </form>
+
+        <!-- Case Form -->
+        <form th:if="${productType == 'case'}" method="post" action="/admin/products/add/case" id="productForm">
+            <h2>Add Case</h2>
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" required minlength="5" maxlength="100" placeholder="e.g. NZXT H510">
+                <div class="field-error" id="nameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="price">Price ($) *</label>
+                <input type="number" id="price" name="price" required min="0" step="0.01" placeholder="69.99">
+                <div class="field-error" id="priceError"></div>
+            </div>
+            <div class="form-group">
+                <label for="vents">Number of Vents</label>
+                <input type="number" id="vents" name="vents" min="0" placeholder="3">
+            </div>
+            <div class="form-group">
+                <label for="type">Type</label>
+                <input type="text" id="type" name="type" placeholder="Mid Tower">
+            </div>
+            <div class="form-group">
+                <label for="format">Format</label>
+                <input type="text" id="format" name="format" placeholder="ATX">
+            </div>
+            <button type="submit">Add Case</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Client-side validation
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('productForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                var valid = true;
+                var name = document.getElementById('name');
+                var price = document.getElementById('price');
+                document.querySelectorAll('.field-error').forEach(function(el) { el.textContent = ''; });
+
+                if (!name.value || name.value.trim().length < 5) {
+                    document.getElementById('nameError').textContent = 'Name must be at least 5 characters';
+                    valid = false;
+                }
+                if (!price.value || parseFloat(price.value) < 0) {
+                    document.getElementById('priceError').textContent = 'Price must be a positive number';
+                    valid = false;
+                }
+                if (!valid) { e.preventDefault(); }
+            });
+        }
+    });
+</script>
+</body>
+</html>
