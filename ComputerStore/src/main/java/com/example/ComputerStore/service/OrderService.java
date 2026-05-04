@@ -13,16 +13,13 @@ import java.util.*;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final CardService cardService;
     private final UserService userService;
     private final ProductService productService;
 
     public OrderService(OrderRepository orderRepository,
-                        CardService cardService,
                         UserService userService,
                         ProductService productService) {
         this.orderRepository = orderRepository;
-        this.cardService = cardService;
         this.userService = userService;
         this.productService = productService;
     }
@@ -67,9 +64,8 @@ public class OrderService {
     }
 
     // creare comanda cu card (folosit de SessionCartService la checkout)
-    public Order createOrderWithCard(Integer userId, Map<Integer, Integer> cart,
-                                     String cardNumber, String cardName,
-                                     String expiryDate, String cvv) {
+    // creare comanda (fostul createOrderWithCard, acum doar creeaza comanda)
+    public Order createOrderWithPaymentDetails(Integer userId, Map<Integer, Integer> cart) {
         if (cart == null || cart.isEmpty()) {
             throw new IllegalStateException("Cart is empty");
         }
@@ -100,11 +96,7 @@ public class OrderService {
 
         order.setTotalPrice(totalPrice);
 
-        Order savedOrder = orderRepository.save(order);
-
-        cardService.processPayment(savedOrder, cardNumber, cardName, expiryDate, cvv);
-
-        return savedOrder;
+        return orderRepository.save(order);
     }
 
     public Order getOrderById(Integer orderId) {

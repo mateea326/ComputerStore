@@ -3,10 +3,6 @@ package com.example.ComputerStore.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,19 +11,15 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "orders")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
 
-    // mai multe comenzi pot apartine unui client
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
-    private User user; // foreign key
+    private User user;
 
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate = LocalDateTime.now();
@@ -35,23 +27,36 @@ public class Order {
     @Min(value = 0, message = "Total price has to be positive")
     private double totalPrice;
 
-    // o comanda are mai multe produse (1:M)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    // relatie 1:1 cu card
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private Card card;
+    public Order() {}
 
-    // metoda pentru a adauga produse
+    public Order(int orderId, User user, LocalDateTime orderDate, double totalPrice, List<OrderItem> orderItems) {
+        this.orderId = orderId;
+        this.user = user;
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+        this.orderItems = orderItems;
+    }
+
+    public int getOrderId() { return orderId; }
+    public void setOrderId(int orderId) { this.orderId = orderId; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+    public LocalDateTime getOrderDate() { return orderDate; }
+    public void setOrderDate(LocalDateTime orderDate) { this.orderDate = orderDate; }
+    public double getTotalPrice() { return totalPrice; }
+    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
+    public List<OrderItem> getOrderItems() { return orderItems; }
+    public void setOrderItems(List<OrderItem> orderItems) { this.orderItems = orderItems; }
+
     public void addOrderItem(OrderItem item) {
         orderItems.add(item);
         item.setOrder(this);
     }
 
-    // metoda pentru a obtine productQuantities din orderItems
-    @Transient // nu se salveaza in bd
+    @Transient
     public Map<Integer, Integer> getProductQuantities() {
         if (orderItems == null || orderItems.isEmpty()) {
             return Map.of();
@@ -59,7 +64,7 @@ public class Order {
         return orderItems.stream()
                 .collect(Collectors.toMap(
                         item -> item.getProduct().getProductId(),
-                        OrderItem::getQuantity // map product id - quantity
+                        OrderItem::getQuantity
                 ));
     }
 }
