@@ -1,7 +1,8 @@
 package com.example.ComputerStore.controller;
 
-import org.springframework.web.util.HtmlUtils;
-import com.example.ComputerStore.model.User;
+import com.example.ComputerStore.dto.UserRegistrationDTO;
+import com.example.ComputerStore.dto.UserResponseDTO;
+import com.example.ComputerStore.dto.UserLoginDTO;
 import com.example.ComputerStore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 import jakarta.servlet.http.HttpSession;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -36,7 +38,7 @@ public class UserController {
             @ApiResponse(
                     responseCode = "201",
                     description = "User successfully registered",
-                    content = @Content(schema = @Schema(implementation = User.class))
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -44,13 +46,16 @@ public class UserController {
             )
     })
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(
+    public ResponseEntity<UserResponseDTO> registerUser(
             @Parameter(description = "User registration details", required = true)
-            @Valid @RequestBody User user) {
-        user.setUsername(HtmlUtils.htmlEscape(user.getUsername()));
-        user.setEmail(HtmlUtils.htmlEscape(user.getEmail()));
+            @Valid @RequestBody UserRegistrationDTO userDTO) {
 
-        User newUser = userService.registerNewUser(user);
+        // Curățăm datele de intrare pentru securitate (XSS)[cite: 1]
+        userDTO.setUsername(HtmlUtils.htmlEscape(userDTO.getUsername()));
+        userDTO.setEmail(HtmlUtils.htmlEscape(userDTO.getEmail()));
+
+        // Serviciul se ocupă de transformarea DTO în Entitate și salvare[cite: 24]
+        UserResponseDTO newUser = userService.registerNewUser(userDTO);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
@@ -62,7 +67,7 @@ public class UserController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Login successful",
-                    content = @Content(schema = @Schema(implementation = User.class))
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class))
             ),
             @ApiResponse(
                     responseCode = "401",
@@ -76,30 +81,32 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @Parameter(description = "Login credentials (username and password)", required = true)
-            @RequestBody User loginDetails) {
+            @RequestBody UserLoginDTO loginDetails) {
+
+        // Verificăm dacă datele de autentificare sunt prezente[cite: 1]
         if (loginDetails.getUsername() == null || loginDetails.getPassword() == null) {
             return ResponseEntity.badRequest().body("Username or password missing");
         }
 
-        User user = userService.login(loginDetails.getUsername(), loginDetails.getPassword());
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        try {
+            // Tentativă de autentificare prin intermediul serviciului[cite: 24]
+            UserResponseDTO user = userService.login(loginDetails.getUsername(), loginDetails.getPassword());
+            return ResponseEntity.ok(user);
+        } catch (IllegalArgumentException e) {
+            // Returnăm 401 Unauthorized în cazul în care credențialele sunt greșite[cite: 1]
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
-
-        user.setPassword(null); // Security: don't send password back
-        return ResponseEntity.ok(user);
     }
 
     @Operation(
             summary = "Update user information",
-            description = "Update user profile details (name, address, phone, email). Password cannot be updated through this endpoint."
+            description = "Update user profile details. Password update is usually handled by a different process."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "User successfully updated",
-                    content = @Content(schema = @Schema(implementation = User.class))
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -107,16 +114,12 @@ public class UserController {
             )
     })
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(
+    public ResponseEntity<UserResponseDTO> updateUser(
             @Parameter(description = "User ID", required = true) @PathVariable Integer id,
-            @Parameter(description = "Updated user details", required = true) @Valid @RequestBody User updatedDetails,
-            HttpSession session) {
-        Integer sessionUserId = (Integer) session.getAttribute("userId");
-        if (sessionUserId == null || !sessionUserId.equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
-        User updated = userService.updateUser(id, updatedDetails);
-        updated.setPassword(null);
+            @Parameter(description = "Updated user details", required = true) @Valid @RequestBody UserRegistrationDTO updatedDetails) {
+
+        // Actualizăm profilul folosind DTO-ul primit[cite: 24]
+        UserResponseDTO updated = userService.updateUser(id, updatedDetails);
         return ResponseEntity.ok(updated);
     }
 
@@ -126,7 +129,7 @@ public class UserController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "204",
+                    responseCode = "200",
                     description = "User successfully deleted"
             ),
             @ApiResponse(
@@ -135,14 +138,11 @@ public class UserController {
             )
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(
-            @Parameter(description = "User ID", required = true) @PathVariable Integer id,
-            HttpSession session) {
-        Integer sessionUserId = (Integer) session.getAttribute("userId");
-        if (sessionUserId == null || !sessionUserId.equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserResponseDTO> deleteUser(
+            @Parameter(description = "User ID", required = true) @PathVariable Integer id) {
+
+        // Ștergem utilizatorul și returnăm detaliile acestuia pentru confirmare[cite: 24]
+        UserResponseDTO deletedUser = userService.deleteUser(id);
+        return ResponseEntity.ok(deletedUser);
     }
 }

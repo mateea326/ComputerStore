@@ -1,5 +1,7 @@
 package com.example.ComputerStore.service;
 
+import com.example.ComputerStore.dto.UserRegistrationDTO;
+import com.example.ComputerStore.dto.UserResponseDTO;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.repo.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,36 +23,77 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+    String hashMe(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (Exception e) {
+            return password;
+        }
+    }
+
+    // MAPPER: Metodă internă de transformare a Entității în DTO de răspuns
+    private UserResponseDTO mapToResponseDTO(User user) {
+        UserResponseDTO responseDTO = new UserResponseDTO();
+        responseDTO.setUserId(user.getUserId());
+        responseDTO.setFirstName(user.getFirstName());
+        responseDTO.setLastName(user.getLastName());
+        responseDTO.setEmail(user.getEmail());
+        responseDTO.setUsername(user.getUsername());
+        responseDTO.setPhoneNumber(user.getPhoneNumber());
+        responseDTO.setAddress(user.getAddress());
+        return responseDTO;
+    }
+
     // comanda new account
-    public User registerNewUser(User user) {
-        // verific daca username-ul exista deja
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+    public UserResponseDTO registerNewUser(UserRegistrationDTO registrationDTO) {
+        // 1. Verificăm validitatea parolelor (Confirm Password)
+        if (!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        // 2. Verificăm unicitatea
+        if (userRepository.findByUsername(registrationDTO.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already taken");
         }
-        // verific daca email-ul exista deja
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(registrationDTO.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already taken");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        // 3. Creăm entitatea
+        User user = new User();
+        user.setFirstName(registrationDTO.getFirstName());
+        user.setLastName(registrationDTO.getLastName());
+        user.setEmail(registrationDTO.getEmail());
+        user.setPhoneNumber(registrationDTO.getPhoneNumber());
+        user.setAddress(registrationDTO.getAddress());
+        user.setUsername(registrationDTO.getUsername());
+        user.setPassword(hashMe(registrationDTO.getPassword()));
+
+        // 4. Salvăm și returnăm versiunea sigură
+        User savedUser = userRepository.save(user);
+        return mapToResponseDTO(savedUser);
     }
 
     // comanda login
-    public User login(String username, String password) {
-
+    public UserResponseDTO login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
 
         if (userOpt.isEmpty() || !passwordEncoder.matches(password, userOpt.get().getPassword())) {
             throw new IllegalArgumentException("Invalid username or password");
         }
 
-        return userOpt.get();
+        User user = userOpt.get();
+        if (!user.getPassword().equals(hashMe(password))) {
+            throw new IllegalArgumentException("Incorrect password");
+        }
+
+        return mapToResponseDTO(user);
     }
 
     // comanda edit account
-    public User updateUser(Integer userId, User updatedDetails) {
-
+    public UserResponseDTO updateUser(Integer userId, UserRegistrationDTO updatedDetails) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -59,18 +102,25 @@ public class UserService {
         existingUser.setPhoneNumber(updatedDetails.getPhoneNumber());
         existingUser.setAddress(updatedDetails.getAddress());
         existingUser.setEmail(updatedDetails.getEmail());
+        // Permitem schimbarea username-ului doar dacă vrem, altfel îl lăsăm nemodificat.
+        // Parolele se schimbă de obicei printr-un alt endpoint specific "change-password".
 
-        return userRepository.save(existingUser);
+        User savedUser = userRepository.save(existingUser);
+        return mapToResponseDTO(savedUser);
     }
 
+    // Metodă pentru backend/alte servicii, returnează entitatea
     public User findUserById(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " was not found"));
     }
-    public void deleteUser(Integer id){
-        if (!userRepository.existsById(id)) {
-            throw new IllegalArgumentException("User not found");
-        }
-        userRepository.deleteById(id);
+
+    // comanda delete user
+    public UserResponseDTO deleteUser(Integer id) {
+        User userToDelete = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " was not found"));
+
+        userRepository.delete(userToDelete);
+        return mapToResponseDTO(userToDelete); // Poți returna detaliile utilizatorului șters
     }
 }
