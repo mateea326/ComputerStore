@@ -44,6 +44,11 @@ public class CartService {
         cart.computeIfPresent(productId, (key, count) -> (count > 1) ? count - 1 : null);
     }
 
+    public void removeEntireProductFromCart(HttpSession session, Integer productId) {
+        Map<Integer, Integer> cart = getCart(session);
+        cart.remove(productId);
+    }
+
     public void clearCart(HttpSession session) {
         Map<Integer, Integer> cart = getCart(session);
         cart.clear();

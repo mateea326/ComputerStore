@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - PC Store</title>
+    <title>Products - Computer Store</title>
     <style>
         * {
             margin: 0;
@@ -130,9 +130,35 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
+            margin-bottom: 8px;
         }
         .add-to-cart-btn:hover {
             background: #64b57d;
+        }
+        .wishlist-btn {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            color: #dc3580;
+            border: 2px solid #dc3580;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .wishlist-btn:hover {
+            background: #dc3580;
+            color: white;
+        }
+        .pagination, .sorting {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .pagination span {
+            font-weight: 600;
+            color: #333;
         }
     </style>
 </head>
@@ -145,6 +171,7 @@
         <a href="/products">Products</a>
         <a href="/cart">Cart</a>
         <a href="/order-history">Orders</a>
+        <a href="/wishlist">Wishlist</a>
         <a href="/account-settings">Edit account</a>
         <a href="/logout">Logout</a>
     </div>
@@ -162,6 +189,14 @@
             <a href="/products?type=graphics cards" class="filter-btn" th:classappend="${selectedType == 'graphics cards'} ? 'active' : ''">Graphics Cards</a>
             <a href="/products?type=cases" class="filter-btn" th:classappend="${selectedType == 'cases'} ? 'active' : ''">Cases</a>
         </div>
+    </div>
+
+    <div class="sorting">
+        <span style="font-weight: 600; color: #333;">Sort by:</span>
+        <a th:href="@{/products(sortBy='name', direction='asc', type=${selectedType})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'asc'} ? 'active' : ''">Name A-Z</a>
+        <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">Name Z-A</a>
+        <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">Price Low-High</a>
+        <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">Price High-Low</a>
     </div>
 
     <div class="products-grid">
@@ -207,9 +242,18 @@
 
                 <form method="post" th:action="@{/cart/add/{id}(id=${product.productId})}">
                 <input type="hidden" name="returnType" th:value="${selectedType}">
-                <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                <button type="submit" class="add-to-cart-btn">🛒 Add to Cart</button>
+            </form>
+            <form method="post" th:action="@{/wishlist/toggle/{id}(id=${product.productId})}">
+                <button type="submit" class="wishlist-btn">❤️ Wishlist</button>
             </form>
         </div>
+    </div>
+
+    <div th:if="${isPaginated}" class="pagination" style="margin-top: 30px; justify-content: center;">
+        <a th:if="${currentPage > 0}" th:href="@{/products(page=${currentPage - 1}, sortBy=${sortBy}, direction=${direction})}" class="filter-btn">← Previous</a>
+        <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${totalPages}"></span>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/products(page=${currentPage + 1}, sortBy=${sortBy}, direction=${direction})}" class="filter-btn">Next →</a>
     </div>
 </div>
 </body>

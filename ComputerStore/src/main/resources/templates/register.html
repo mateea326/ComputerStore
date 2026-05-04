@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - PC Store</title>
+    <title>Register - Computer Store</title>
     <style>
         * {
             margin: 0;
@@ -93,11 +93,11 @@
 </head>
 <body>
 <div class="container">
-    <h1>🖥️ Create an account</h1>
+    <h1>Create an account</h1>
 
     <div th:if="${error}" class="error" th:text="${error}"></div>
 
-    <form method="post" action="/register">
+    <form method="post" action="/register" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="firstName">First Name</label>
             <input type="text" id="firstName" name="firstName" required>
@@ -140,6 +140,26 @@
 
         <button type="submit">Register</button>
     </form>
+
+    <script>
+        function validateForm() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const phone = document.getElementById('phoneNumber').value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return false;
+            }
+
+            if (!/^\d+$/.test(phone)) {
+                alert("Phone number should contain only digits!");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 
     <div class="login-link">
         Already have an account? <a href="/login">Login here</a>

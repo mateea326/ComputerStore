@@ -43,9 +43,22 @@ public class User {
     @Size(min = 8, max = 255)
     private String password;
 
+    @Column(nullable = true)
+    private String role = "USER";
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Order> orders;
+
+    // relatie 1:1 cu Cart
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Cart cart;
+
+    // relatie 1:1 cu Wishlist
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Wishlist wishlist;
 
     public User() {}
 
@@ -78,4 +91,10 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public List<Order> getOrders() { return orders; }
     public void setOrders(List<Order> orders) { this.orders = orders; }
+    public Cart getCart() { return cart; }
+    public void setCart(Cart cart) { this.cart = cart; }
+    public Wishlist getWishlist() { return wishlist; }
+    public void setWishlist(Wishlist wishlist) { this.wishlist = wishlist; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }
