@@ -131,7 +131,10 @@ public class ViewController {
         redirectAttributes.addFlashAttribute("success", "Product added to cart!");
 
         if (returnType != null && !returnType.isEmpty()) {
-            return "redirect:/products?type=" + returnType.replace(" ", "%20");
+            List<String> validTypes = List.of("processors", "motherboards", "graphics cards", "gpus", "cases");
+            if (validTypes.contains(returnType.toLowerCase().trim())) {
+                return "redirect:/products?type=" + returnType.replace(" ", "%20");
+            }
         }
         return "redirect:/products";
     }
@@ -196,19 +199,15 @@ public class ViewController {
     }
 
     @PostMapping("/checkout")
-    public String processCheckout(@RequestParam String cardNumber,
-                                  @RequestParam String cardName,
-                                  @RequestParam String expiryDate,
-                                  @RequestParam String cvv,
-                                  HttpSession session,
-                                  RedirectAttributes redirectAttributes) {
+    public String processCheckout(HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
             return "redirect:/login";
         }
 
         try {
-            cartService.checkout(session, userId, cardNumber, cardName, expiryDate, cvv);
+            cartService.checkout(session, userId);
             redirectAttributes.addFlashAttribute("success", "Order placed successfully!");
             return "redirect:/products";
         } catch (Exception e) {

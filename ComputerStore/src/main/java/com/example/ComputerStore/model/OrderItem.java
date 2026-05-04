@@ -3,35 +3,46 @@ package com.example.ComputerStore.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "order_items")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderItemId;
 
-    // relatie M:1 cu order
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     @JsonIgnore
     private Order order;
 
-    // relatie M:1 cu product (acelasi produs apare in mai multe comenzi)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    // cantitatea
     @Min(value = 1, message = "Quantity has to be at least 1")
     private Integer quantity;
 
-    // pretul la momentul cumpararii
     private double unitPriceAtPurchase;
+
+    public OrderItem() {}
+
+    public OrderItem(Integer orderItemId, Order order, Product product, Integer quantity, double unitPriceAtPurchase) {
+        this.orderItemId = orderItemId;
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.unitPriceAtPurchase = unitPriceAtPurchase;
+    }
+
+    public Integer getOrderItemId() { return orderItemId; }
+    public void setOrderItemId(Integer orderItemId) { this.orderItemId = orderItemId; }
+    public Order getOrder() { return order; }
+    public void setOrder(Order order) { this.order = order; }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public double getUnitPriceAtPurchase() { return unitPriceAtPurchase; }
+    public void setUnitPriceAtPurchase(double unitPriceAtPurchase) { this.unitPriceAtPurchase = unitPriceAtPurchase; }
 }

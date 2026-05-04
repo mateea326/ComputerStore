@@ -2,11 +2,11 @@ package com.example.ComputerStore.service;
 
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.repo.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.MessageDigest;
-import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -14,19 +14,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    String hashMe(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(password.getBytes());
-            return Base64.getEncoder().encodeToString(hash);
-        } catch (Exception e) {
-            return password;
-        }
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     // comanda new account
@@ -40,7 +32,7 @@ public class UserService {
             throw new IllegalArgumentException("Email already taken");
         }
 
-        user.setPassword(hashMe(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -49,16 +41,11 @@ public class UserService {
 
         Optional<User> userOpt = userRepository.findByUsername(username);
 
-        if (userOpt.isEmpty()) {
-            throw new IllegalArgumentException("User not found. Please create an account");
+        if (userOpt.isEmpty() || !passwordEncoder.matches(password, userOpt.get().getPassword())) {
+            throw new IllegalArgumentException("Invalid username or password");
         }
 
-        User user = userOpt.get();
-        if (!user.getPassword().equals(hashMe(password))) {
-            throw new IllegalArgumentException("Incorrect password");
-        }
-
-        return user;
+        return userOpt.get();
     }
 
     // comanda edit account
@@ -81,7 +68,9 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " was not found"));
     }
     public void deleteUser(Integer id){
-        // to do si fa l de tipul user
-
+        if (!userRepository.existsById(id)) {
+            throw new IllegalArgumentException("User not found");
+        }
+        userRepository.deleteById(id);
     }
 }

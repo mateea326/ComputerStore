@@ -49,16 +49,14 @@ public class CartService {
         cart.clear();
     }
 
-    public Order checkout(HttpSession session, Integer userId,
-                          String cardNumber, String cardName, String expiryDate, String cvv) {
+    public Order checkout(HttpSession session, Integer userId) {
         Map<Integer, Integer> cart = getCart(session);
 
         if (cart.isEmpty()) {
             throw new IllegalStateException("Cart is empty");
         }
 
-        Order savedOrder = orderService.createOrderWithCard(userId, cart,
-                cardNumber, cardName, expiryDate, cvv);
+        Order savedOrder = orderService.createOrderWithPaymentDetails(userId, cart);
 
         clearCart(session);
         return savedOrder;

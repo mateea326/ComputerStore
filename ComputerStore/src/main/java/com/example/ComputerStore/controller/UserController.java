@@ -14,8 +14,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/users")
 @Tag(name = "Users", description = "User management and authentication APIs")
@@ -106,9 +107,14 @@ public class UserController {
             )
     })
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(
+    public ResponseEntity<?> updateUser(
             @Parameter(description = "User ID", required = true) @PathVariable Integer id,
-            @Parameter(description = "Updated user details", required = true) @Valid @RequestBody User updatedDetails) {
+            @Parameter(description = "Updated user details", required = true) @Valid @RequestBody User updatedDetails,
+            HttpSession session) {
+        Integer sessionUserId = (Integer) session.getAttribute("userId");
+        if (sessionUserId == null || !sessionUserId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
         User updated = userService.updateUser(id, updatedDetails);
         updated.setPassword(null);
         return ResponseEntity.ok(updated);
@@ -129,8 +135,13 @@ public class UserController {
             )
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(
-            @Parameter(description = "User ID", required = true) @PathVariable Integer id) {
+    public ResponseEntity<?> deleteUser(
+            @Parameter(description = "User ID", required = true) @PathVariable Integer id,
+            HttpSession session) {
+        Integer sessionUserId = (Integer) session.getAttribute("userId");
+        if (sessionUserId == null || !sessionUserId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

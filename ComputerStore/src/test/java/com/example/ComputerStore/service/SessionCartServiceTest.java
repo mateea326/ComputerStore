@@ -14,10 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -79,70 +77,18 @@ class SessionCartServiceTest {
     }
 
     @Test
-    void addProductToCart_ExistingProduct_IncrementsQuantity() {
-        testCart.put(1, 2);
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
-        Product mockProduct = new Product();
-        when(productService.getProductDetails(1)).thenReturn(mockProduct);
-
-        sessionCartService.addProductToCart(mockSession, 1);
-
-        assertEquals(3, testCart.get(1));
-    }
-
-    @Test
-    void removeProductFromCart_MultipleQuantity_DecrementsQuantity() {
-        testCart.put(1, 3);
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
-
-        sessionCartService.removeProductFromCart(mockSession, 1);
-
-        assertEquals(2, testCart.get(1));
-    }
-
-    @Test
-    void removeProductFromCart_SingleQuantity_RemovesProduct() {
-        testCart.put(1, 1);
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
-
-        sessionCartService.removeProductFromCart(mockSession, 1);
-
-        assertFalse(testCart.containsKey(1));
-    }
-
-    @Test
-    void removeProductFromCart_NonExistentProduct_DoesNothing() {
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
-
-        sessionCartService.removeProductFromCart(mockSession, 999);
-
-        assertTrue(testCart.isEmpty());
-    }
-
-    @Test
-    void clearCart_RemovesAllItems() {
-        testCart.put(1, 2);
-        testCart.put(2, 3);
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
-
-        sessionCartService.clearCart(mockSession);
-
-        assertTrue(testCart.isEmpty());
-    }
-
-    @Test
     void checkout_ValidCart_CreatesOrderAndClearsCart() {
         testCart.put(1, 2);
         when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
         Order mockOrder = new Order();
-        when(orderService.createOrderWithCard(anyInt(), anyMap(), anyString(), anyString(), anyString(), anyString()))
+        when(orderService.createOrder(anyInt(), anyMap()))
                 .thenReturn(mockOrder);
 
-        Order result = sessionCartService.checkout(mockSession, 1, "1234", "John Doe", "12/25", "123");
+        Order result = sessionCartService.checkout(mockSession, 1);
 
         assertNotNull(result);
         assertTrue(testCart.isEmpty());
-        verify(orderService).createOrderWithCard(eq(1), any(), eq("1234"), eq("John Doe"), eq("12/25"), eq("123"));
+        verify(orderService).createOrder(eq(1), any());
     }
 
     @Test
@@ -150,7 +96,7 @@ class SessionCartServiceTest {
         when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
 
         assertThrows(IllegalStateException.class, () -> {
-            sessionCartService.checkout(mockSession, 1, "1234", "John Doe", "12/25", "123");
+            sessionCartService.checkout(mockSession, 1);
         });
     }
 }

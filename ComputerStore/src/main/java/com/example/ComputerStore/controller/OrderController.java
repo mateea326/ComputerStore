@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -41,9 +43,14 @@ public class OrderController {
             )
     })
     @GetMapping("/history/{userId}")
-    public ResponseEntity<List<Order>> getOrderHistory(
+    public ResponseEntity<?> getOrderHistory(
             @Parameter(description = "ID of the user", required = true, example = "1")
-            @PathVariable Integer userId) {
+            @PathVariable Integer userId,
+            HttpSession session) {
+        Integer sessionUserId = (Integer) session.getAttribute("userId");
+        if (sessionUserId == null || !sessionUserId.equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
         List<Order> orders = orderService.getOrderHistory(userId);
         return ResponseEntity.ok(orders);
     }
@@ -64,10 +71,15 @@ public class OrderController {
             )
     })
     @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getOrder(
+    public ResponseEntity<?> getOrder(
             @Parameter(description = "ID of the order", required = true, example = "1")
-            @PathVariable Integer orderId) {
+            @PathVariable Integer orderId,
+            HttpSession session) {
         Order order = orderService.getOrderById(orderId);
+        Integer sessionUserId = (Integer) session.getAttribute("userId");
+        if (sessionUserId == null || order.getUser().getUserId() != sessionUserId) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
         return ResponseEntity.ok(order);
     }
 
@@ -83,7 +95,12 @@ public class OrderController {
             )
     })
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<?> getAllOrders(HttpSession session) {
+        // Simple placeholder for admin check
+        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        if (isAdmin == null || !isAdmin) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Admin access required");
+        }
         List<Order> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
