@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order History - PC Store</title>
+    <title>Order History - Computer Store</title>
     <style>
         * {
             margin: 0;
@@ -102,17 +102,44 @@
         .shop-link:hover {
             color: #619e9a;
         }
+        .pagination, .sorting {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .pagination span {
+            font-weight: 600;
+            color: #333;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #7bb8b4;
+            background: white;
+            color: #7bb8b4;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #7bb8b4;
+            color: white;
+        }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <h1>🖥️ Computer Store</h1>
+    <h1>Computer Store</h1>
     <div class="navbar-right">
         <span th:text="'Welcome, ' + ${userName}"></span>
         <a href="/products">Products</a>
         <a href="/cart">Cart</a>
         <a href="/order-history">Orders</a>
+        <a href="/wishlist">Wishlist</a>
         <a href="/account-settings">Edit account</a>
         <a href="/logout">Logout</a>
     </div>
@@ -121,6 +148,14 @@
 <div class="container">
     <div class="page-header">
         <h2>Order History</h2>
+    </div>
+
+    <div class="sorting" th:if="${orders != null and !orders.isEmpty()}">
+        <span style="font-weight: 600; color: #333;">Sort by:</span>
+        <a th:href="@{/order-history(sortBy='orderDate', direction='desc')}" class="filter-btn" th:classappend="${sortBy == 'orderDate' && direction == 'desc'} ? 'active' : ''">Newest First</a>
+        <a th:href="@{/order-history(sortBy='orderDate', direction='asc')}" class="filter-btn" th:classappend="${sortBy == 'orderDate' && direction == 'asc'} ? 'active' : ''">Oldest First</a>
+        <a th:href="@{/order-history(sortBy='totalPrice', direction='desc')}" class="filter-btn" th:classappend="${sortBy == 'totalPrice' && direction == 'desc'} ? 'active' : ''">Price High-Low</a>
+        <a th:href="@{/order-history(sortBy='totalPrice', direction='asc')}" class="filter-btn" th:classappend="${sortBy == 'totalPrice' && direction == 'asc'} ? 'active' : ''">Price Low-High</a>
     </div>
 
     <!-- Empty State -->
@@ -162,6 +197,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        </div>
+
+        <div th:if="${totalPages > 1}" class="pagination" style="margin-top: 30px; justify-content: center;">
+            <a th:if="${currentPage > 0}" th:href="@{/order-history(page=${currentPage - 1}, sortBy=${sortBy}, direction=${direction})}" class="filter-btn">← Previous</a>
+            <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${totalPages}"></span>
+            <a th:if="${currentPage < totalPages - 1}" th:href="@{/order-history(page=${currentPage + 1}, sortBy=${sortBy}, direction=${direction})}" class="filter-btn">Next →</a>
         </div>
     </div>
 </div>

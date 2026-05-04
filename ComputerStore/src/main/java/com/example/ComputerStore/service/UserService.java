@@ -4,34 +4,32 @@ import com.example.ComputerStore.dto.UserRegistrationDTO;
 import com.example.ComputerStore.dto.UserResponseDTO;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.repo.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
     }
 
-    String hashMe(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(password.getBytes());
-            return Base64.getEncoder().encodeToString(hash);
-        } catch (Exception e) {
-            return password;
-        }
-    }
 
     // MAPPER: Metodă internă de transformare a Entității în DTO de răspuns
     private UserResponseDTO mapToResponseDTO(User user) {
@@ -69,26 +67,24 @@ public class UserService {
         user.setPhoneNumber(registrationDTO.getPhoneNumber());
         user.setAddress(registrationDTO.getAddress());
         user.setUsername(registrationDTO.getUsername());
-        user.setPassword(hashMe(registrationDTO.getPassword()));
+        user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
 
         // 4. Salvăm și returnăm versiunea sigură
         User savedUser = userRepository.save(user);
+        log.info("New user registered: {}", savedUser.getUsername());
         return mapToResponseDTO(savedUser);
     }
 
-    // comanda login
     public UserResponseDTO login(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
 
-        if (userOpt.isEmpty() || !passwordEncoder.matches(password, userOpt.get().getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            log.warn("Failed login attempt for user: {}", username);
             throw new IllegalArgumentException("Invalid username or password");
         }
 
-        User user = userOpt.get();
-        if (!user.getPassword().equals(hashMe(password))) {
-            throw new IllegalArgumentException("Incorrect password");
-        }
-
+        log.info("User logged in: {}", username);
         return mapToResponseDTO(user);
     }
 
@@ -106,6 +102,7 @@ public class UserService {
         // Parolele se schimbă de obicei printr-un alt endpoint specific "change-password".
 
         User savedUser = userRepository.save(existingUser);
+        log.info("User updated: id={}", userId);
         return mapToResponseDTO(savedUser);
     }
 
@@ -121,6 +118,16 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " was not found"));
 
         userRepository.delete(userToDelete);
-        return mapToResponseDTO(userToDelete); // Poți returna detaliile utilizatorului șters
+        log.info("User deleted: id={}", id);
+        return mapToResponseDTO(userToDelete);
+    }
+
+    // metoda pentru a obtine toti utilizatorii
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }

@@ -9,8 +9,12 @@ import com.example.ComputerStore.service.UserService;
 import com.example.ComputerStore.service.ProductService;
 import com.example.ComputerStore.service.CartService;
 import com.example.ComputerStore.service.OrderService;
+import com.example.ComputerStore.service.WishlistService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,15 +33,18 @@ public class ViewController {
     private final ProductService productService;
     private final CartService cartService;
     private final OrderService orderService;
+    private final WishlistService wishlistService;
 
     public ViewController(UserService userService,
                           ProductService productService,
                           CartService cartService,
-                          OrderService orderService) {
+                          OrderService orderService,
+                          WishlistService wishlistService) {
         this.userService = userService;
         this.productService = productService;
         this.cartService = cartService;
         this.orderService = orderService;
+        this.wishlistService = wishlistService;
     }
 
     @GetMapping("/")
@@ -50,22 +57,6 @@ public class ViewController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam String username,
-                        @RequestParam String password,
-                        HttpSession session,
-                        RedirectAttributes redirectAttributes) {
-        try {
-            // UserService returnează acum UserResponseDTO
-            UserResponseDTO user = userService.login(username, password);
-            session.setAttribute("userId", user.getUserId());
-            session.setAttribute("userName", user.getFirstName());
-            return "redirect:/products";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/login";
-        }
-    }
 
     @GetMapping("/register")
     public String registerPage() {
@@ -97,6 +88,10 @@ public class ViewController {
 
     @GetMapping("/products")
     public String productsPage(@RequestParam(required = false) String type,
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "10") int size,
+                               @RequestParam(defaultValue = "name") String sortBy,
+                               @RequestParam(defaultValue = "asc") String direction,
                                Model model,
                                HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -104,16 +99,29 @@ public class ViewController {
             return "redirect:/login";
         }
 
-        List<? extends Product> products;
+        Sort sort = direction.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        PageRequest pageable = PageRequest.of(page, size, sort);
+
         if (type != null && !type.isEmpty()) {
-            products = productService.filterProductsByType(type);
+            // Paginarea pentru filtrare ar necesita metode noi in repository, 
+            // pentru simplitate paginam doar lista totala sau lasam filtrarea asa
+            List<? extends Product> products = productService.filterProductsByType(type);
+            model.addAttribute("products", products);
+            model.addAttribute("isPaginated", false);
         } else {
-            products = productService.getAllProducts();
+            Page<Product> productPage = productService.getAllProducts(pageable);
+            model.addAttribute("products", productPage.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", productPage.getTotalPages());
+            model.addAttribute("totalItems", productPage.getTotalElements());
+            model.addAttribute("isPaginated", true);
         }
 
-        model.addAttribute("products", products);
+        model.addAttribute("wishlistProductIds", wishlistService.getWishlistProductIds(userId));
         model.addAttribute("userName", session.getAttribute("userName"));
         model.addAttribute("selectedType", type);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
         return "products";
     }
 
@@ -165,8 +173,24 @@ public class ViewController {
     @PostMapping("/cart/remove/{productId}")
     public String removeFromCart(@PathVariable Integer productId,
                                  HttpSession session) {
-        cartService.removeProductFromCart(session, productId);
+        cartService.removeEntireProductFromCart(session, productId);
         return "redirect:/cart";
+    }
+
+    @PostMapping("/cart/increase/{productId}")
+    public String increaseQuantity(@PathVariable Integer productId,
+                                   HttpSession session,
+                                   @RequestParam(required = false, defaultValue = "cart") String redirect) {
+        cartService.addProductToCart(session, productId);
+        return "redirect:/" + redirect;
+    }
+
+    @PostMapping("/cart/decrease/{productId}")
+    public String decreaseQuantity(@PathVariable Integer productId,
+                                   HttpSession session,
+                                   @RequestParam(required = false, defaultValue = "cart") String redirect) {
+        cartService.removeProductFromCart(session, productId);
+        return "redirect:/" + redirect;
     }
 
     @GetMapping("/checkout")
@@ -197,16 +221,38 @@ public class ViewController {
     }
 
     @PostMapping("/checkout")
-    public String processCheckout(HttpSession session,
+    public String processCheckout(@RequestParam(required = false) String cardNumber,
+                                   @RequestParam(required = false) String cardName,
+                                   @RequestParam(required = false) String expiryDate,
+                                   @RequestParam(required = false) String cvv,
+                                   HttpSession session,
                                    RedirectAttributes redirectAttributes) {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
             return "redirect:/login";
         }
 
+        // Validare simpla a datelor cardului (nu se salveaza)
+        if (cardNumber == null || cardNumber.replaceAll("\\s", "").length() < 13) {
+            redirectAttributes.addFlashAttribute("error", "Please enter a valid card number");
+            return "redirect:/checkout";
+        }
+        if (cardName == null || cardName.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Please enter the cardholder name");
+            return "redirect:/checkout";
+        }
+        if (expiryDate == null || !expiryDate.matches("\\d{2}/\\d{2}")) {
+            redirectAttributes.addFlashAttribute("error", "Please enter a valid expiry date (MM/YY)");
+            return "redirect:/checkout";
+        }
+        if (cvv == null || !cvv.matches("\\d{3,4}")) {
+            redirectAttributes.addFlashAttribute("error", "Please enter a valid CVV");
+            return "redirect:/checkout";
+        }
+
         try {
             cartService.checkout(session, userId);
-            redirectAttributes.addFlashAttribute("success", "Order placed successfully!");
+            redirectAttributes.addFlashAttribute("success", "Payment processed and order placed successfully!");
             return "redirect:/products";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -215,14 +261,23 @@ public class ViewController {
     }
 
     @GetMapping("/order-history")
-    public String orderHistory(Model model, HttpSession session) {
+    public String orderHistory(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(defaultValue = "orderDate") String sortBy,
+                               @RequestParam(defaultValue = "desc") String direction,
+                               Model model,
+                               HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
             return "redirect:/login";
         }
 
+        Sort sort = direction.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        PageRequest pageable = PageRequest.of(page, size, sort);
+
         try {
-            List<Order> orders = orderService.getOrderHistory(userId);
+            Page<Order> orderPage = orderService.getOrderHistory(userId, pageable);
+            List<Order> orders = orderPage.getContent();
             Map<Integer, String> productNames = new HashMap<>();
             Map<Integer, Float> productPrices = new HashMap<>();
 
@@ -246,12 +301,15 @@ public class ViewController {
             model.addAttribute("productNames", productNames);
             model.addAttribute("productPrices", productPrices);
             model.addAttribute("userName", session.getAttribute("userName"));
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", orderPage.getTotalPages());
+            model.addAttribute("sortBy", sortBy);
+            model.addAttribute("direction", direction);
+            return "order-history";
         } catch (Exception e) {
-            model.addAttribute("orders", new ArrayList<>());
-            model.addAttribute("userName", session.getAttribute("userName"));
+            model.addAttribute("error", "Error loading order history: " + e.getMessage());
+            return "order-history";
         }
-
-        return "order-history";
     }
 
     @GetMapping("/account-settings")
@@ -324,9 +382,41 @@ public class ViewController {
         }
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
+    // --- Wishlist ---
+    @PostMapping("/wishlist/toggle/{productId}")
+    public String toggleWishlist(@PathVariable Integer productId,
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            if (wishlistService.isProductInWishlist(userId, productId)) {
+                wishlistService.removeProductFromWishlist(userId, productId);
+                redirectAttributes.addFlashAttribute("success", "Removed from wishlist");
+            } else {
+                wishlistService.addProductToWishlist(userId, productId);
+                redirectAttributes.addFlashAttribute("success", "Added to wishlist!");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+
+        return "redirect:/products";
     }
-}
+
+    @GetMapping("/wishlist")
+    public String wishlistPage(Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("wishlistProducts", wishlistService.getWishlistProducts(userId));
+        model.addAttribute("userName", session.getAttribute("userName"));
+        return "wishlist";
+    }
+
+}

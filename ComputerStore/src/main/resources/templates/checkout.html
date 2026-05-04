@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - PC Store</title>
+    <title>Checkout - Computer Store</title>
     <style>
         * {
             margin: 0;
@@ -70,6 +70,7 @@
         .order-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid #eee;
         }
@@ -83,10 +84,37 @@
             font-weight: 600;
             color: #333;
         }
-        .item-quantity {
-            font-size: 14px;
-            color: #666;
-            margin-top: 3px;
+        .item-quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: #f0f0f0;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .qty-btn:hover {
+            background: #7bb8b4;
+            color: white;
+            border-color: #7bb8b4;
+        }
+        .qty-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            min-width: 30px;
+            text-align: center;
         }
         .item-price {
             font-weight: bold;
@@ -146,6 +174,9 @@
             outline: none;
             border-color: #7bb8b4;
         }
+        .form-group input.invalid {
+            border-color: #dc3580;
+        }
         .form-row {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -185,6 +216,19 @@
             margin-bottom: 20px;
             border-left: 4px solid #dc3580;
         }
+        .field-error {
+            color: #dc3580;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+        .secure-note {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -196,6 +240,7 @@
         <a href="/products">Products</a>
         <a href="/cart">Cart</a>
         <a href="/order-history">Orders</a>
+        <a href="/wishlist">Wishlist</a>
         <a href="/account-settings">Edit account</a>
         <a href="/logout">Logout</a>
     </div>
@@ -210,12 +255,22 @@
 
     <div class="order-summary">
         <h3>Order Summary</h3>
-        <div class="order-item" th:each="product : ${cartProducts}">
+        <div class="order-item" th:each="entry : ${cart.entrySet()}">
             <div class="item-details">
-                <div class="item-name" th:text="${product.name}"></div>
-                <div class="item-quantity" th:text="'Quantity: ' + ${cart.get(product.productId)}"></div>
+                <div class="item-name" th:text="${productMap.get(entry.key).name}"></div>
+                <div class="item-quantity-controls">
+                    <form method="post" th:action="@{/cart/decrease/{id}(id=${entry.key})}" style="display:inline;">
+                        <input type="hidden" name="redirect" value="checkout">
+                        <button type="submit" class="qty-btn">−</button>
+                    </form>
+                    <span class="qty-value" th:text="${entry.value}"></span>
+                    <form method="post" th:action="@{/cart/increase/{id}(id=${entry.key})}" style="display:inline;">
+                        <input type="hidden" name="redirect" value="checkout">
+                        <button type="submit" class="qty-btn">+</button>
+                    </form>
+                </div>
             </div>
-            <div class="item-price" th:text="'$' + ${#numbers.formatDecimal(product.price * cart.get(product.productId), 1, 2)}"></div>
+            <div class="item-price" th:text="'$' + ${#numbers.formatDecimal(productMap.get(entry.key).price * entry.value, 1, 2)}"></div>
         </div>
     </div>
 
@@ -227,14 +282,118 @@
     </div>
 
     <div class="payment-section">
-        <h3>💳 Complete Order</h3>
-        <p style="margin-bottom: 20px; color: #666;">Payment will be processed upon delivery or via our external portal.</p>
-        <form method="post" action="/checkout">
+        <h3>💳 Payment Information</h3>
+        <div class="secure-note">
+            🔒 Your payment details are secure and will not be stored.
+        </div>
+        <form id="checkoutForm" method="post" action="/checkout" onsubmit="return validatePaymentForm()">
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456"
+                       maxlength="19" required oninput="formatCardNumber(this)">
+                <div id="cardNumberError" class="field-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="cardName">Cardholder Name</label>
+                <input type="text" id="cardName" name="cardName" placeholder="JOHN DOE" required>
+                <div id="cardNameError" class="field-error"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="expiryDate">Expiry Date</label>
+                    <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY"
+                           maxlength="5" required oninput="formatExpiryDate(this)">
+                    <div id="expiryDateError" class="field-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="password" id="cvv" name="cvv" placeholder="123"
+                           maxlength="4" required>
+                    <div id="cvvError" class="field-error"></div>
+                </div>
+            </div>
             <button type="submit" class="place-order-btn">Place Order</button>
         </form>
     </div>
 
     <a href="/cart" class="back-link">← Back to Cart</a>
 </div>
+
+<script>
+    function formatCardNumber(input) {
+        let value = input.value.replace(/\D/g, '');
+        let formatted = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        input.value = formatted.substring(0, 19);
+    }
+
+    function formatExpiryDate(input) {
+        let value = input.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        input.value = value;
+    }
+
+    function validatePaymentForm() {
+        let valid = true;
+
+        // Card number
+        let cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        let cardError = document.getElementById('cardNumberError');
+        if (cardNumber.length < 13 || cardNumber.length > 16) {
+            cardError.textContent = 'Card number must be between 13 and 16 digits';
+            document.getElementById('cardNumber').classList.add('invalid');
+            valid = false;
+        } else {
+            cardError.textContent = '';
+            document.getElementById('cardNumber').classList.remove('invalid');
+        }
+
+        // Card name
+        let cardName = document.getElementById('cardName').value.trim();
+        let nameError = document.getElementById('cardNameError');
+        if (cardName.length < 2) {
+            nameError.textContent = 'Please enter the cardholder name';
+            document.getElementById('cardName').classList.add('invalid');
+            valid = false;
+        } else {
+            nameError.textContent = '';
+            document.getElementById('cardName').classList.remove('invalid');
+        }
+
+        // Expiry date
+        let expiryDate = document.getElementById('expiryDate').value;
+        let expiryError = document.getElementById('expiryDateError');
+        if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+            expiryError.textContent = 'Please enter a valid date (MM/YY)';
+            document.getElementById('expiryDate').classList.add('invalid');
+            valid = false;
+        } else {
+            let month = parseInt(expiryDate.split('/')[0]);
+            if (month < 1 || month > 12) {
+                expiryError.textContent = 'Invalid month';
+                document.getElementById('expiryDate').classList.add('invalid');
+                valid = false;
+            } else {
+                expiryError.textContent = '';
+                document.getElementById('expiryDate').classList.remove('invalid');
+            }
+        }
+
+        // CVV
+        let cvv = document.getElementById('cvv').value;
+        let cvvError = document.getElementById('cvvError');
+        if (!/^\d{3,4}$/.test(cvv)) {
+            cvvError.textContent = 'CVV must be 3 or 4 digits';
+            document.getElementById('cvv').classList.add('invalid');
+            valid = false;
+        } else {
+            cvvError.textContent = '';
+            document.getElementById('cvv').classList.remove('invalid');
+        }
+
+        return valid;
+    }
+</script>
 </body>
 </html>

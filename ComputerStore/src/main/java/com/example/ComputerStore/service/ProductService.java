@@ -6,11 +6,17 @@ import com.example.ComputerStore.repo.MotherboardRepository;
 import com.example.ComputerStore.repo.GraphicsCardRepository;
 import com.example.ComputerStore.repo.ProcessorRepository;
 import com.example.ComputerStore.repo.CaseRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class ProductService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository productRepository;
     private final MotherboardRepository motherboardRepository;
@@ -33,12 +39,18 @@ public class ProductService {
     }
 
     public Product saveProduct(Product product) {
-        return productRepository.save(product);
+        Product saved = productRepository.save(product);
+        log.info("Product saved: id={}, name={}", saved.getProductId(), saved.getName());
+        return saved;
     }
 
     // comanda products
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     // comanda details (afiseaza detaliile unui produs)
@@ -54,12 +66,15 @@ public class ProductService {
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setPrice(updatedProduct.getPrice());
 
-        return productRepository.save(existingProduct);
+        Product saved = productRepository.save(existingProduct);
+        log.info("Product updated: id={}", id);
+        return saved;
     }
 
     // comanda admin delete product
     public void deleteProduct(Integer id) {
         productRepository.deleteById(id);
+        log.info("Product deleted: id={}", id);
     }
 
     // comanda de filtrare a produselor dupa tip

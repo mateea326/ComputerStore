@@ -1,14 +1,16 @@
 package com.example.ComputerStore.service;
 
+import com.example.ComputerStore.dto.UserRegistrationDTO;
+import com.example.ComputerStore.dto.UserResponseDTO;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.repo.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -22,14 +24,15 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
     private UserService userService;
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private User testUser;
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @BeforeEach
     void setUp() {
+        userService = new UserService(userRepository, passwordEncoder);
+        
         testUser = new User();
         testUser.setUserId(1);
         testUser.setFirstName("John");
@@ -39,18 +42,24 @@ class UserServiceTest {
         testUser.setPassword(passwordEncoder.encode("password123"));
         testUser.setPhoneNumber("1234567890");
         testUser.setAddress("123 Main St");
+        testUser.setRole("USER");
     }
 
     @Test
     void registerNewUser_Success() {
-        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.empty());
-        when(userRepository.findByEmail(testUser.getEmail())).thenReturn(Optional.empty());
+        UserRegistrationDTO regDto = new UserRegistrationDTO(
+                "John", "Doe", "1234567890", "123 Main St",
+                "john@example.com", "johndoe", "password123", "password123"
+        );
+
+        when(userRepository.findByUsername(regDto.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(regDto.getEmail())).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        User result = userService.registerNewUser(testUser);
+        UserResponseDTO result = userService.registerNewUser(regDto);
 
         assertNotNull(result);
-        assertEquals(testUser.getUsername(), result.getUsername());
+        assertEquals(regDto.getUsername(), result.getUsername());
         verify(userRepository, times(1)).save(any(User.class));
     }
 
@@ -59,7 +68,7 @@ class UserServiceTest {
         when(userRepository.findByUsername(testUser.getUsername()))
                 .thenReturn(Optional.of(testUser));
 
-        User result = userService.login("johndoe", "password123");
+        UserResponseDTO result = userService.login("johndoe", "password123");
 
         assertNotNull(result);
         assertEquals(testUser.getUsername(), result.getUsername());
@@ -78,17 +87,17 @@ class UserServiceTest {
 
     @Test
     void updateUser_Success() {
-        User updatedDetails = new User();
-        updatedDetails.setFirstName("Jane");
-        updatedDetails.setLastName("Smith");
-        updatedDetails.setEmail("jane@example.com");
-        updatedDetails.setPhoneNumber("0987654321");
-        updatedDetails.setAddress("456 Oak Ave");
+        UserRegistrationDTO updateDto = new UserRegistrationDTO();
+        updateDto.setFirstName("Jane");
+        updateDto.setLastName("Smith");
+        updateDto.setEmail("jane@example.com");
+        updateDto.setPhoneNumber("0987654321");
+        updateDto.setAddress("456 Oak Ave");
 
         when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        User result = userService.updateUser(1, updatedDetails);
+        UserResponseDTO result = userService.updateUser(1, updateDto);
 
         assertNotNull(result);
         assertEquals("Jane", result.getFirstName());
@@ -97,11 +106,13 @@ class UserServiceTest {
 
     @Test
     void deleteUser_Success() {
-        when(userRepository.existsById(1)).thenReturn(true);
-        doNothing().when(userRepository).deleteById(1);
+        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        doNothing().when(userRepository).delete(testUser);
 
-        userService.deleteUser(1);
+        UserResponseDTO result = userService.deleteUser(1);
 
-        verify(userRepository, times(1)).deleteById(1);
+        assertNotNull(result);
+        assertEquals(testUser.getUserId(), result.getUserId());
+        verify(userRepository, times(1)).delete(testUser);
     }
 }

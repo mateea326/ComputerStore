@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Settings - PC Store</title>
+    <title>Account Settings - Computer Store</title>
     <style>
         * {
             margin: 0;
@@ -205,12 +205,13 @@
 <body>
 
 <nav class="navbar">
-    <h1>🖥️ Computer Store</h1>
+    <h1>Computer Store</h1>
     <div class="navbar-right">
-        <span th:text="'Welcome, ' + ${customerName}"></span>
+        <span th:text="'Welcome, ' + ${userName}"></span>
         <a href="/products">Products</a>
         <a href="/cart">Cart</a>
         <a href="/order-history">Orders</a>
+        <a href="/wishlist">Wishlist</a>
         <a href="/account-settings">Edit account</a>
         <a href="/logout">Logout</a>
     </div>
@@ -221,7 +222,7 @@
 <div class="container">
     <!-- Update Account Section -->
     <div class="settings-card">
-        <h2>⚙️ Account Settings</h2>
+        <h2>Account Settings</h2>
 
         <div th:if="${error}" class="error" th:text="${error}"></div>
         <div th:if="${success}" class="success" th:text="${success}"></div>

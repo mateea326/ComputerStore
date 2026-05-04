@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Georgia", serif;
+            background: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .error-container {
+            text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+        }
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            color: #7bb8b4;
+            line-height: 1;
+        }
+        .error-title {
+            font-size: 28px;
+            color: #333;
+            margin: 15px 0;
+        }
+        .error-message {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #7bb8b4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #619e9a;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">The page you're looking for doesn't exist or has been moved.</p>
+        <a href="/products" class="back-btn">Back to Store</a>
+    </div>
+</body>
+</html>

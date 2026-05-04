@@ -1,0 +1,54 @@
+2026-05-04 15:55:18 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-04 15:55:18 [main] INFO  c.e.C.StoreIntegrationTest - Starting StoreIntegrationTest using Java 25 with PID 47236 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-04 15:55:18 [main] DEBUG c.e.C.StoreIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-04 15:55:18 [main] INFO  c.e.C.StoreIntegrationTest - The following 1 profile is active: "test"
+2026-05-04 15:55:20 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-04 15:55:21 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 157 ms. Found 11 JPA repository interfaces.
+2026-05-04 15:55:22 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-04 15:55:22 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-04 15:55:22 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-04 15:55:23 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-04 15:55:23 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-04 15:55:23 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-05-04 15:55:23 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-04 15:55:23 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-04 15:55:26 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-04 15:55:26 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-04 15:55:27 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-04 15:55:27 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6e43c01f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6567de86, org.springframework.security.web.context.SecurityContextHolderFilter@7ef570be, org.springframework.security.web.header.HeaderWriterFilter@64547a83, org.springframework.web.filter.CorsFilter@5350a926, org.springframework.security.web.authentication.logout.LogoutFilter@11eb8842, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5397d41e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@63574d76, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@586a9fe1, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@56dae6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@77732366, org.springframework.security.web.access.ExceptionTranslationFilter@7a4c1a6c, org.springframework.security.web.access.intercept.AuthorizationFilter@760b9444]
+2026-05-04 15:55:28 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-05-04 15:55:28 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-05-04 15:55:28 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-05-04 15:55:28 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2026-05-04 15:55:28 [main] INFO  c.e.C.StoreIntegrationTest - Started StoreIntegrationTest in 10.449 seconds (process running for 13.678)
+2026-05-04 15:55:28 [main] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/products' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-05-04 15:55:29 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-04 15:55:29 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-04 15:55:29 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-04 15:55:53 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-04 15:55:53 [main] INFO  c.e.C.StoreIntegrationTest - Starting StoreIntegrationTest using Java 25 with PID 62212 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-04 15:55:53 [main] DEBUG c.e.C.StoreIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-04 15:55:53 [main] INFO  c.e.C.StoreIntegrationTest - The following 1 profile is active: "test"
+2026-05-04 15:55:53 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-04 15:55:53 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 56 ms. Found 11 JPA repository interfaces.
+2026-05-04 15:55:54 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-04 15:55:54 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-04 15:55:54 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-04 15:55:54 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-04 15:55:54 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-04 15:55:54 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-05-04 15:55:54 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-04 15:55:54 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-04 15:55:55 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-04 15:55:55 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-04 15:55:56 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-04 15:55:56 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6e43c01f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6567de86, org.springframework.security.web.context.SecurityContextHolderFilter@7ef570be, org.springframework.security.web.header.HeaderWriterFilter@64547a83, org.springframework.web.filter.CorsFilter@5350a926, org.springframework.security.web.authentication.logout.LogoutFilter@11eb8842, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5397d41e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@63574d76, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@586a9fe1, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@56dae6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@77732366, org.springframework.security.web.access.ExceptionTranslationFilter@7a4c1a6c, org.springframework.security.web.access.intercept.AuthorizationFilter@760b9444]
+2026-05-04 15:55:57 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-05-04 15:55:57 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-05-04 15:55:57 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-05-04 15:55:57 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2026-05-04 15:55:57 [main] INFO  c.e.C.StoreIntegrationTest - Started StoreIntegrationTest in 4.586 seconds (process running for 5.428)
+2026-05-04 15:55:57 [main] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/products' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-05-04 15:55:58 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-04 15:55:58 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-04 15:55:58 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

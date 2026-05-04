@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Computer Store</title>
+    <title>Wishlist - Computer Store</title>
     <style>
         * {
             margin: 0;
@@ -46,17 +46,17 @@
             margin: 30px auto;
             padding: 0 20px;
         }
-        .cart-header {
+        .wishlist-header {
             background: white;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .cart-header h2 {
+        .wishlist-header h2 {
             color: #333;
         }
-        .cart-item {
+        .wishlist-item {
             background: white;
             padding: 20px;
             border-radius: 10px;
@@ -80,11 +80,6 @@
             color: #7bb8b4;
             font-weight: bold;
         }
-        .item-quantity {
-            font-size: 16px;
-            color: #666;
-            margin-top: 5px;
-        }
         .item-actions {
             display: flex;
             gap: 10px;
@@ -100,87 +95,29 @@
             transition: background 0.3s;
         }
         .remove-btn:hover {
-            background: #bc1e65;
+            background: #c42d70;
         }
-        .item-quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .qty-btn {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #ddd;
-            background: #f0f0f0;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.2s;
-            color: #333;
-        }
-        .qty-btn:hover {
-            background: #e0e0e0;
-            border-color: #ccc;
-        }
-        .qty-val {
-            font-weight: 600;
-            min-width: 20px;
-            text-align: center;
-        }
-        .cart-summary {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-top: 20px;
-        }
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-top: 2px solid #eee;
-            margin-top: 15px;
-        }
-        .total-label {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-        .total-amount {
-            font-size: 28px;
-            font-weight: bold;
-            color: #7bb8b4;
-        }
-        .checkout-btn {
-            width: 100%;
-            padding: 15px;
+        .add-cart-btn {
+            padding: 8px 16px;
             background: #6bc689;
             color: white;
             border: none;
             border-radius: 5px;
-            font-size: 18px;
-            font-weight: 600;
             cursor: pointer;
-            margin-top: 20px;
+            font-weight: 600;
             transition: background 0.3s;
         }
-        .checkout-btn:hover {
+        .add-cart-btn:hover {
             background: #64b57d;
         }
-        .empty-cart {
+        .empty-wishlist {
             background: white;
             padding: 60px 20px;
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .empty-cart h3 {
+        .empty-wishlist h3 {
             color: #666;
             margin-bottom: 20px;
         }
@@ -197,12 +134,20 @@
         .continue-shopping:hover {
             background: #619e9a;
         }
+        .success {
+            background: #e8f8ee;
+            color: #2d7a4f;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #6bc689;
+        }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <h1>🖥️ Computer Store</h1>
+    <h1>Computer Store</h1>
     <div class="navbar-right">
         <span th:text="'Welcome, ' + ${userName}"></span>
         <a href="/products">Products</a>
@@ -215,47 +160,31 @@
 </nav>
 
 <div class="container">
-    <div class="cart-header">
-        <h2>Shopping Cart</h2>
+    <div class="wishlist-header">
+        <h2>Wishlist</h2>
     </div>
 
-    <div th:if="${cartProducts.isEmpty()}" class="empty-cart">
-        <h3>Your cart is empty</h3>
-        <a href="/products" class="continue-shopping">Start Shopping</a>
+    <div th:if="${success}" class="success" th:text="${success}"></div>
+
+    <div th:if="${wishlistProducts.isEmpty()}" class="empty-wishlist">
+        <h3>Your wishlist is empty</h3>
+        <a href="/products" class="continue-shopping">Browse Products</a>
     </div>
 
-    <div th:if="${!cartProducts.isEmpty()}">
-        <div class="cart-item" th:each="product : ${cartProducts}">
+    <div th:if="${!wishlistProducts.isEmpty()}">
+        <div class="wishlist-item" th:each="product : ${wishlistProducts}">
             <div class="item-info">
                 <div class="item-name" th:text="${product.name}"></div>
                 <div class="item-price" th:text="'$' + ${product.price}"></div>
-                <div class="item-quantity-controls">
-                    <form method="post" th:action="@{/cart/decrease/{id}(id=${product.productId})}">
-                        <input type="hidden" name="redirect" value="cart">
-                        <button type="submit" class="qty-btn">-</button>
-                    </form>
-                    <span class="qty-val" th:text="${cart.get(product.productId)}">1</span>
-                    <form method="post" th:action="@{/cart/increase/{id}(id=${product.productId})}">
-                        <input type="hidden" name="redirect" value="cart">
-                        <button type="submit" class="qty-btn">+</button>
-                    </form>
-                </div>
             </div>
             <div class="item-actions">
-                <form method="post" th:action="@{/cart/remove/{id}(id=${product.productId})}">
+                <form method="post" th:action="@{/cart/add/{id}(id=${product.productId})}">
+                    <button type="submit" class="add-cart-btn">🛒 Add to Cart</button>
+                </form>
+                <form method="post" th:action="@{/wishlist/toggle/{id}(id=${product.productId})}">
                     <button type="submit" class="remove-btn">Remove</button>
                 </form>
             </div>
-        </div>
-
-        <div class="cart-summary">
-            <div class="total-row">
-                <span class="total-label">Total:</span>
-                <span class="total-amount" th:text="'$' + ${#numbers.formatDecimal(total, 1, 2)}"></span>
-            </div>
-            <a href="/checkout">
-                <button class="checkout-btn">Proceed to Checkout</button>
-            </a>
         </div>
     </div>
 </div>
