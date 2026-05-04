@@ -1,12 +1,12 @@
 # Computer Store
 
-A full-stack e-commerce platform for buying PC components built with Spring Boot and Thymeleaf. This project fulfills academic requirements for a web application with Spring Boot.
+A full-stack e-commerce platform for buying PC components built with Spring Boot and Thymeleaf.
 
 ## Features
 
 - **User Authentication (Spring Security)** - Secure registration/login with BCrypt hashing and role-based access control (USER/ADMIN).
 - **Multi-Environment Configuration** - Support for `dev` (PostgreSQL) and `test` (H2 In-Memory) profiles.
-- **Product Catalog** - Browse processors, graphics cards, motherboards, and cases with **Pagination and Sorting**.
+- **Product Catalog** - Browse processors, graphics cards, motherboards, and cases with Pagination and Sorting.
 - **Shopping Cart & Wishlist** - Manage items in a persistent cart and save favorites in a many-to-many wishlist.
 - **Checkout System** - Secure checkout with card validation and order persistence.
 - **Order History** - Track past purchases and detailed order items.
@@ -30,8 +30,6 @@ The project includes 11 entities with various relationship types:
     - `@OneToMany`/`@ManyToOne`: User ↔ Order, Order ↔ OrderItem, Cart ↔ CartItem
     - `@ManyToMany`: Wishlist ↔ Product
 - **Inheritance:** `Product` is the base class for component-specific entities.
-
-![ER Diagram](er_diagram.jpeg)
 
 ## Running the Project
 

@@ -25,8 +25,6 @@ public class ProductService {
     private final ProcessorRepository processorRepository;
     private final CaseRepository caseRepository;
 
-
-    // injectarea tuturor dependentelor in Constructor
     public ProductService(ProductRepository productRepository,
                           MotherboardRepository motherboardRepository,
                           GraphicsCardRepository graphicsCardRepository,
@@ -39,28 +37,30 @@ public class ProductService {
         this.caseRepository = caseRepository;
     }
 
+    // CREATE / UPDATE
     public Product saveProduct(Product product) {
         Product saved = productRepository.save(product);
         log.info("Product saved: id={}, name={}", saved.getProductId(), saved.getName());
         return saved;
     }
 
-    // comanda products
+    // READ – toate produsele (fără paginare)
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    // READ – toate produsele cu paginare
     public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
 
-    // comanda details (afiseaza detaliile unui produs)
+    // READ – produs după ID
     public Product getProductDetails(Integer id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
     }
 
-    // comanda admin edit product
+    // UPDATE – editare produs existent
     public Product updateProduct(Integer id, Product updatedProduct) {
         Product existingProduct = getProductDetails(id);
 
@@ -72,13 +72,16 @@ public class ProductService {
         return saved;
     }
 
-    // comanda admin delete product
+    // DELETE
     public void deleteProduct(Integer id) {
+        if (!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Product", "id", id);
+        }
         productRepository.deleteById(id);
         log.info("Product deleted: id={}", id);
     }
 
-    // comanda de filtrare a produselor dupa tip
+    // READ – filtrare după tip de produs
     public List<? extends Product> filterProductsByType(String type) {
         String normalizedType = type.toLowerCase().trim();
 
@@ -87,8 +90,7 @@ public class ProductService {
             case "graphics cards", "gpus" -> graphicsCardRepository.findAll();
             case "processors", "cpus" -> processorRepository.findAll();
             case "cases" -> caseRepository.findAll();
-            default -> throw new IllegalArgumentException("Type of product " + type + " is not valid");
+            default -> throw new IllegalArgumentException("Invalid product type: " + type);
         };
     }
-
 }

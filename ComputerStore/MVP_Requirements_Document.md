@@ -1,59 +1,57 @@
 # Computer Store - MVP Requirements Document
 
 ## Project Overview
-**PC Components E-commerce Store** - A web-based platform for buying computer hardware components including processors, graphics cards, motherboards, and cases.
+**ComputerStore** - An e-commerce platform for computer hardware components.
 
 **Technology Stack:**
-- Backend: Spring Boot 4.0.0
-- Frontend: Thymeleaf
-- Database: PostgreSQL
-- Testing: JUnit 5, Mockito
+- **Backend:** Java 21, Spring Boot 3.2.0
+- **Security:** Spring Security 6.2 (RBAC, CSRF Protection, BCrypt)
+- **Database:** PostgreSQL (Persistence), H2 (Testing)
+- **Frontend:** Thymeleaf
+- **Logging:** Spring AOP (Aspect-Oriented Programming)
+- **Testing:** JUnit 5, Mockito, Jacoco (Code Coverage)
+- **API Documentation:** SpringDoc OpenAPI (Swagger)
 
 ---
 
 ## Technical Architecture
 
-### Database Schema (9 Entities)
-
-![Database ERD](./er_diagram.jpeg)
+### Database Schema (11 Entities)
 
 **Entities:**
-1. **customers** - User accounts (customer_id, first_name, last_name, phone_number, address, email, username, password)
-2. **products** - Base product information (product_id, name, price)
-3. **processors** - CPU-specific specs (product_id FK, core_count, core_clock, socket)
-4. **graphicscards** - GPU-specific specs (product_id FK, memory_size, core_clock, memory_clock)
-5. **motherboards** - Motherboard-specific specs (product_id FK, slots, cpu_socket, chipset)
-6. **cases** - Case-specific specs (product_id FK, vents, type, format)
-7. **orders** - Purchase orders (order_id, customer_id FK, order_date, total_price)
-8. **order_items** - Order line items (order_item_id, order_id FK, product_id FK, quantity, unit_price_at_purchase)
-9. **cards** - Payment card information (card_id, order_id FK, card_number, card_name, expiry_date, CVV)
+1. **users** - Secure user accounts (user_id, first_name, last_name, phone_number, address, email, username, password, role)
+2. **products** - Base product catalog (product_id, name, price)
+3. **processors** - CPU specifications (product_id FK, core_count, core_clock, socket)
+4. **graphicscards** - GPU specifications (product_id FK, memory_size, core_clock, memory_clock)
+5. **motherboards** - Motherboard specifications (product_id FK, slots, cpu_socket, chipset)
+6. **cases** - Chassis specifications (product_id FK, vents, type, format)
+7. **orders** - Customer orders (order_id, user_id FK, order_date, total_price)
+8. **order_items** - Order line items (order_item_id, order_id FK, product_id FK, quantity, price_at_purchase)
+9. **carts** - Persistent shopping carts (cart_id, user_id FK)
+10. **cart_items** - Items within a cart (cart_item_id, cart_id FK, product_id FK, quantity)
+11. **wishlists** - User wishlists (wishlist_id, user_id FK)
 
 ### Key Relationships
-1. **Customer → Orders** (One-to-Many) - One user can have multiple orders
-2. **Order → OrderItems** (One-to-Many) - One order contains multiple items
-3. **OrderItem → Product** (Many-to-One) - Multiple order items can reference the same product
-4. **Order → Card** (One-to-One) - Each order has one payment card
-5. **Product → Subclasses** (Inheritance: JOINED strategy) - Product types inherit from base Product entity
-
-**Cascade Deletion:**
-- Deleting a Customer cascades to Orders → OrderItems and Cards
-- Ensures data integrity and orphan prevention
+1. **User → Orders** (One-to-Many) - A user can place multiple orders.
+2. **User → Cart** (One-to-One) - Each user has one shopping cart.
+3. **User → Wishlist** (One-to-One) - Each user has one wishlist.
+4. **Order → OrderItems** (One-to-Many) - One order contains multiple products.
+5. **Cart → CartItems** (One-to-Many) - A cart manages multiple items.
+6. **Product → Subclasses** (Joined Inheritance) - Specialized components inherit from the Product base.
 
 ---
 
 ## Business Requirements
 
 ### 1. User Account Management
-**Description:** Users must be able to create accounts, login, and manage their personal information.
+**Description:** Users must be able to create accounts, login and manage their personal profile.
 
 **Acceptance Criteria:**
-- Users can register with email, username, and password
-- Users can login with username and password
-- Users can update their profile information (name, address, phone, email)
-- Users can delete their account
-- Password is hashed for security
-
-**Business Value:** Enables personalized shopping experience and order tracking.
+- Users can register with valid email, unique username, and strong password.
+- Secure login using Spring Security and BCrypt password hashing.
+- Users can update their profile information (name, address, phone, email).
+- Account deletion with full data cleanup (cascade deletion).
+- Role-based access (USER role by default).
 
 ---
 
@@ -66,36 +64,28 @@
 - Users can view all products or filter by category
 - Product information is stored persistently in database
 
-**Business Value:** Provides customers with detailed product information to make informed purchasing decisions.
-
 ---
 
-### 3. Shopping Cart Functionality
-**Description:** Users must be able to add products to a cart and manage quantities before checkout.
+### 3. Shopping Cart and Wishlist
+**Description:** Users can manage a persistent shopping cart and a wishlist for future purchases.
 
 **Acceptance Criteria:**
-- Users can add products to cart
-- Cart displays product name, price, and quantity
-- Users can remove items or adjust quantities
-- Cart persists during user session
-- Cart calculates total price automatically
-
-**Business Value:** Enables users to shop for multiple items and review before purchase.
+- Authenticated users have a persistent cart stored in the database.
+- Products can be added to the cart or wishlist.
+- Cart displays product details, quantities, and real-time total price.
+- Users can adjust quantities or remove items from the cart.
+- Wishlist items can be moved directly to the cart.
 
 ---
 
 ### 4. Order Processing
-**Description:** Users must be able to complete purchases with payment card information.
+**Description:** A streamlined checkout process that creates persistent orders and manages inventory state.
 
 **Acceptance Criteria:**
-- Users can proceed to checkout from cart
-- System collects payment card details (card number, name, expiry date, CVV)
-- System validates card information format
-- Order is created with timestamp and total price
-- Cart is cleared after successful order
-- Order details are persisted in database
-
-**Business Value:** Core revenue-generating functionality enabling sales transactions.
+- Secure checkout flow restricted to authenticated users.
+- Order creation includes timestamp, user reference, and item snapshots.
+- Cart is automatically cleared upon successful order placement.
+- Total price calculation includes all items and potential discounts.
 
 ---
 
@@ -106,8 +96,6 @@
 - Users can view list of all their previous orders
 - Each order shows: order ID, date, total price, and items purchased
 - Orders are sorted by date (newest first)
-
-**Business Value:** Provides transparency and enables users to track purchase history.
 
 ---
 
@@ -120,21 +108,17 @@
 - Filter selection persists when adding items to cart
 - System returns appropriate products based on filter
 
-**Business Value:** Improves user experience by reducing time to find desired products.
-
 ---
 
-### 7. Data Validation
-**Description:** All user inputs must be validated to ensure data integrity and security.
+### 7. Security and Data Validation
+**Description:** Comprehensive security measures and strict input validation to protect user data and system integrity.
 
 **Acceptance Criteria:**
-- Email addresses must be in valid format
-- Passwords must be minimum 8 characters
-- Phone numbers must be provided
-- Card numbers must be 10-20 characters
-- CVV must be 3-4 digits
-
-**Business Value:** Prevents invalid data entry and protects system integrity.
+- CSRF (Cross-Site Request Forgery) protection on all state-changing forms.
+- Password requirements: Minimum 8 characters with hashing via BCrypt.
+- Email format validation using Jakarta Validation API.
+- Role-Based Access Control (RBAC) ensuring users only access their own data.
+- Protection against unauthorized access to administrative endpoints.
 
 ---
 
@@ -148,20 +132,16 @@
 - Users can logout to end session
 - Unauthenticated users are redirected to login
 
-**Business Value:** Provides seamless user experience and security.
-
 ---
 
-### 9. Secure Payment Information Storage
-**Description:** Payment card information must be stored securely and associated with orders.
+### 9. Logging and Monitoring (AOP)
+**Description:** The system must implement automated logging to track application behavior and troubleshoot issues.
 
 **Acceptance Criteria:**
-- Card details are validated before storage
-- Each card is linked to exactly one order
-- Card information includes: number, cardholder name, expiry date, CVV
-- Card data is stored in separate secure table
-
-**Business Value:** Enables order fulfillment and payment processing while maintaining security.
+- Aspect-Oriented Programming (AOP) used to log service method executions.
+- Request/Response logging for critical business flows (login, checkout).
+- Performance tracking (execution time) for database queries.
+- Error and Exception logging with stack traces for debugging.
 
 ---
 
@@ -174,101 +154,92 @@
 - Products can be added, updated, or removed from catalog
 - All product changes are persisted in database
 
-**Business Value:** Ensures accurate product information and pricing for customers.
-
 ---
 
 ## MVP Features
 
-### Feature 1: User Authentication System
-**Description:** Complete user registration and login system with secure password hashing.
+### Feature 1: Robust Authentication & RBAC
+**Description:** A secure authentication system using Spring Security with Role-Based Access Control (RBAC).
 
 **Technical Implementation:**
-- REST endpoints: POST `/api/v1/customers/register`, POST `/api/v1/customers/login`
-- Service: `CustomerService` with SHA-256 password hashing
-- Database: `customers` table with validated fields
-- Frontend: Login and registration pages with Thymeleaf
+- **Security:** BCrypt password encoding and CSRF protection.
+- **Roles:** `ROLE_USER` for customers and `ROLE_ADMIN` for system management.
+- **Persistence:** User details stored in the `users` table with Jakarta Validation.
+- **Session:** Secure session management with "Remember Me" functionality.
 
-**User Story:** As a user, I want to create an account and login so that I can make purchases and track my orders.
+**User Story:** As a user, I want a secure way to access my personal data and orders so that my information remains private.
 
-**Priority:** Critical (P0) - Required for all other features
+**Priority:** Critical (P0)
 
 ---
 
-### Feature 2: Product Browsing and Filtering
-**Description:** Comprehensive product catalog with category-based filtering.
+### Feature 2: Advanced Product Catalog
+**Description:** A dynamic product catalog with category-based filtering and high-performance pagination.
 
 **Technical Implementation:**
-- REST endpoints: GET `/api/v1/products`, GET `/api/v1/products/filter?type={type}`
-- Service: `ProductService` with inheritance-based product types
-- Database: `products` parent table with child tables (processors, graphicscards, motherboards, cases)
-- Frontend: Product grid with filter buttons and detailed specifications
+- **Filtering:** Category-specific views for Processors, GPUs, Motherboards, and Cases.
+- **Pagination:** Server-side pagination (Spring Data JPA) to handle large datasets efficiently.
+- **Inheritance:** `JOINED` inheritance strategy for specialized product specifications.
+- **UI:** Responsive grid layout with real-time specification display.
 
-**User Story:** As a user, I want to browse computer components by category so that I can find the parts I need for my build.
+**User Story:** As a user, I want to filter and paginate through components so that I can quickly find parts that fit my specific build requirements.
 
-**Priority:** Critical (P0) - Core shopping functionality
+**Priority:** Critical (P0)
 
 ---
 
-### Feature 3: Shopping Cart Management
-**Description:** Session-based shopping cart with add/remove functionality.
+### Feature 3: Persistent Cart & Wishlist
+**Description:** Persistent storage for user shopping carts and wishlists, enabling cross-device shopping.
 
 **Technical Implementation:**
-- Service: `SessionCartService` using HTTP session storage
-- Cart operations: add product, remove product, view cart, clear cart
-- Frontend: Cart page showing items, quantities, and total price
-- Session persistence: Cart maintained during user session
+- **Service:** `CartService` and `WishlistService` managing database persistence.
+- **Operations:** Real-time quantity adjustments, price calculations, and "Move to Cart" logic.
+- **Integration:** Automated cart cleanup upon successful order placement.
 
-**User Story:** As a user, I want to add multiple items to my cart and review them before checkout so that I can ensure I'm buying everything I need.
+**User Story:** As a user, I want my cart to be saved across sessions so that I can place my order later.
 
-**Priority:** Critical (P0) - Required for purchasing
+**Priority:** High (P1)
 
 ---
 
-### Feature 4: Checkout and Payment Processing
-**Description:** Complete checkout flow with payment card validation and order creation.
+### Feature 4: Secure Checkout & Transaction Flow
+**Description:** A checkout system that validates payment details and ensures transactional integrity.
 
 **Technical Implementation:**
-- REST endpoint: POST `/api/v1/orders/checkout/{customerId}`
-- Services: `OrderService`, `CardService` for order creation and payment processing
-- Database: `orders` table with `order_items` (many-to-many) and `cards` table (one-to-one)
-- Frontend: Checkout page with card input form and order summary
-- Validation: Card number (10-20 chars), CVV (3-4 digits), expiry date format
+- **Transaction:** Atomic order creation and cart clearing using `@Transactional`.
+- **Validation:** Server-side validation of payment information (Luhn check simulation).
+- **History:** Immutable order snapshots capturing price-at-purchase to prevent history drift.
 
-**User Story:** As a user, I want to securely enter my payment information and complete my purchase so that I can receive my computer components.
+**User Story:** As a user, I want a secure checkout process so that I can finalize my purchase.
 
-**Priority:** Critical (P0) - Revenue generation
+**Priority:** Critical (P0)
 
 ---
 
-### Feature 5: Order History and Tracking
-**Description:** View past orders with details of purchased items.
+### Feature 5: Admin User Management
+**Description:** A dedicated administrative dashboard for managing system users and monitoring activity.
 
 **Technical Implementation:**
-- REST endpoint: GET `/api/v1/orders/history/{customerId}`
-- Service: `OrderService` retrieves orders by user
-- Database: Queries `orders` joined with `order_items` and `customers`
-- Frontend: Order history page
+- **Authorization:** Restrictive access via `hasRole('ADMIN')`.
+- **Management:** Paginated view of all registered users with administrative controls.
+- **Auditing:** AOP-based logging of administrative actions for security audits.
 
-**User Story:** As a user, I want to view my past orders so that I can track my purchases and reference my order details.
+**User Story:** As an administrator, I want to manage user accounts so that I can ensure the platform remains secure and well-moderated.
 
-**Priority:** High (P1) - Important for user satisfaction
+**Priority:** High (P1)
+
+---
+
+## Technical Standards & Quality
+- **AOP Logging:** Automated logging of all service layer methods for better observability.
+- **Exception Handling:** Centralized `@ControllerAdvice` for consistent error responses and user feedback.
+- **Testing Coverage:** Target >80% coverage using Jacoco, JUnit 5, and Mockito.
+- **Documentation:** Full OpenAPI/Swagger integration for API exploration.
 
 ---
 
 ## Success Metrics
-- Users can successfully register and login
-- Products display with correct specifications
-- Shopping cart maintains state throughout session
-- Orders are created and persisted correctly
-- All API endpoints return appropriate responses
-- All unit tests pass (52 tests)
-
----
-
-## Future Enhancements (Post-MVP)
-- Admin panel for product management
-- Product reviews and ratings
-- Advanced search with multiple filters
-- Wishlist functionality
-- Inventory tracking and stock management
+- **Performance:** Product pages load in under 500ms even with pagination.
+- **Security:** 100% of sensitive data is encrypted; no unauthorized access to admin panels.
+- **Reliability:** Successful order persistence and transactional integrity across all flows.
+- **Quality:** All 50+ unit and integration tests passing in the CI/CD pipeline.

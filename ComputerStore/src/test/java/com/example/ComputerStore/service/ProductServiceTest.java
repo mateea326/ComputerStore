@@ -93,11 +93,14 @@ class ProductServiceTest {
 
     @Test
     void getProductDetails_NotFound_ThrowsException() {
+        // Arrange
         when(productRepository.findById(999)).thenReturn(Optional.empty());
 
-        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, () -> {
-            productService.getProductDetails(999);
-        });
+        // Act & Assert
+        assertThrows(
+                com.example.ComputerStore.exception.ResourceNotFoundException.class,
+                () -> productService.getProductDetails(999)
+        );
     }
 
     @Test
@@ -151,12 +154,13 @@ class ProductServiceTest {
                 IllegalArgumentException.class,
                 () -> productService.filterProductsByType("invalid")
         );
-        assertTrue(exception.getMessage().contains("not valid"));
+        assertTrue(exception.getMessage().contains("Invalid product type"));
     }
 
     @Test
     void deleteProduct_Success() {
         // Arrange
+        when(productRepository.existsById(1)).thenReturn(true);
         doNothing().when(productRepository).deleteById(1);
 
         // Act

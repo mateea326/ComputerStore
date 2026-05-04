@@ -14,29 +14,39 @@ import java.util.Arrays;
 @Component
 public class LoggingAspect {
 
-    private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     // Pointcut care acoperă toate metodele din pachetul service
     @Pointcut("execution(* com.example.ComputerStore.service.*.*(..))")
     public void serviceMethods() {}
 
+    /**
+     * Aspect for automatic logging of all service methods.
+     * Logs method entry, arguments, execution time, and exit (result or exception).
+     */
     @Around("serviceMethods()")
-    public Object logExecutionTimeAndMethodInfo(ProceedingJoinPoint joinPoint) throws Throwable {
-        String methodName = joinPoint.getSignature().toShortString();
+    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        String methodName = joinPoint.getSignature().getName();
+        String className = joinPoint.getSignature().getDeclaringTypeName();
         Object[] args = joinPoint.getArgs();
 
-        log.info("AOP [Start] Executing {} with args: {}", methodName, Arrays.toString(args));
-        long startTime = System.currentTimeMillis();
+        log.debug("AOP [Start] Enter: {}.{}() with argument[s] = {}", className, methodName, Arrays.toString(args));
 
+        long start = System.currentTimeMillis();
         try {
             Object result = joinPoint.proceed();
-            long timeTaken = System.currentTimeMillis() - startTime;
-            log.info("AOP [Success] Executed {} in {} ms. Result: {}", methodName, timeTaken, result);
+            long executionTime = System.currentTimeMillis() - start;
+
+            log.debug("AOP [Success] Exit: {}.{}() with result = {}. Execution time: {} ms", 
+                    className, methodName, result, executionTime);
             return result;
-        } catch (Throwable ex) {
-            long timeTaken = System.currentTimeMillis() - startTime;
-            log.error("AOP [Error] Exception in {} after {} ms. Error: {}", methodName, timeTaken, ex.getMessage());
-            throw ex;
+        } catch (IllegalArgumentException e) {
+            log.error("AOP [Error] Illegal argument: {} in {}.{}()", Arrays.toString(args), className, methodName);
+            throw e;
+        } catch (Throwable e) {
+            log.error("AOP [Error] Exception in {}.{}() after {} ms with cause = {}", 
+                    className, methodName, (System.currentTimeMillis() - start), e.getCause() != null ? e.getCause() : "NULL");
+            throw e;
         }
     }
 }
