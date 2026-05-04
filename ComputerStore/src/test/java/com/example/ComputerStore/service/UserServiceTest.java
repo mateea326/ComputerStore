@@ -78,8 +78,8 @@ class UserServiceTest {
     void login_Failure_GenericMessage() {
         when(userRepository.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        com.example.ComputerStore.exception.ResourceNotFoundException exception = assertThrows(
+                com.example.ComputerStore.exception.ResourceNotFoundException.class,
                 () -> userService.login("johndoe", "wrongpassword")
         );
         assertEquals("Invalid username or password", exception.getMessage());

@@ -2,6 +2,8 @@ package com.example.ComputerStore.service;
 
 import com.example.ComputerStore.dto.UserRegistrationDTO;
 import com.example.ComputerStore.dto.UserResponseDTO;
+import com.example.ComputerStore.exception.ResourceNotFoundException;
+import com.example.ComputerStore.exception.DuplicateResourceException;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.repo.UserRepository;
 import org.slf4j.Logger;
@@ -53,10 +55,10 @@ public class UserService {
 
         // 2. Verificăm unicitatea
         if (userRepository.findByUsername(registrationDTO.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already taken");
+            throw new DuplicateResourceException("Username already taken");
         }
         if (userRepository.findByEmail(registrationDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already taken");
+            throw new DuplicateResourceException("Email already taken");
         }
 
         // 3. Creăm entitatea
@@ -77,11 +79,11 @@ public class UserService {
 
     public UserResponseDTO login(String username, String password) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid username or password"));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             log.warn("Failed login attempt for user: {}", username);
-            throw new IllegalArgumentException("Invalid username or password");
+            throw new ResourceNotFoundException("Invalid username or password");
         }
 
         log.info("User logged in: {}", username);
@@ -91,7 +93,7 @@ public class UserService {
     // comanda edit account
     public UserResponseDTO updateUser(Integer userId, UserRegistrationDTO updatedDetails) {
         User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
         existingUser.setFirstName(updatedDetails.getFirstName());
         existingUser.setLastName(updatedDetails.getLastName());
@@ -109,13 +111,13 @@ public class UserService {
     // Metodă pentru backend/alte servicii, returnează entitatea
     public User findUserById(Integer id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User", id));
     }
 
     // comanda delete user
     public UserResponseDTO deleteUser(Integer id) {
         User userToDelete = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User", id));
 
         userRepository.delete(userToDelete);
         log.info("User deleted: id={}", id);

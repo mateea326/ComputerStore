@@ -77,6 +77,15 @@
             outline: none;
             border-color: #7bb8b4;
         }
+        .field-error {
+            color: #dc3580;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+        input.invalid {
+            border-color: #dc3580;
+        }
         .button-group {
             display: flex;
             gap: 15px;
@@ -227,29 +236,31 @@
         <div th:if="${error}" class="error" th:text="${error}"></div>
         <div th:if="${success}" class="success" th:text="${success}"></div>
 
-        <form method="post" action="/account-settings/update">
+        <form method="post" th:action="@{/account-settings/update}" id="accountForm">
             <div class="form-group">
-                <label for="firstName">First Name</label>
+                <label for="firstName">First Name *</label>
                 <input type="text" id="firstName" name="firstName"
-                       th:value="${user?.firstName}" required>
+                       th:value="${user?.firstName}" required maxlength="50">
             </div>
 
             <div class="form-group">
-                <label for="lastName">Last Name</label>
+                <label for="lastName">Last Name *</label>
                 <input type="text" id="lastName" name="lastName"
-                       th:value="${user?.lastName}" required>
+                       th:value="${user?.lastName}" required maxlength="50">
             </div>
 
             <div class="form-group">
-                <label for="email">Email</label>
+                <label for="email">Email *</label>
                 <input type="email" id="email" name="email"
-                       th:value="${user?.email}" required>
+                       th:value="${user?.email}" required maxlength="50">
+                <div class="field-error" id="emailError">Please enter a valid email</div>
             </div>
 
             <div class="form-group">
-                <label for="phoneNumber">Phone Number</label>
-                <input type="text" id="phoneNumber" name="phoneNumber"
-                       th:value="${user?.phoneNumber}" required>
+                <label for="phoneNumber">Phone Number *</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber"
+                       th:value="${user?.phoneNumber}" required maxlength="20">
+                <div class="field-error" id="phoneError">Phone number should contain only digits</div>
             </div>
 
             <div class="form-group">
@@ -282,7 +293,7 @@
         </div>
         <div class="modal-buttons">
             <button class="btn-cancel" onclick="hideDeleteModal()">Cancel</button>
-            <form method="post" action="/account-settings/delete" style="display: inline;">
+            <form method="post" th:action="@{/account-settings/delete}" style="display: inline;">
                 <button type="submit" class="btn-confirm">Delete My Account</button>
             </form>
         </div>
@@ -305,6 +316,29 @@
             modal.style.display = 'none';
         }
     }
+
+    document.getElementById('accountForm').addEventListener('submit', function(e) {
+        var valid = true;
+        document.querySelectorAll('.field-error').forEach(function(el) { el.style.display = 'none'; });
+        document.querySelectorAll('input').forEach(function(el) { el.classList.remove('invalid'); });
+
+        var email = document.getElementById('email');
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.value)) {
+            document.getElementById('email').classList.add('invalid');
+            document.getElementById('emailError').style.display = 'block';
+            valid = false;
+        }
+
+        var phone = document.getElementById('phoneNumber');
+        if (!/^\d+$/.test(phone.value)) {
+            document.getElementById('phoneNumber').classList.add('invalid');
+            document.getElementById('phoneError').style.display = 'block';
+            valid = false;
+        }
+
+        if (!valid) e.preventDefault();
+    });
 </script>
 </body>
 </html>

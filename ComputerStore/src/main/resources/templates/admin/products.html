@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products - Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Georgia", serif; background: #f5f7fa; }
+        .navbar { background: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h1 { font-size: 24px; }
+        .navbar-right { display: flex; gap: 20px; align-items: center; }
+        .navbar a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 5px; transition: background 0.3s; }
+        .navbar a:hover { background: rgba(255,255,255,0.2); }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .success { background: #d4edda; color: #155724; padding: 12px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #64b57d; }
+        .error { background: #fee; color: #dc3580; padding: 12px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #dc3580; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .add-btn { background: #7bb8b4; color: white; padding: 12px 24px; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.3s; }
+        .add-btn:hover { background: #619e9a; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        th { background: #2c3e50; color: white; padding: 15px; text-align: left; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
+        .delete-btn:hover { background: #c82333; }
+        .sort-link { color: white; text-decoration: none; }
+        .sort-link:hover { text-decoration: underline; }
+        .pagination { display: flex; gap: 10px; align-items: center; margin-top: 20px; justify-content: center; }
+        .page-btn { padding: 8px 16px; border: 2px solid #7bb8b4; background: white; color: #7bb8b4; border-radius: 5px; text-decoration: none; font-weight: 600; transition: all 0.3s; }
+        .page-btn:hover { background: #7bb8b4; color: white; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <h1>⚙️ Admin - Products</h1>
+    <div class="navbar-right">
+        <a href="/admin">Dashboard</a>
+        <a href="/products">Store View</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+<div class="container">
+    <div th:if="${success}" class="success" th:text="${success}"></div>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <div class="header-row">
+        <h2>All Products</h2>
+        <a href="/admin/products/add" class="add-btn">+ Add Product</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th><a th:href="@{/admin/products(sortBy='productId', direction=${sortBy == 'productId' && direction == 'asc' ? 'desc' : 'asc'})}" class="sort-link">ID ↕</a></th>
+                <th><a th:href="@{/admin/products(sortBy='name', direction=${sortBy == 'name' && direction == 'asc' ? 'desc' : 'asc'})}" class="sort-link">Name ↕</a></th>
+                <th><a th:href="@{/admin/products(sortBy='price', direction=${sortBy == 'price' && direction == 'asc' ? 'desc' : 'asc'})}" class="sort-link">Price ↕</a></th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.productId}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="'$' + ${product.price}"></td>
+                <td>
+                    <form method="post" th:action="@{/admin/products/delete/{id}(id=${product.productId})}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <a th:if="${currentPage > 0}" th:href="@{/admin/products(page=${currentPage - 1}, sortBy=${sortBy}, direction=${direction})}" class="page-btn">← Previous</a>
+        <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${totalPages}" style="font-weight: 600;"></span>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/admin/products(page=${currentPage + 1}, sortBy=${sortBy}, direction=${direction})}" class="page-btn">Next →</a>
+    </div>
+</div>
+</body>
+</html>

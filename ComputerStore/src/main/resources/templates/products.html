@@ -191,12 +191,28 @@
         </div>
     </div>
 
-    <div class="sorting">
-        <span style="font-weight: 600; color: #333;">Sort by:</span>
-        <a th:href="@{/products(sortBy='name', direction='asc', type=${selectedType})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'asc'} ? 'active' : ''">Name A-Z</a>
-        <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">Name Z-A</a>
-        <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">Price Low-High</a>
-        <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">Price High-Low</a>
+    <div class="sorting" style="justify-content: space-between;">
+        <div>
+            <span style="font-weight: 600; color: #333;">Sort by:</span>
+            <a th:href="@{/products(sortBy='name', direction='asc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'asc'} ? 'active' : ''">Name A-Z</a>
+            <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">Name Z-A</a>
+            <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">Price Low-High</a>
+            <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">Price High-Low</a>
+        </div>
+        <div>
+            <form id="pageSizeForm" method="get" action="/products" style="display: flex; align-items: center; gap: 10px;">
+                <input type="hidden" name="sortBy" th:value="${sortBy}">
+                <input type="hidden" name="direction" th:value="${direction}">
+                <input type="hidden" name="type" th:value="${selectedType}">
+                <label for="size" style="font-weight: 600; margin: 0;">Items per page:</label>
+                <select name="size" id="size" onchange="document.getElementById('pageSizeForm').submit()" style="padding: 5px; border-radius: 5px; border: 1px solid #7bb8b4; color: #7bb8b4; font-weight: 600;">
+                    <option value="5" th:selected="${size == 5}">5</option>
+                    <option value="10" th:selected="${size == 10}">10</option>
+                    <option value="20" th:selected="${size == 20}">20</option>
+                    <option value="50" th:selected="${size == 50}">50</option>
+                </select>
+            </form>
+        </div>
     </div>
 
     <div class="products-grid">
@@ -251,9 +267,9 @@
     </div>
 
     <div th:if="${isPaginated}" class="pagination" style="margin-top: 30px; justify-content: center;">
-        <a th:if="${currentPage > 0}" th:href="@{/products(page=${currentPage - 1}, sortBy=${sortBy}, direction=${direction})}" class="filter-btn">← Previous</a>
+        <a th:if="${currentPage > 0}" th:href="@{/products(page=${currentPage - 1}, sortBy=${sortBy}, direction=${direction}, type=${selectedType}, size=${size})}" class="filter-btn">← Previous</a>
         <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${totalPages}"></span>
-        <a th:if="${currentPage < totalPages - 1}" th:href="@{/products(page=${currentPage + 1}, sortBy=${sortBy}, direction=${direction})}" class="filter-btn">Next →</a>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/products(page=${currentPage + 1}, sortBy=${sortBy}, direction=${direction}, type=${selectedType}, size=${size})}" class="filter-btn">Next →</a>
     </div>
 </div>
 </body>

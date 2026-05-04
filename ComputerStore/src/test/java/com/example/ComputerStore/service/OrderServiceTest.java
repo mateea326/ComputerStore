@@ -110,4 +110,13 @@ class OrderServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size());
     }
+
+    @Test
+    void createOrder_EmptyCart_ThrowsException() {
+        Map<Integer, Integer> emptyCart = new HashMap<>();
+
+        assertThrows(com.example.ComputerStore.exception.EmptyCartException.class, () -> {
+            orderService.createOrder(1, emptyCart);
+        });
+    }
 }

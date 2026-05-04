@@ -1,5 +1,6 @@
 package com.example.ComputerStore.service;
 
+import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.Product;
 import com.example.ComputerStore.repo.ProductRepository;
 import com.example.ComputerStore.repo.MotherboardRepository;
@@ -56,7 +57,7 @@ public class ProductService {
     // comanda details (afiseaza detaliile unui produs)
     public Product getProductDetails(Integer id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Product with the id " + id + " was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
     }
 
     // comanda admin edit product
