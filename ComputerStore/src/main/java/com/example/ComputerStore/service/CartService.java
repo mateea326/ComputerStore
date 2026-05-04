@@ -1,5 +1,6 @@
 package com.example.ComputerStore.service;
 
+import com.example.ComputerStore.exception.EmptyCartException;
 import com.example.ComputerStore.model.Order;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,7 @@ public class CartService {
         Map<Integer, Integer> cart = getCart(session);
 
         if (cart.isEmpty()) {
-            throw new IllegalStateException("Cart is empty");
+            throw new EmptyCartException();
         }
 
         Order savedOrder = orderService.createOrderWithPaymentDetails(userId, cart);

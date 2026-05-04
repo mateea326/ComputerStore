@@ -62,6 +62,13 @@ public class WishlistService {
         return wishlist.getProducts();
     }
 
+    // verifica daca un produs este in wishlist
+    public boolean isProductInWishlist(Integer userId, Integer productId) {
+        Wishlist wishlist = getOrCreateWishlist(userId);
+        Product product = productService.getProductDetails(productId);
+        return wishlist.containsProduct(product);
+    }
+
     // obtine ID-urile produselor din wishlist
     public Set<Integer> getWishlistProductIds(Integer userId) {
         Wishlist wishlist = getOrCreateWishlist(userId);
