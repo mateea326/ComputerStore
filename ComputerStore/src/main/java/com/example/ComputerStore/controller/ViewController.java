@@ -1,5 +1,7 @@
 package com.example.ComputerStore.controller;
 
+import com.example.ComputerStore.dto.UserRegistrationDTO; // Import nou
+import com.example.ComputerStore.dto.UserResponseDTO;     // Import nou
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.model.Product;
 import com.example.ComputerStore.model.Order;
@@ -38,7 +40,6 @@ public class ViewController {
         this.orderService = orderService;
     }
 
-    // homepage - redirect catre login
     @GetMapping("/")
     public String home() {
         return "redirect:/login";
@@ -55,7 +56,8 @@ public class ViewController {
                         HttpSession session,
                         RedirectAttributes redirectAttributes) {
         try {
-            User user = userService.login(username, password);
+            // UserService returnează acum UserResponseDTO
+            UserResponseDTO user = userService.login(username, password);
             session.setAttribute("userId", user.getUserId());
             session.setAttribute("userName", user.getFirstName());
             return "redirect:/products";
@@ -65,14 +67,13 @@ public class ViewController {
         }
     }
 
-    // pagina de inregistrare
     @GetMapping("/register")
     public String registerPage() {
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute User user,
+    public String register(@Valid @ModelAttribute("user") UserRegistrationDTO userDto, // Folosește DTO
                            BindingResult result,
                            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -85,7 +86,7 @@ public class ViewController {
         }
 
         try {
-            userService.registerNewUser(user);
+            userService.registerNewUser(userDto); // Trimite DTO-ul
             redirectAttributes.addFlashAttribute("success", "Account created! Please login.");
             return "redirect:/login";
         } catch (Exception e) {
@@ -116,7 +117,6 @@ public class ViewController {
         return "products";
     }
 
-    // add to cart
     @PostMapping("/cart/add/{productId}")
     public String addToCart(@PathVariable Integer productId,
                             @RequestParam(required = false) String returnType,
@@ -139,7 +139,6 @@ public class ViewController {
         return "redirect:/products";
     }
 
-    // view cart
     @GetMapping("/cart")
     public String cartPage(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -163,7 +162,6 @@ public class ViewController {
         return "cart";
     }
 
-    // remove from cart
     @PostMapping("/cart/remove/{productId}")
     public String removeFromCart(@PathVariable Integer productId,
                                  HttpSession session) {
@@ -216,7 +214,6 @@ public class ViewController {
         }
     }
 
-    // istoria comenzilor
     @GetMapping("/order-history")
     public String orderHistory(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -226,13 +223,12 @@ public class ViewController {
 
         try {
             List<Order> orders = orderService.getOrderHistory(userId);
-
             Map<Integer, String> productNames = new HashMap<>();
             Map<Integer, Float> productPrices = new HashMap<>();
 
             for (Order order : orders) {
                 Map<Integer, Integer> quantities = order.getProductQuantities();
-                if (quantities != null && !quantities.isEmpty()) {
+                if (quantities != null) {
                     for (Integer productId : quantities.keySet()) {
                         try {
                             Product product = productService.getProductDetails(productId);
@@ -252,8 +248,6 @@ public class ViewController {
             model.addAttribute("userName", session.getAttribute("userName"));
         } catch (Exception e) {
             model.addAttribute("orders", new ArrayList<>());
-            model.addAttribute("productNames", new HashMap<>());
-            model.addAttribute("productPrices", new HashMap<>());
             model.addAttribute("userName", session.getAttribute("userName"));
         }
 
@@ -269,7 +263,7 @@ public class ViewController {
 
         try {
             User user = userService.findUserById(userId);
-            model.addAttribute("user", user);
+            model.addAttribute("user", user); // Aici trimitem încă entitatea pentru a popula formularul
             model.addAttribute("userName", session.getAttribute("userName"));
         } catch (Exception e) {
             model.addAttribute("error", "Could not load account details");
@@ -278,7 +272,6 @@ public class ViewController {
         return "account-settings";
     }
 
-    // editarea contului
     @PostMapping("/account-settings/update")
     public String updateAccount(@RequestParam String firstName,
                                 @RequestParam String lastName,
@@ -293,18 +286,18 @@ public class ViewController {
         }
 
         try {
-            User updatedDetails = new User();
-            updatedDetails.setFirstName(firstName);
-            updatedDetails.setLastName(lastName);
-            updatedDetails.setEmail(email);
-            updatedDetails.setPhoneNumber(phoneNumber);
-            updatedDetails.setAddress(address);
+            // Mapăm datele primite într-un DTO pentru a apela serviciul
+            UserRegistrationDTO updateDto = new UserRegistrationDTO();
+            updateDto.setFirstName(firstName);
+            updateDto.setLastName(lastName);
+            updateDto.setEmail(email);
+            updateDto.setPhoneNumber(phoneNumber);
+            updateDto.setAddress(address);
 
-            userService.updateUser(userId, updatedDetails);
+            // UserService.updateUser primește acum DTO
+            userService.updateUser(userId, updateDto);
 
-            // updatam sesiunea cu noul nume
             session.setAttribute("userName", firstName);
-
             redirectAttributes.addFlashAttribute("success", "Account updated successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -313,7 +306,6 @@ public class ViewController {
         return "redirect:/account-settings";
     }
 
-    // stergerea contului
     @PostMapping("/account-settings/delete")
     public String deleteAccount(HttpSession session, RedirectAttributes redirectAttributes) {
         Integer userId = (Integer) session.getAttribute("userId");
