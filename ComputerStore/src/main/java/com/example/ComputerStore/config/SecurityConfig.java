@@ -31,7 +31,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()) // Disabled for simplicity in testing, but can be enabled
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**", "/swagger-ui/**", "/v3/api-docs/**") // CSRF active for forms, disabled for REST API
+            )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/register", "/login", "/", "/css/**", "/js/**", "/images/**", "/error").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -61,10 +63,9 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
+        AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authBuilder.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+        return authBuilder.build();
     }
 }

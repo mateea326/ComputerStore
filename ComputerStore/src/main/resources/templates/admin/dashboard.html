@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Computer Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Georgia", serif; background: #f5f7fa; }
+        .navbar { background: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h1 { font-size: 24px; }
+        .navbar-right { display: flex; gap: 20px; align-items: center; }
+        .navbar a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 5px; transition: background 0.3s; }
+        .navbar a:hover { background: rgba(255,255,255,0.2); }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px; }
+        .stat-card { background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center; transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card h2 { font-size: 48px; color: #7bb8b4; margin-bottom: 10px; }
+        .stat-card p { font-size: 18px; color: #666; }
+        .admin-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .admin-link { display: block; background: white; border-radius: 10px; padding: 25px; text-align: center; text-decoration: none; color: #333; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: all 0.3s; font-size: 18px; font-weight: 600; }
+        .admin-link:hover { background: #7bb8b4; color: white; transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <h1>⚙️ Admin Panel</h1>
+    <div class="navbar-right">
+        <a href="/products">Store View</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+<div class="container">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h2 th:text="${totalProducts}">0</h2>
+            <p>Products</p>
+        </div>
+        <div class="stat-card">
+            <h2 th:text="${totalUsers}">0</h2>
+            <p>Users</p>
+        </div>
+        <div class="stat-card">
+            <h2 th:text="${totalOrders}">0</h2>
+            <p>Orders</p>
+        </div>
+    </div>
+    <div class="admin-links">
+        <a href="/admin/products" class="admin-link">📦 Manage Products</a>
+        <a href="/admin/users" class="admin-link">👥 Manage Users</a>
+        <a href="/admin/orders" class="admin-link">📋 Manage Orders</a>
+    </div>
+</div>
+</body>
+</html>

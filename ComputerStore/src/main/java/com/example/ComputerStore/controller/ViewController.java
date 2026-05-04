@@ -122,6 +122,7 @@ public class ViewController {
         model.addAttribute("selectedType", type);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);
+        model.addAttribute("size", size);
         return "products";
     }
 
@@ -305,6 +306,7 @@ public class ViewController {
             model.addAttribute("totalPages", orderPage.getTotalPages());
             model.addAttribute("sortBy", sortBy);
             model.addAttribute("direction", direction);
+            model.addAttribute("size", size);
             return "order-history";
         } catch (Exception e) {
             model.addAttribute("error", "Error loading order history: " + e.getMessage());

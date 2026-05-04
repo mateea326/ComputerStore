@@ -1,5 +1,7 @@
 package com.example.ComputerStore.service;
 
+import com.example.ComputerStore.exception.EmptyCartException;
+import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.*;
 import com.example.ComputerStore.repo.OrderRepository;
 import org.slf4j.Logger;
@@ -42,7 +44,7 @@ public class OrderService {
 
     public Order createOrder(Integer userId, Map<Integer, Integer> cart) {
         if (cart == null || cart.isEmpty()) {
-            throw new IllegalStateException("Cart is empty");
+            throw new EmptyCartException();
         }
 
         User user = userService.findUserById(userId);
@@ -112,7 +114,7 @@ public class OrderService {
 
     public Order getOrderById(Integer orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Order with id " + orderId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order", orderId));
     }
 
     public List<Order> getAllOrders() {

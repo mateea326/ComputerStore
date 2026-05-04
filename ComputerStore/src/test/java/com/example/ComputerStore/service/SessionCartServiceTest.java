@@ -81,21 +81,21 @@ class SessionCartServiceTest {
         testCart.put(1, 2);
         when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
         Order mockOrder = new Order();
-        when(orderService.createOrder(anyInt(), anyMap()))
+        when(orderService.createOrderWithPaymentDetails(anyInt(), anyMap()))
                 .thenReturn(mockOrder);
 
         Order result = sessionCartService.checkout(mockSession, 1);
 
         assertNotNull(result);
         assertTrue(testCart.isEmpty());
-        verify(orderService).createOrder(eq(1), any());
+        verify(orderService).createOrderWithPaymentDetails(eq(1), any());
     }
 
     @Test
     void checkout_EmptyCart_ThrowsException() {
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
+        when(mockSession.getAttribute("USER_CART")).thenReturn(new HashMap<>());
 
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(com.example.ComputerStore.exception.EmptyCartException.class, () -> {
             sessionCartService.checkout(mockSession, 1);
         });
     }
