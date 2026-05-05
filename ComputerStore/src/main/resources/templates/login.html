@@ -104,15 +104,17 @@
     <div th:if="${error}" class="error" th:text="${error}"></div>
     <div th:if="${success}" class="success" th:text="${success}"></div>
 
-    <form method="post" th:action="@{/login}">
+    <form id="loginForm" method="post" th:action="@{/login}" onsubmit="return validateLoginForm()">
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
+            <div id="usernameError" class="error" style="display: none; border: none; margin-top: 5px; padding: 5px;"></div>
         </div>
 
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
+            <div id="passwordError" class="error" style="display: none; border: none; margin-top: 5px; padding: 5px;"></div>
         </div>
 
         <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
@@ -122,6 +124,25 @@
 
         <button type="submit">Login</button>
     </form>
+
+    <script>
+        function validateLoginForm() {
+            let valid = true;
+            const username = document.getElementById('username');
+            const usernameError = document.getElementById('usernameError');
+            
+            if (username.value.trim().length < 3) {
+                usernameError.textContent = "Username must be at least 3 characters";
+                usernameError.style.display = "block";
+                valid = false;
+            } else {
+                usernameError.style.display = "none";
+            }
+            
+            return valid;
+        }
+    </script>
+
 
     <div class="register-link">
         Don't have an account? <a href="/register">Register here</a>

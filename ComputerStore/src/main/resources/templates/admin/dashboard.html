@@ -23,13 +23,7 @@
     </style>
 </head>
 <body>
-<nav class="navbar">
-    <h1>⚙️ Admin Panel</h1>
-    <div class="navbar-right">
-        <a href="/products">Store View</a>
-        <a href="/logout">Logout</a>
-    </div>
-</nav>
+<nav th:replace="~{fragments/navbar :: header(adminTitle='⚙️ Admin Panel')}"></nav>
 <div class="container">
     <div class="stats-grid">
         <div class="stat-card">

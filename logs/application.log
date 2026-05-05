@@ -1654,6 +1654,7 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
 2026-05-05 12:09:38 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-05-05 12:09:38 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
 2026-05-05 12:09:38 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+<<<<<<< HEAD
 2026-05-05 13:32:22 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
 2026-05-05 13:32:22 [main] INFO  c.e.C.ComputerStoreApplication - Starting ComputerStoreApplication using Java 21.0.3 with PID 1444 (D:\ComputerStore\ComputerStore\target\classes started by Admin in D:\ComputerStore)
 2026-05-05 13:32:22 [main] DEBUG c.e.C.ComputerStoreApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
@@ -12565,3 +12566,5 @@ Caused by: org.hibernate.query.sqm.PathElementException: Could not resolve attri
 2026-05-05 15:15:08 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-05-05 15:15:08 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
 2026-05-05 15:15:08 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+=======
+>>>>>>> origin/main

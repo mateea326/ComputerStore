@@ -81,20 +81,22 @@ class SessionCartServiceTest {
         testCart.put(1, 2);
         when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
         Order mockOrder = new Order();
-        when(orderService.createOrderWithPaymentDetails(anyInt(), anyMap()))
+        // Updated to use createOrder as per new implementation
+        when(orderService.createOrder(anyInt(), anyMap()))
                 .thenReturn(mockOrder);
 
         Order result = sessionCartService.checkout(mockSession, 1);
 
         assertNotNull(result);
         assertTrue(testCart.isEmpty());
-        verify(orderService).createOrderWithPaymentDetails(eq(1), any());
+        verify(orderService).createOrder(eq(1), any());
     }
 
     @Test
     void checkout_EmptyCart_ThrowsException() {
         when(mockSession.getAttribute("USER_CART")).thenReturn(new HashMap<>());
 
+        // Updated to expect EmptyCartException
         assertThrows(com.example.ComputerStore.exception.EmptyCartException.class, () -> {
             sessionCartService.checkout(mockSession, 1);
         });
