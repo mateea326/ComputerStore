@@ -192,7 +192,7 @@
             <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">Name Z-A</a>
             <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">Price Low-High</a>
             <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">Price High-Low</a>
-            <a th:href="@{/products(sortBy='popularity', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'popularity'} ? 'active' : ''">⭐ Popularity</a>
+            <a th:href="@{/products(sortBy='popularity', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'popularity'} ? 'active' : ''">Popularity</a>
         </div>
         <div>
             <form id="pageSizeForm" method="get" action="/products" style="display: flex; align-items: center; gap: 10px;">
