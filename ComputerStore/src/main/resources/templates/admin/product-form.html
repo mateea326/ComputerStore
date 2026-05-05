@@ -33,7 +33,7 @@
     </style>
 </head>
 <body>
-<nav th:replace="~{fragments/navbar :: header(adminTitle=${isEdit ? '⚙️ Edit Product' : '⚙️ Add Product'})}"></nav>
+<nav th:replace="~{fragments/navbar :: header(adminTitle=${isEdit ? 'Edit Product' : 'Add Product'})}"></nav>
 <div class="container">
     <div th:if="${error}" class="error" th:text="${error}"></div>
 
