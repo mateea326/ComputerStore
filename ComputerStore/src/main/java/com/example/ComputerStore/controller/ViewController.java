@@ -103,13 +103,19 @@ public class ViewController {
         PageRequest pageable = PageRequest.of(page, size, sort);
 
         if (type != null && !type.isEmpty()) {
-            // Paginarea pentru filtrare ar necesita metode noi in repository, 
-            // pentru simplitate paginam doar lista totala sau lasam filtrarea asa
             List<? extends Product> products = productService.filterProductsByType(type);
             model.addAttribute("products", products);
             model.addAttribute("isPaginated", false);
         } else {
-            Page<Product> productPage = productService.getAllProducts(pageable);
+            Page<Product> productPage;
+            if ("popularity".equalsIgnoreCase(sortBy)) {
+                // Pentru popularitate, folosim query-ul custom care are propriul ORDER BY
+                // Deci trimitem un PageRequest fara sortarea automata care ar cauta campul "popularity"
+                PageRequest popularityPageable = PageRequest.of(page, size);
+                productPage = productService.getAllProductsOrderByPopularity(popularityPageable);
+            } else {
+                productPage = productService.getAllProducts(pageable);
+            }
             model.addAttribute("products", productPage.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", productPage.getTotalPages());
@@ -118,7 +124,6 @@ public class ViewController {
         }
 
         model.addAttribute("wishlistProductIds", wishlistService.getWishlistProductIds(userId));
-        model.addAttribute("userName", session.getAttribute("userName"));
         model.addAttribute("selectedType", type);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);
@@ -137,7 +142,6 @@ public class ViewController {
         }
 
         cartService.addProductToCart(session, productId);
-        redirectAttributes.addFlashAttribute("success", "Product added to cart!");
 
         if (returnType != null && !returnType.isEmpty()) {
             List<String> validTypes = List.of("processors", "motherboards", "graphics cards", "gpus", "cases");
@@ -167,7 +171,6 @@ public class ViewController {
         model.addAttribute("cartProducts", cartProducts);
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
-        model.addAttribute("userName", session.getAttribute("userName"));
         return "cart";
     }
 
@@ -210,14 +213,19 @@ public class ViewController {
                 .map(productService::getProductDetails)
                 .toList();
 
+        Map<Integer, Product> productMap = new HashMap<>();
+        for (Product p : cartProducts) {
+            productMap.put(p.getProductId(), p);
+        }
+
         double total = cartProducts.stream()
                 .mapToDouble(p -> p.getPrice() * cart.get(p.getProductId()))
                 .sum();
 
         model.addAttribute("cartProducts", cartProducts);
+        model.addAttribute("productMap", productMap);
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
-        model.addAttribute("userName", session.getAttribute("userName"));
         return "checkout";
     }
 
@@ -301,7 +309,6 @@ public class ViewController {
             model.addAttribute("orders", orders);
             model.addAttribute("productNames", productNames);
             model.addAttribute("productPrices", productPrices);
-            model.addAttribute("userName", session.getAttribute("userName"));
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", orderPage.getTotalPages());
             model.addAttribute("sortBy", sortBy);
@@ -324,7 +331,6 @@ public class ViewController {
         try {
             User user = userService.findUserById(userId);
             model.addAttribute("user", user); // Aici trimitem încă entitatea pentru a popula formularul
-            model.addAttribute("userName", session.getAttribute("userName"));
         } catch (Exception e) {
             model.addAttribute("error", "Could not load account details");
         }
@@ -397,10 +403,8 @@ public class ViewController {
         try {
             if (wishlistService.isProductInWishlist(userId, productId)) {
                 wishlistService.removeProductFromWishlist(userId, productId);
-                redirectAttributes.addFlashAttribute("success", "Removed from wishlist");
             } else {
                 wishlistService.addProductToWishlist(userId, productId);
-                redirectAttributes.addFlashAttribute("success", "Added to wishlist!");
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -417,8 +421,7 @@ public class ViewController {
         }
 
         model.addAttribute("wishlistProducts", wishlistService.getWishlistProducts(userId));
-        model.addAttribute("userName", session.getAttribute("userName"));
         return "wishlist";
     }
 
-}
+}

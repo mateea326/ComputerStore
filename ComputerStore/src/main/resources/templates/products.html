@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,6 +96,7 @@
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
         }
         .product-card:hover {
             transform: translateY(-5px);
@@ -106,6 +107,7 @@
             font-weight: 600;
             color: #333;
             margin-bottom: 10px;
+            padding-right: 35px;
         }
         .product-price {
             font-size: 24px;
@@ -135,21 +137,25 @@
         .add-to-cart-btn:hover {
             background: #64b57d;
         }
-        .wishlist-btn {
-            width: 100%;
-            padding: 10px;
-            background: white;
-            color: #dc3580;
-            border: 2px solid #dc3580;
-            border-radius: 5px;
-            font-weight: 600;
+        
+        /* Heart Toggle Style */
+        .wishlist-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 24px;
+            color: #dc3580;
+            padding: 0;
+            line-height: 1;
+            transition: transform 0.2s;
         }
-        .wishlist-btn:hover {
-            background: #dc3580;
-            color: white;
+        .wishlist-toggle:hover {
+            transform: scale(1.2);
         }
+        
         .pagination, .sorting {
             display: flex;
             gap: 10px;
@@ -164,21 +170,9 @@
 </head>
 <body>
 
-<nav class="navbar">
-    <h1>🖥️ Computer Store</h1>
-    <div class="navbar-right">
-        <span th:text="'Welcome, ' + ${userName}"></span>
-        <a href="/products">Products</a>
-        <a href="/cart">Cart</a>
-        <a href="/order-history">Orders</a>
-        <a href="/wishlist">Wishlist</a>
-        <a href="/account-settings">Edit account</a>
-        <a href="/logout">Logout</a>
-    </div>
-</nav>
+<nav th:replace="~{fragments/navbar :: header}"></nav>
 
 <div class="container">
-    <div th:if="${success}" class="success" th:text="${success}"></div>
 
     <div class="filters">
         <h2>Filter by type</h2>
@@ -198,6 +192,7 @@
             <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">Name Z-A</a>
             <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">Price Low-High</a>
             <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">Price High-Low</a>
+            <a th:href="@{/products(sortBy='popularity', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'popularity'} ? 'active' : ''">⭐ Popularity</a>
         </div>
         <div>
             <form id="pageSizeForm" method="get" action="/products" style="display: flex; align-items: center; gap: 10px;">
@@ -217,37 +212,36 @@
 
     <div class="products-grid">
         <div class="product-card" th:each="product : ${products}">
+            <form method="post" th:action="@{/wishlist/toggle/{id}(id=${product.productId})}">
+                <button type="submit" class="wishlist-toggle" title="Toggle Wishlist">
+                    <svg th:if="${wishlistProductIds.contains(product.productId)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#dc3580" stroke="#dc3580" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <svg th:unless="${wishlistProductIds.contains(product.productId)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc3580" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </button>
+            </form>
+
             <div class="product-name" th:text="${product.name}"></div>
             <div class="product-price" th:text="'$' + ${product.price}"></div>
-            <!--  <div class="product-details" th:text="${product.name}"> -->
-                 <!-- Specifications will be shown in name for now -->
-            <!--  </div>-->
 
             <div class="product-details">
-                <!-- Show specs only if not on "All Products" -->
                 <span th:if="${selectedType != null}">
-                        <!-- Processor specs -->
                         <div th:if="${selectedType == 'processors'}">
                             Cores: <span th:text="${product.coreCount}"></span> |
                             Clock: <span th:text="${product.coreClock} + ' GHz'"></span> |
                             Socket: <span th:text="${product.socket}"></span>
                         </div>
 
-                    <!-- Graphics Card specs -->
                         <div th:if="${selectedType == 'graphics cards'}">
                             Memory: <span th:text="${product.memorySize} + ' GB'"></span> |
                             Core Clock: <span th:text="${product.coreClock} + ' MHz'"></span> |
                             Mem Clock: <span th:text="${product.memoryClock} + ' MHz'"></span>
                         </div>
 
-                    <!-- Motherboard specs -->
                         <div th:if="${selectedType == 'motherboards'}">
                             Slots: <span th:text="${product.slots}"></span> |
                             Socket: <span th:text="${product.cpu_socket}"></span> |
                             Chipset: <span th:text="${product.chipset}"></span>
                         </div>
 
-                    <!-- Case specs -->
                         <div th:if="${selectedType == 'cases'}">
                             Vents: <span th:text="${product.vents}"></span> |
                             Type: <span th:text="${product.type}"></span> |
@@ -256,12 +250,9 @@
                     </span>
             </div>
 
-                <form method="post" th:action="@{/cart/add/{id}(id=${product.productId})}">
+            <form method="post" th:action="@{/cart/add/{id}(id=${product.productId})}">
                 <input type="hidden" name="returnType" th:value="${selectedType}">
-                <button type="submit" class="add-to-cart-btn">🛒 Add to Cart</button>
-            </form>
-            <form method="post" th:action="@{/wishlist/toggle/{id}(id=${product.productId})}">
-                <button type="submit" class="wishlist-btn">❤️ Wishlist</button>
+                <button type="submit" class="add-to-cart-btn">Add to Cart</button>
             </form>
         </div>
     </div>

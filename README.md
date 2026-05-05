@@ -23,13 +23,29 @@ A full-stack e-commerce platform for buying PC components built with Spring Boot
 
 ## Database Schema (ER Diagram)
 
+```mermaid
+erDiagram
+    USER ||--|| CART : has
+    USER ||--|| WISHLIST : has
+    USER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_ITEM : contains
+    PRODUCT ||--o{ ORDER_ITEM : in
+    CART ||--o{ CART_ITEM : contains
+    PRODUCT ||--o{ CART_ITEM : in
+    WISHLIST }|--|{ PRODUCT : saves
+    PRODUCT <|-- PROCESSOR : is_a
+    PRODUCT <|-- GRAPHICS_CARD : is_a
+    PRODUCT <|-- MOTHERBOARD : is_a
+    PRODUCT <|-- CASE : is_a
+```
+
 The project includes 11 entities with various relationship types:
 - **Entities:** `User`, `Product`, `Order`, `OrderItem`, `Cart`, `CartItem`, `Wishlist`, `Processor`, `GraphicsCard`, `Motherboard`, `Case`.
 - **Relationships:**
     - `@OneToOne`: User ↔ Cart, User ↔ Wishlist
     - `@OneToMany`/`@ManyToOne`: User ↔ Order, Order ↔ OrderItem, Cart ↔ CartItem
     - `@ManyToMany`: Wishlist ↔ Product
-- **Inheritance:** `Product` is the base class for component-specific entities.
+- **Inheritance:** `Product` is the base class for component-specific entities (JOINED strategy).
 
 ![ER Diagram](er_diagram.jpeg)
 
