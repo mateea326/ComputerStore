@@ -121,10 +121,7 @@ public class OrderService {
         return saved;
     }
 
-<<<<<<< HEAD
     @Transactional
-=======
->>>>>>> origin/main
     public void deleteOrder(Integer orderId) {
         // Curățare manuală a item-urilor pentru a evita erorile de constrângere pe date vechi
         orderItemRepository.deleteByOrderId(orderId);
