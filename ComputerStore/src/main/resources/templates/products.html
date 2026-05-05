@@ -192,6 +192,7 @@
             <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">Name Z-A</a>
             <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">Price Low-High</a>
             <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">Price High-Low</a>
+            <a th:href="@{/products(sortBy='popularity', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'popularity'} ? 'active' : ''">⭐ Popularity</a>
         </div>
         <div>
             <form id="pageSizeForm" method="get" action="/products" style="display: flex; align-items: center; gap: 10px;">
@@ -211,10 +212,10 @@
 
     <div class="products-grid">
         <div class="product-card" th:each="product : ${products}">
-            <!-- Heart Toggle -->
             <form method="post" th:action="@{/wishlist/toggle/{id}(id=${product.productId})}">
-                <button type="submit" class="wishlist-toggle">
-                    <span th:text="${wishlistProductIds.contains(product.productId)} ? '♥' : '♡'"></span>
+                <button type="submit" class="wishlist-toggle" title="Toggle Wishlist">
+                    <svg th:if="${wishlistProductIds.contains(product.productId)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#dc3580" stroke="#dc3580" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <svg th:unless="${wishlistProductIds.contains(product.productId)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc3580" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                 </button>
             </form>
 

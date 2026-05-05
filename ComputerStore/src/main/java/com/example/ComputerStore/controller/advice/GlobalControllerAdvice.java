@@ -39,4 +39,11 @@ public class GlobalControllerAdvice {
     public String getUserName(HttpSession session) {
         return (String) session.getAttribute("userName");
     }
+
+    @ModelAttribute("isAdmin")
+    public boolean isAdmin(org.springframework.security.core.Authentication authentication) {
+        if (authentication == null) return false;
+        return authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
 }

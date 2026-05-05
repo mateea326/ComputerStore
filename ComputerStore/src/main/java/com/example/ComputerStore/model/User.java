@@ -95,6 +95,6 @@ public class User {
     public void setCart(Cart cart) { this.cart = cart; }
     public Wishlist getWishlist() { return wishlist; }
     public void setWishlist(Wishlist wishlist) { this.wishlist = wishlist; }
-    public String getRole() { return role; }
+    public String getRole() { return role != null ? role : "USER"; }
     public void setRole(String role) { this.role = role; }
 }
