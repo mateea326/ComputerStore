@@ -22,10 +22,7 @@
     </style>
 </head>
 <body>
-<nav class="navbar">
-    <h1>Admin - Orders</h1>
-    <div style="display:flex;gap:20px;"><a href="/admin">Dashboard</a><a href="/logout">Logout</a></div>
-</nav>
+<nav th:replace="~{fragments/navbar :: header(adminTitle='Admin - Orders')}"></nav>
 <div class="container">
     <div th:if="${success}" class="success" th:text="${success}"></div>
     <h2 style="margin-bottom:20px;">All Orders</h2>

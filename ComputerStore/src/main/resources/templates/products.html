@@ -170,23 +170,9 @@
 </head>
 <body>
 
-<nav class="navbar">
-    <h1>Computer Store</h1>
-    <div class="navbar-right">
-        <span th:text="'Welcome, ' + ${userName}"></span>
-        <a sec:authorize="hasRole('ADMIN')" href="/admin/users">Admin Panel</a>
-        <a href="/products">Products</a>
-        <a href="/cart">Cart</a>
-        <a href="/order-history">Orders</a>
-        <a href="/wishlist">Wishlist</a>
-        <a href="/account-settings">Edit account</a>
-        <a href="/logout">Logout</a>
-    </div>
-
-</nav>
+<nav th:replace="~{fragments/navbar :: header}"></nav>
 
 <div class="container">
-    <div th:if="${success}" class="success" th:text="${success}"></div>
 
     <div class="filters">
         <h2>Filter by type</h2>
