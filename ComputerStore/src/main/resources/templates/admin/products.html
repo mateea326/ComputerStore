@@ -18,7 +18,7 @@
         .add-btn { background: #7bb8b4; color: white; padding: 12px 24px; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.3s; }
         .add-btn:hover { background: #619e9a; }
         table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-        th { background: #2c3e50; color: white; padding: 15px; text-align: left; }
+        th { background: #7bb8b4; color: white; padding: 15px; text-align: left; }
         td { padding: 12px 15px; border-bottom: 1px solid #eee; }
         tr:hover { background: #f8f9fa; }
         .delete-btn { background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-<nav th:replace="~{fragments/navbar :: header(adminTitle='⚙️ Admin - Products')}"></nav>
+<nav th:replace="~{fragments/navbar :: header(adminTitle='Admin - Products')}"></nav>
 <div class="container">
     <div th:if="${success}" class="success" th:text="${success}"></div>
     <div th:if="${error}" class="error" th:text="${error}"></div>
