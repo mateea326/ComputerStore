@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -201,18 +201,7 @@
 </head>
 <body>
 
-<nav class="navbar">
-    <h1>🖥️ Computer Store</h1>
-    <div class="navbar-right">
-        <span th:text="'Welcome, ' + ${userName}"></span>
-        <a href="/products">Products</a>
-        <a href="/cart">Cart</a>
-        <a href="/order-history">Orders</a>
-        <a href="/wishlist">Wishlist</a>
-        <a href="/account-settings">Edit account</a>
-        <a href="/logout">Logout</a>
-    </div>
-</nav>
+<nav th:replace="~{fragments/navbar :: header}"></nav>
 
 <div class="container">
     <div class="cart-header">

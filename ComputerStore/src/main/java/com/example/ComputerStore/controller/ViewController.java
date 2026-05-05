@@ -103,10 +103,16 @@ public class ViewController {
         PageRequest pageable = PageRequest.of(page, size, sort);
 
         if (type != null && !type.isEmpty()) {
+<<<<<<< HEAD
+=======
+            // Paginarea pentru filtrare ar necesita metode noi in repository, 
+            // pentru simplitate paginam doar lista totala sau lasam filtrarea asa
+>>>>>>> origin/main
             List<? extends Product> products = productService.filterProductsByType(type);
             model.addAttribute("products", products);
             model.addAttribute("isPaginated", false);
         } else {
+<<<<<<< HEAD
             Page<Product> productPage;
             if ("popularity".equalsIgnoreCase(sortBy)) {
                 // Pentru popularitate, folosim query-ul custom care are propriul ORDER BY
@@ -116,6 +122,9 @@ public class ViewController {
             } else {
                 productPage = productService.getAllProducts(pageable);
             }
+=======
+            Page<Product> productPage = productService.getAllProducts(pageable);
+>>>>>>> origin/main
             model.addAttribute("products", productPage.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", productPage.getTotalPages());
@@ -213,17 +222,23 @@ public class ViewController {
                 .map(productService::getProductDetails)
                 .toList();
 
+<<<<<<< HEAD
         Map<Integer, Product> productMap = new HashMap<>();
         for (Product p : cartProducts) {
             productMap.put(p.getProductId(), p);
         }
 
+=======
+>>>>>>> origin/main
         double total = cartProducts.stream()
                 .mapToDouble(p -> p.getPrice() * cart.get(p.getProductId()))
                 .sum();
 
         model.addAttribute("cartProducts", cartProducts);
+<<<<<<< HEAD
         model.addAttribute("productMap", productMap);
+=======
+>>>>>>> origin/main
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
         return "checkout";

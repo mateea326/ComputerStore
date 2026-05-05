@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2026-05-05 13:48:36 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
 2026-05-05 13:48:36 [main] INFO  c.e.C.AdminIntegrationTest - Starting AdminIntegrationTest using Java 21.0.2 with PID 23660 (started by Admin in D:\ComputerStore\ComputerStore)
 2026-05-05 13:48:36 [main] DEBUG c.e.C.AdminIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
@@ -99,3 +100,5 @@
 2026-05-05 13:49:02 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-05-05 13:49:02 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
 2026-05-05 13:49:02 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+=======
+>>>>>>> origin/main

@@ -115,4 +115,32 @@ class UserServiceTest {
         assertEquals(testUser.getUserId(), result.getUserId());
         verify(userRepository, times(1)).delete(testUser);
     }
+    @Test
+    void registerNewUser_DuplicateUsername_ThrowsException() {
+        UserRegistrationDTO regDto = new UserRegistrationDTO(
+                "John", "Doe", "1234567890", "123 Main St",
+                "john@example.com", "johndoe", "password123", "password123"
+        );
+
+        when(userRepository.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
+
+        assertThrows(com.example.ComputerStore.exception.DuplicateResourceException.class, 
+                () -> userService.registerNewUser(regDto));
+    }
+
+    @Test
+    void findUserById_NotFound_ThrowsException() {
+        when(userRepository.findById(999)).thenReturn(Optional.empty());
+
+        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, 
+                () -> userService.findUserById(999));
+    }
+
+    @Test
+    void deleteUser_NotFound_ThrowsException() {
+        when(userRepository.findById(999)).thenReturn(Optional.empty());
+
+        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, 
+                () -> userService.deleteUser(999));
+    }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -146,25 +146,12 @@
 </head>
 <body>
 
-<nav class="navbar">
-    <h1>Computer Store</h1>
-    <div class="navbar-right">
-        <span th:text="'Welcome, ' + ${userName}"></span>
-        <a href="/products">Products</a>
-        <a href="/cart">Cart</a>
-        <a href="/order-history">Orders</a>
-        <a href="/wishlist">Wishlist</a>
-        <a href="/account-settings">Edit account</a>
-        <a href="/logout">Logout</a>
-    </div>
-</nav>
+<nav th:replace="~{fragments/navbar :: header}"></nav>
 
 <div class="container">
     <div class="wishlist-header">
         <h2>Wishlist</h2>
     </div>
-
-    <div th:if="${success}" class="success" th:text="${success}"></div>
 
     <div th:if="${wishlistProducts.isEmpty()}" class="empty-wishlist">
         <h3>Your wishlist is empty</h3>
@@ -179,7 +166,7 @@
             </div>
             <div class="item-actions">
                 <form method="post" th:action="@{/cart/add/{id}(id=${product.productId})}">
-                    <button type="submit" class="add-cart-btn">🛒 Add to Cart</button>
+                    <button type="submit" class="add-cart-btn">Add to Cart</button>
                 </form>
                 <form method="post" th:action="@{/wishlist/toggle/{id}(id=${product.productId})}">
                     <button type="submit" class="remove-btn">Remove</button>
