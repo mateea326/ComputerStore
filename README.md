@@ -23,7 +23,7 @@ A full-stack e-commerce platform for buying PC components built with Spring Boot
 
 ## Database Schema (ER Diagram)
 
-![Database ER Diagram](er-diagram.png)
+![Database ER Diagram](erDiagram.drawio.svg)
 
 
 The project includes 11 entities with various relationship types:
