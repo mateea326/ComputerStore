@@ -1,7 +1,7 @@
 package com.example.ComputerStore.controller;
 
-import com.example.ComputerStore.dto.UserRegistrationDTO; // Import nou
-import com.example.ComputerStore.dto.UserResponseDTO;     // Import nou
+import com.example.ComputerStore.dto.UserRegistrationDTO;
+import com.example.ComputerStore.dto.UserResponseDTO;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.model.Product;
 import com.example.ComputerStore.model.Order;
@@ -64,7 +64,7 @@ public class ViewController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") UserRegistrationDTO userDto, // Folosește DTO
+    public String register(@Valid @ModelAttribute("user") UserRegistrationDTO userDto,
                            BindingResult result,
                            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -77,7 +77,7 @@ public class ViewController {
         }
 
         try {
-            userService.registerNewUser(userDto); // Trimite DTO-ul
+            userService.registerNewUser(userDto);
             redirectAttributes.addFlashAttribute("success", "Account created! Please login.");
             return "redirect:/login";
         } catch (Exception e) {
@@ -103,28 +103,17 @@ public class ViewController {
         PageRequest pageable = PageRequest.of(page, size, sort);
 
         if (type != null && !type.isEmpty()) {
-<<<<<<< HEAD
-=======
-            // Paginarea pentru filtrare ar necesita metode noi in repository, 
-            // pentru simplitate paginam doar lista totala sau lasam filtrarea asa
->>>>>>> origin/main
             List<? extends Product> products = productService.filterProductsByType(type);
             model.addAttribute("products", products);
             model.addAttribute("isPaginated", false);
         } else {
-<<<<<<< HEAD
             Page<Product> productPage;
             if ("popularity".equalsIgnoreCase(sortBy)) {
-                // Pentru popularitate, folosim query-ul custom care are propriul ORDER BY
-                // Deci trimitem un PageRequest fara sortarea automata care ar cauta campul "popularity"
                 PageRequest popularityPageable = PageRequest.of(page, size);
                 productPage = productService.getAllProductsOrderByPopularity(popularityPageable);
             } else {
                 productPage = productService.getAllProducts(pageable);
             }
-=======
-            Page<Product> productPage = productService.getAllProducts(pageable);
->>>>>>> origin/main
             model.addAttribute("products", productPage.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", productPage.getTotalPages());
@@ -222,23 +211,17 @@ public class ViewController {
                 .map(productService::getProductDetails)
                 .toList();
 
-<<<<<<< HEAD
         Map<Integer, Product> productMap = new HashMap<>();
         for (Product p : cartProducts) {
             productMap.put(p.getProductId(), p);
         }
 
-=======
->>>>>>> origin/main
         double total = cartProducts.stream()
                 .mapToDouble(p -> p.getPrice() * cart.get(p.getProductId()))
                 .sum();
 
         model.addAttribute("cartProducts", cartProducts);
-<<<<<<< HEAD
         model.addAttribute("productMap", productMap);
-=======
->>>>>>> origin/main
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
         return "checkout";
@@ -345,7 +328,7 @@ public class ViewController {
 
         try {
             User user = userService.findUserById(userId);
-            model.addAttribute("user", user); // Aici trimitem încă entitatea pentru a popula formularul
+            model.addAttribute("user", user);
         } catch (Exception e) {
             model.addAttribute("error", "Could not load account details");
         }
@@ -367,7 +350,6 @@ public class ViewController {
         }
 
         try {
-            // Mapăm datele primite într-un DTO pentru a apela serviciul
             UserRegistrationDTO updateDto = new UserRegistrationDTO();
             updateDto.setFirstName(firstName);
             updateDto.setLastName(lastName);
@@ -375,7 +357,6 @@ public class ViewController {
             updateDto.setPhoneNumber(phoneNumber);
             updateDto.setAddress(address);
 
-            // UserService.updateUser primește acum DTO
             userService.updateUser(userId, updateDto);
 
             session.setAttribute("userName", firstName);
@@ -405,7 +386,6 @@ public class ViewController {
         }
     }
 
-    // --- Wishlist ---
     @PostMapping("/wishlist/toggle/{productId}")
     public String toggleWishlist(@PathVariable Integer productId,
                                  HttpSession session,
