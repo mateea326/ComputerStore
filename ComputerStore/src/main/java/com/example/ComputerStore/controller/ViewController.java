@@ -118,7 +118,6 @@ public class ViewController {
         }
 
         model.addAttribute("wishlistProductIds", wishlistService.getWishlistProductIds(userId));
-        model.addAttribute("userName", session.getAttribute("userName"));
         model.addAttribute("selectedType", type);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);
@@ -137,7 +136,6 @@ public class ViewController {
         }
 
         cartService.addProductToCart(session, productId);
-        redirectAttributes.addFlashAttribute("success", "Product added to cart!");
 
         if (returnType != null && !returnType.isEmpty()) {
             List<String> validTypes = List.of("processors", "motherboards", "graphics cards", "gpus", "cases");
@@ -167,7 +165,6 @@ public class ViewController {
         model.addAttribute("cartProducts", cartProducts);
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
-        model.addAttribute("userName", session.getAttribute("userName"));
         return "cart";
     }
 
@@ -217,7 +214,6 @@ public class ViewController {
         model.addAttribute("cartProducts", cartProducts);
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
-        model.addAttribute("userName", session.getAttribute("userName"));
         return "checkout";
     }
 
@@ -301,7 +297,6 @@ public class ViewController {
             model.addAttribute("orders", orders);
             model.addAttribute("productNames", productNames);
             model.addAttribute("productPrices", productPrices);
-            model.addAttribute("userName", session.getAttribute("userName"));
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", orderPage.getTotalPages());
             model.addAttribute("sortBy", sortBy);
@@ -324,7 +319,6 @@ public class ViewController {
         try {
             User user = userService.findUserById(userId);
             model.addAttribute("user", user); // Aici trimitem încă entitatea pentru a popula formularul
-            model.addAttribute("userName", session.getAttribute("userName"));
         } catch (Exception e) {
             model.addAttribute("error", "Could not load account details");
         }
@@ -397,10 +391,8 @@ public class ViewController {
         try {
             if (wishlistService.isProductInWishlist(userId, productId)) {
                 wishlistService.removeProductFromWishlist(userId, productId);
-                redirectAttributes.addFlashAttribute("success", "Removed from wishlist");
             } else {
                 wishlistService.addProductToWishlist(userId, productId);
-                redirectAttributes.addFlashAttribute("success", "Added to wishlist!");
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -417,7 +409,6 @@ public class ViewController {
         }
 
         model.addAttribute("wishlistProducts", wishlistService.getWishlistProducts(userId));
-        model.addAttribute("userName", session.getAttribute("userName"));
         return "wishlist";
     }
 

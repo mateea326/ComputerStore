@@ -146,26 +146,12 @@
 </head>
 <body>
 
-<nav class="navbar">
-    <h1>Computer Store</h1>
-    <div class="navbar-right">
-        <span th:text="'Welcome, ' + ${userName}"></span>
-        <a sec:authorize="hasRole('ADMIN')" href="/admin/users">Admin Panel</a>
-        <a href="/products">Products</a>
-        <a href="/cart">Cart</a>
-        <a href="/order-history">Orders</a>
-        <a href="/wishlist">Wishlist</a>
-        <a href="/account-settings">Edit account</a>
-        <a href="/logout">Logout</a>
-    </div>
-</nav>
+<nav th:replace="~{fragments/navbar :: header}"></nav>
 
 <div class="container">
     <div class="wishlist-header">
         <h2>Wishlist</h2>
     </div>
-
-    <div th:if="${success}" class="success" th:text="${success}"></div>
 
     <div th:if="${wishlistProducts.isEmpty()}" class="empty-wishlist">
         <h3>Your wishlist is empty</h3>

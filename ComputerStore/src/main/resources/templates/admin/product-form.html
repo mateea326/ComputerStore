@@ -28,13 +28,7 @@
     </style>
 </head>
 <body>
-<nav class="navbar">
-    <h1>⚙️ Add Product</h1>
-    <div style="display:flex;gap:20px;">
-        <a href="/admin/products">← Back to Products</a>
-        <a href="/admin">Dashboard</a>
-    </div>
-</nav>
+<nav th:replace="~{fragments/navbar :: header(adminTitle='⚙️ Add Product')}"></nav>
 <div class="container">
     <div th:if="${error}" class="error" th:text="${error}"></div>
 
