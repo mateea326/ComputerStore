@@ -24,10 +24,26 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final com.example.ComputerStore.repo.CartRepository cartRepository;
+    private final com.example.ComputerStore.repo.CartItemRepository cartItemRepository;
+    private final com.example.ComputerStore.repo.WishlistRepository wishlistRepository;
+    private final com.example.ComputerStore.repo.OrderRepository orderRepository;
+    private final com.example.ComputerStore.repo.OrderItemRepository orderItemRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, 
+                       PasswordEncoder passwordEncoder,
+                       com.example.ComputerStore.repo.CartRepository cartRepository,
+                       com.example.ComputerStore.repo.CartItemRepository cartItemRepository,
+                       com.example.ComputerStore.repo.WishlistRepository wishlistRepository,
+                       com.example.ComputerStore.repo.OrderRepository orderRepository,
+                       com.example.ComputerStore.repo.OrderItemRepository orderItemRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
+        this.wishlistRepository = wishlistRepository;
+        this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     // MAPPER: Entity -> DTO răspuns (fără parolă)
@@ -109,12 +125,34 @@ public class UserService {
     }
 
     // DELETE – ștergere cont utilizator
+    @Transactional
     public UserResponseDTO deleteUser(Integer id) {
         User userToDelete = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
+        // 1. Curățăm coșul (Cart)
+        if (userToDelete.getCart() != null) {
+            cartItemRepository.deleteByCartId(userToDelete.getCart().getCartId());
+            cartRepository.delete(userToDelete.getCart());
+        }
+
+        // 2. Curățăm wishlist-ul (produsele din tabelul de legătură)
+        if (userToDelete.getWishlist() != null) {
+            wishlistRepository.deleteProductsByWishlistId(userToDelete.getWishlist().getWishlistId());
+            wishlistRepository.delete(userToDelete.getWishlist());
+        }
+
+        // 3. Curățăm comenzile (Orders)
+        if (userToDelete.getOrders() != null) {
+            for (com.example.ComputerStore.model.Order order : userToDelete.getOrders()) {
+                orderItemRepository.deleteByOrderId(order.getOrderId());
+            }
+            orderRepository.deleteAll(userToDelete.getOrders());
+        }
+
+        // 4. Ștergem utilizatorul
         userRepository.delete(userToDelete);
-        log.info("User deleted: id={}", id);
+        log.info("User and all related data deleted: id={}", id);
         return mapToResponseDTO(userToDelete);
     }
 

@@ -38,7 +38,7 @@
     <div class="navbar-right">
         <span th:if="${userName}" th:text="'Welcome, ' + ${userName}"></span>
         
-        <a sec:authorize="hasRole('ADMIN')" href="/admin/users">Admin Panel</a>
+        <a th:if="${isAdmin}" href="/admin">Admin Panel</a>
         <a href="/products">Products</a>
 
         <!-- Wishlist Icon with Badge -->

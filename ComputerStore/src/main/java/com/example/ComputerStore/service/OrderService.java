@@ -23,13 +23,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final ProductService productService;
+    private final com.example.ComputerStore.repo.OrderItemRepository orderItemRepository;
 
     public OrderService(OrderRepository orderRepository,
                         UserService userService,
-                        ProductService productService) {
+                        ProductService productService,
+                        com.example.ComputerStore.repo.OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.productService = productService;
+        this.orderItemRepository = orderItemRepository;
     }
 
     public List<Order> getOrderHistory(Integer userId) {
@@ -118,9 +121,11 @@ public class OrderService {
         return saved;
     }
 
+    @Transactional
     public void deleteOrder(Integer orderId) {
-        Order order = getOrderById(orderId);
-        orderRepository.delete(order);
-        log.info("Order deleted: id={}", orderId);
+        // Curățare manuală a item-urilor pentru a evita erorile de constrângere pe date vechi
+        orderItemRepository.deleteByOrderId(orderId);
+        orderRepository.deleteById(orderId);
+        log.info("Order and its items deleted: id={}", orderId);
     }
 }

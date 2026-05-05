@@ -130,6 +130,52 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
+    @GetMapping("/products/edit/{id}")
+    public String editProductForm(@PathVariable Integer id, Model model) {
+        Product product = productService.getProductDetails(id);
+        model.addAttribute("product", product);
+        String type = "processor";
+        if (product instanceof GraphicsCard) type = "gpu";
+        else if (product instanceof Motherboard) type = "motherboard";
+        else if (product instanceof Case) type = "case";
+        
+        model.addAttribute("productType", type);
+        model.addAttribute("isEdit", true);
+        return "admin/product-form";
+    }
+
+    @PostMapping("/products/edit/processor/{id}")
+    public String editProcessor(@PathVariable Integer id, @Valid @ModelAttribute("product") Processor product, BindingResult result, RedirectAttributes ra) {
+        if (result.hasErrors()) return "admin/product-form";
+        productService.updateProduct(id, product);
+        ra.addFlashAttribute("success", "Processor updated!");
+        return "redirect:/admin/products";
+    }
+
+    @PostMapping("/products/edit/gpu/{id}")
+    public String editGpu(@PathVariable Integer id, @Valid @ModelAttribute("product") GraphicsCard product, BindingResult result, RedirectAttributes ra) {
+        if (result.hasErrors()) return "admin/product-form";
+        productService.updateProduct(id, product);
+        ra.addFlashAttribute("success", "Graphics Card updated!");
+        return "redirect:/admin/products";
+    }
+
+    @PostMapping("/products/edit/motherboard/{id}")
+    public String editMotherboard(@PathVariable Integer id, @Valid @ModelAttribute("product") Motherboard product, BindingResult result, RedirectAttributes ra) {
+        if (result.hasErrors()) return "admin/product-form";
+        productService.updateProduct(id, product);
+        ra.addFlashAttribute("success", "Motherboard updated!");
+        return "redirect:/admin/products";
+    }
+
+    @PostMapping("/products/edit/case/{id}")
+    public String editCase(@PathVariable Integer id, @Valid @ModelAttribute("product") Case product, BindingResult result, RedirectAttributes ra) {
+        if (result.hasErrors()) return "admin/product-form";
+        productService.updateProduct(id, product);
+        ra.addFlashAttribute("success", "Case updated!");
+        return "redirect:/admin/products";
+    }
+
     @PostMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         productService.deleteProduct(id);
@@ -159,6 +205,11 @@ public class AdminController {
 
     @PostMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        User user = userService.findUserById(id);
+        if ("admin".equals(user.getUsername())) {
+            redirectAttributes.addFlashAttribute("error", "The main admin account cannot be deleted!");
+            return "redirect:/admin/users";
+        }
         userService.deleteUser(id);
         log.info("Admin deleted user: id={}", id);
         redirectAttributes.addFlashAttribute("success", "User deleted successfully!");
