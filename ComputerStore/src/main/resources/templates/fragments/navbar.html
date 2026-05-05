@@ -1,0 +1,64 @@
+<nav th:fragment="header" class="navbar" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <style>
+        .nav-icon-link {
+            padding: 8px !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .nav-icon-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #333;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #7bb8b4;
+        }
+        .navbar-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+    </style>
+    <h1 th:text="${adminTitle} ?: 'Computer Store'">Computer Store</h1>
+    <div class="navbar-right">
+        <span th:if="${userName}" th:text="'Welcome, ' + ${userName}"></span>
+        
+        <a th:if="${isAdmin}" href="/admin">Admin Panel</a>
+        <a href="/products">Products</a>
+
+        <!-- Wishlist Icon with Badge -->
+        <a href="/wishlist" class="nav-icon-link" title="Wishlist">
+            <div class="nav-icon-container">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <span class="badge" th:if="${wishlistCount > 0}" th:text="${wishlistCount}">0</span>
+            </div>
+        </a>
+
+        <!-- Cart Icon with Badge -->
+        <a href="/cart" class="nav-icon-link" title="Shopping Cart">
+            <div class="nav-icon-container">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span class="badge" th:if="${cartCount > 0}" th:text="${cartCount}">0</span>
+            </div>
+        </a>
+
+        <a href="/order-history">Orders</a>
+        <a href="/account-settings">Edit account</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>

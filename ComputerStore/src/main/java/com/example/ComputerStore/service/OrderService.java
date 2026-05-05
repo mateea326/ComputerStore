@@ -23,13 +23,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final ProductService productService;
+    private final com.example.ComputerStore.repo.OrderItemRepository orderItemRepository;
 
     public OrderService(OrderRepository orderRepository,
                         UserService userService,
-                        ProductService productService) {
+                        ProductService productService,
+                        com.example.ComputerStore.repo.OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.productService = productService;
+        this.orderItemRepository = orderItemRepository;
     }
 
     public List<Order> getOrderHistory(Integer userId) {
@@ -42,6 +45,7 @@ public class OrderService {
         return orderRepository.findByUser(user, pageable);
     }
 
+    // Unificarea logicii de creare a comenzii
     public Order createOrder(Integer userId, Map<Integer, Integer> cart) {
         if (cart == null || cart.isEmpty()) {
             throw new EmptyCartException();
@@ -49,14 +53,12 @@ public class OrderService {
 
         User user = userService.findUserById(userId);
 
-        // creare comanda
         Order order = new Order();
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
 
         double totalPrice = 0.0;
 
-        // creare OrderItems
         for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
             Product product = productService.getProductDetails(entry.getKey());
             int quantity = entry.getValue();
@@ -72,49 +74,19 @@ public class OrderService {
         }
 
         order.setTotalPrice(totalPrice);
-
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        log.info("Order created successfully: id={}, total={}", savedOrder.getOrderId(), savedOrder.getTotalPrice());
+        return savedOrder;
     }
 
-    // creare comanda cu card (folosit de SessionCartService la checkout)
-    // creare comanda (fostul createOrderWithCard, acum doar creeaza comanda)
+    // Alias pentru compatibilitate
     public Order createOrderWithPaymentDetails(Integer userId, Map<Integer, Integer> cart) {
-        if (cart == null || cart.isEmpty()) {
-            throw new IllegalStateException("Cart is empty");
-        }
-
-        User user = userService.findUserById(userId);
-
-        // creare comanda
-        Order order = new Order();
-        order.setUser(user);
-        order.setOrderDate(LocalDateTime.now());
-
-        double totalPrice = 0.0;
-
-        // creare OrderItems
-        for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-            Product product = productService.getProductDetails(entry.getKey());
-            int quantity = entry.getValue();
-
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProduct(product);
-            orderItem.setQuantity(quantity);
-            orderItem.setUnitPriceAtPurchase(product.getPrice());
-
-            order.addOrderItem(orderItem);
-
-            totalPrice += product.getPrice() * quantity;
-        }
-
-        order.setTotalPrice(totalPrice);
-
-        return orderRepository.save(order);
+        return createOrder(userId, cart);
     }
 
     public Order getOrderById(Integer orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order", orderId));
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
     }
 
     public List<Order> getAllOrders() {
@@ -125,7 +97,6 @@ public class OrderService {
         return orderRepository.findAll(pageable);
     }
 
-    // comanda update order
     public Order updateOrder(Integer orderId, Map<Integer, Integer> newCart) {
         Order existingOrder = getOrderById(orderId);
         existingOrder.getOrderItems().clear();
@@ -150,10 +121,11 @@ public class OrderService {
         return saved;
     }
 
-    // comanda delete order
+    @Transactional
     public void deleteOrder(Integer orderId) {
-        Order order = getOrderById(orderId);
-        orderRepository.delete(order);
-        log.info("Order deleted: id={}", orderId);
+        // Curățare manuală a item-urilor pentru a evita erorile de constrângere pe date vechi
+        orderItemRepository.deleteByOrderId(orderId);
+        orderRepository.deleteById(orderId);
+        log.info("Order and its items deleted: id={}", orderId);
     }
 }
