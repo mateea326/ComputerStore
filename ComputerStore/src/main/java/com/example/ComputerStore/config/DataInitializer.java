@@ -19,18 +19,24 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (userRepository.findByUsername("admin").isEmpty()) {
-            User admin = new User();
-            admin.setFirstName("Admin");
-            admin.setLastName("User");
-            admin.setUsername("admin");
-            admin.setEmail("admin@computerstore.com");
-            admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole("ADMIN");
-            admin.setPhoneNumber("0000000000");
-            admin.setAddress("Admin Street 1");
-            userRepository.save(admin);
-            System.out.println("Admin user created: admin / admin123");
-        }
+        userRepository.findByUsername("admin").ifPresentOrElse(
+            admin -> {
+                admin.setPassword(passwordEncoder.encode("admin123"));
+                admin.setRole("ADMIN");
+                userRepository.save(admin);
+            },
+            () -> {
+                User admin = new User();
+                admin.setFirstName("Admin");
+                admin.setLastName("User");
+                admin.setUsername("admin");
+                admin.setEmail("admin@computerstore.com");
+                admin.setPassword(passwordEncoder.encode("admin123"));
+                admin.setRole("ADMIN");
+                admin.setPhoneNumber("0000000000");
+                admin.setAddress("Admin Street 1");
+                userRepository.save(admin);
+            }
+        );
     }
 }

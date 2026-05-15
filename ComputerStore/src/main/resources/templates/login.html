@@ -12,7 +12,7 @@
         }
         body {
             font-family: "Georgia", serif;
-            background:  linear-gradient(100deg, #9cd5d1 0%, #ffffff 100%);
+            background: #eeffff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -95,12 +95,41 @@
         .register-link a:hover {
             text-decoration: underline;
         }
+        .corner-img {
+            position: fixed;
+            bottom: 20px;
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            opacity: 0.9;
+            z-index: 1000;
+            pointer-events: none; /* so they don't block clicks */
+        }
+
+        #img-left {
+            left: 20px;
+            transform: perspective(1000px) rotateY(35deg);
+            filter: drop-shadow(-10px 10px 15px rgba(0,0,0,0.2));
+            transition: transform 0.5s ease;
+        }
+
+        #img-right {
+            right: 20px;
+            transform: perspective(1000px) rotateY(-35deg);
+            filter: drop-shadow(10px 10px 15px rgba(0,0,0,0.2));
+            transition: transform 0.5s ease;
+        }
+
+        .corner-img:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.1);
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Login</h1>
 
+    <div th:if="${param.error}" class="error">Invalid username or password.</div>
     <div th:if="${error}" class="error" th:text="${error}"></div>
     <div th:if="${success}" class="success" th:text="${success}"></div>
 
@@ -130,7 +159,7 @@
             let valid = true;
             const username = document.getElementById('username');
             const usernameError = document.getElementById('usernameError');
-            
+
             if (username.value.trim().length < 3) {
                 usernameError.textContent = "Username must be at least 3 characters";
                 usernameError.style.display = "block";
@@ -138,7 +167,7 @@
             } else {
                 usernameError.style.display = "none";
             }
-            
+
             return valid;
         }
     </script>
@@ -148,5 +177,7 @@
         Don't have an account? <a href="/register">Register here</a>
     </div>
 </div>
+<img th:src="@{/images/img.png}" class="corner-img" id="img-left" alt="">
+<img th:src="@{/images/img.png}" class="corner-img" id="img-right" alt="">
 </body>
 </html>

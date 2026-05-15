@@ -50,7 +50,7 @@ class ProductServiceTest {
         testProcessor.setName("AMD Ryzen 5");
         testProcessor.setPrice(150.0f);
         testProcessor.setCoreCount(6);
-        testProcessor.setCoreClock(4);
+        testProcessor.setCoreClock(4.0f);
         testProcessor.setSocket("AM4");
 
         testGraphicsCard = new GraphicsCard();

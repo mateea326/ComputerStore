@@ -16,6 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import com.example.ComputerStore.repo.CartRepository;
+import com.example.ComputerStore.repo.CartItemRepository;
+import com.example.ComputerStore.repo.WishlistRepository;
+import com.example.ComputerStore.repo.OrderRepository;
+import com.example.ComputerStore.repo.OrderItemRepository;
+
 @Service
 @Transactional
 public class UserService {
@@ -24,19 +30,19 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final com.example.ComputerStore.repo.CartRepository cartRepository;
-    private final com.example.ComputerStore.repo.CartItemRepository cartItemRepository;
-    private final com.example.ComputerStore.repo.WishlistRepository wishlistRepository;
-    private final com.example.ComputerStore.repo.OrderRepository orderRepository;
-    private final com.example.ComputerStore.repo.OrderItemRepository orderItemRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final WishlistRepository wishlistRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
     public UserService(UserRepository userRepository, 
                        PasswordEncoder passwordEncoder,
-                       com.example.ComputerStore.repo.CartRepository cartRepository,
-                       com.example.ComputerStore.repo.CartItemRepository cartItemRepository,
-                       com.example.ComputerStore.repo.WishlistRepository wishlistRepository,
-                       com.example.ComputerStore.repo.OrderRepository orderRepository,
-                       com.example.ComputerStore.repo.OrderItemRepository orderItemRepository) {
+                       CartRepository cartRepository,
+                       CartItemRepository cartItemRepository,
+                       WishlistRepository wishlistRepository,
+                       OrderRepository orderRepository,
+                       OrderItemRepository orderItemRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.cartRepository = cartRepository;
@@ -148,7 +154,7 @@ public class UserService {
                 orderItemRepository.deleteByOrderId(order.getOrderId());
             }
             orderRepository.deleteAll(userToDelete.getOrders());
-        }
+        } 
 
         // 4. Ștergem utilizatorul
         userRepository.delete(userToDelete);

@@ -33,6 +33,9 @@ public class Product {
     @Min(value = 0)
     protected float price;
 
+    @Column(length = 500)
+    protected String imageUrl;
+
     public Product() {}
 
     public Product(Integer productId, String name, float price) {
@@ -47,4 +50,6 @@ public class Product {
     public void setName(String name) { this.name = name; }
     public float getPrice() { return price; }
     public void setPrice(float price) { this.price = price; }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }

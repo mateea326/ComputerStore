@@ -19,7 +19,7 @@
         th { background: #7bb8b4; color: white; padding: 15px; text-align: left; }
         td { padding: 12px 15px; border-bottom: 1px solid #eee; }
         tr:hover { background: #f8f9fa; }
-        .delete-btn { background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.3s; font-family: inherit; }
         .delete-btn:hover { background: #c82333; }
         .delete-btn:disabled { background: #ccc; cursor: not-allowed; }
         .sort-link { color: white; text-decoration: none; }
@@ -46,7 +46,7 @@
                 <th><a th:href="@{/admin/users(sortBy='username', direction=${sortBy == 'username' && direction == 'asc' ? 'desc' : 'asc'})}" class="sort-link">Username ↕</a></th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>

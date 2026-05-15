@@ -19,7 +19,7 @@
         th { background: #7bb8b4; color: white; padding: 15px; text-align: left; }
         td { padding: 12px 15px; border-bottom: 1px solid #eee; }
         tr:hover { background: #f8f9fa; }
-        .delete-btn { background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.3s; font-family: inherit; }
         .delete-btn:hover { background: #c82333; }
         .sort-link { color: white; text-decoration: none; }
         .sort-link:hover { text-decoration: underline; }
@@ -45,8 +45,7 @@
                 <th><a th:href="@{/admin/orders(sortBy='user.username', direction=${sortBy == 'user.username' && direction == 'asc' ? 'desc' : 'asc'})}" class="sort-link">Customer ↕</a></th>
                 <th><a th:href="@{/admin/orders(sortBy='orderDate', direction=${sortBy == 'orderDate' && direction == 'asc' ? 'desc' : 'asc'})}" class="sort-link">Date ↕</a></th>
                 <th><a th:href="@{/admin/orders(sortBy='totalPrice', direction=${sortBy == 'totalPrice' && direction == 'asc' ? 'desc' : 'asc'})}" class="sort-link">Total ↕</a></th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -55,7 +54,6 @@
                 <td th:text="${order.user.username}" style="font-weight: 600;"></td>
                 <td th:text="${#temporals.format(order.orderDate, 'MMM dd, yyyy HH:mm')}"></td>
                 <td th:text="'$' + ${#numbers.formatDecimal(order.totalPrice, 1, 2)}" style="color: #64b57d; font-weight: bold;"></td>
-                <td><span style="color: #64b57d; font-weight: 600;">Completed</span></td>
                 <td>
                     <form method="post" th:action="@{/admin/orders/delete/{id}(id=${order.orderId})}" style="display:inline;">
                         <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this order?');">
@@ -65,7 +63,7 @@
                 </td>
             </tr>
             <tr th:if="${orders.empty}">
-                <td colspan="6" style="text-align: center; padding: 30px;">No orders found.</td>
+                <td colspan="5" style="text-align: center; padding: 30px;">No orders found.</td>
             </tr>
         </tbody>
     </table>

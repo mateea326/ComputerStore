@@ -21,15 +21,19 @@
         .type-btn.disabled { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #ccc; }
         .form-group { margin-bottom: 18px; }
         label { display: block; margin-bottom: 5px; color: #555; font-weight: 500; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
-        input:focus { outline: none; border-color: #7bb8b4; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; font-family: inherit; }
+        input:focus, textarea:focus { outline: none; border-color: #7bb8b4; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
+        textarea { resize: vertical; min-height: 80px; }
         .field-error { color: #dc3545; font-size: 12px; margin-top: 4px; }
         button[type="submit"] { width: 100%; padding: 14px; background: #7bb8b4; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
         button[type="submit"]:hover { background: #619e9a; }
         .back-link { display: inline-block; margin-top: 20px; color: #7bb8b4; text-decoration: none; font-weight: 600; }
         .back-link:hover { text-decoration: underline; }
+        .image-preview { margin-top: 8px; }
+        .image-preview img { max-height: 100px; border-radius: 5px; border: 1px solid #ddd; }
+        input[type="file"] { padding: 8px; }
     </style>
 </head>
 <body>
@@ -50,7 +54,7 @@
         </div>
 
         <!-- Processor Form -->
-        <form th:if="${productType == 'processor'}" method="post" 
+        <form th:if="${productType == 'processor'}" method="post" enctype="multipart/form-data"
               th:action="${isEdit ? '/admin/products/edit/processor/' + product.productId : '/admin/products/add/processor'}" 
               th:object="${product}">
             <div class="form-group">
@@ -74,11 +78,19 @@
                 <label for="socket">Socket</label>
                 <input type="text" th:field="*{socket}">
             </div>
+            <div class="form-group">
+                <label for="imageFile">Product Image</label>
+                <input type="file" name="imageFile" accept="image/*">
+                <div class="image-preview" th:if="${isEdit and product.imageUrl != null}">
+                    <p style="font-size: 12px; color: #888; margin-top: 5px;">Current image:</p>
+                    <img th:src="${product.imageUrl}" alt="Current image">
+                </div>
+            </div>
             <button type="submit" th:text="${isEdit ? 'Update Processor' : 'Add Processor'}"></button>
         </form>
 
         <!-- Graphics Card Form -->
-        <form th:if="${productType == 'gpu'}" method="post" 
+        <form th:if="${productType == 'gpu'}" method="post" enctype="multipart/form-data"
               th:action="${isEdit ? '/admin/products/edit/gpu/' + product.productId : '/admin/products/add/gpu'}" 
               th:object="${product}">
             <div class="form-group">
@@ -101,11 +113,19 @@
                 <label for="memoryClock">Memory Clock (MHz)</label>
                 <input type="number" th:field="*{memoryClock}" min="1">
             </div>
+            <div class="form-group">
+                <label for="imageFile">Product Image</label>
+                <input type="file" name="imageFile" accept="image/*">
+                <div class="image-preview" th:if="${isEdit and product.imageUrl != null}">
+                    <p style="font-size: 12px; color: #888; margin-top: 5px;">Current image:</p>
+                    <img th:src="${product.imageUrl}" alt="Current image">
+                </div>
+            </div>
             <button type="submit" th:text="${isEdit ? 'Update Graphics Card' : 'Add Graphics Card'}"></button>
         </form>
 
         <!-- Motherboard Form -->
-        <form th:if="${productType == 'motherboard'}" method="post" 
+        <form th:if="${productType == 'motherboard'}" method="post" enctype="multipart/form-data"
               th:action="${isEdit ? '/admin/products/edit/motherboard/' + product.productId : '/admin/products/add/motherboard'}" 
               th:object="${product}">
             <div class="form-group">
@@ -128,11 +148,19 @@
                 <label for="chipset">Chipset</label>
                 <input type="text" th:field="*{chipset}">
             </div>
+            <div class="form-group">
+                <label for="imageFile">Product Image</label>
+                <input type="file" name="imageFile" accept="image/*">
+                <div class="image-preview" th:if="${isEdit and product.imageUrl != null}">
+                    <p style="font-size: 12px; color: #888; margin-top: 5px;">Current image:</p>
+                    <img th:src="${product.imageUrl}" alt="Current image">
+                </div>
+            </div>
             <button type="submit" th:text="${isEdit ? 'Update Motherboard' : 'Add Motherboard'}"></button>
         </form>
 
         <!-- Case Form -->
-        <form th:if="${productType == 'case'}" method="post" 
+        <form th:if="${productType == 'case'}" method="post" enctype="multipart/form-data"
               th:action="${isEdit ? '/admin/products/edit/case/' + product.productId : '/admin/products/add/case'}" 
               th:object="${product}">
             <div class="form-group">
@@ -154,6 +182,14 @@
             <div class="form-group">
                 <label for="format">Format</label>
                 <input type="text" th:field="*{format}">
+            </div>
+            <div class="form-group">
+                <label for="imageFile">Product Image</label>
+                <input type="file" name="imageFile" accept="image/*">
+                <div class="image-preview" th:if="${isEdit and product.imageUrl != null}">
+                    <p style="font-size: 12px; color: #888; margin-top: 5px;">Current image:</p>
+                    <img th:src="${product.imageUrl}" alt="Current image">
+                </div>
             </div>
             <button type="submit" th:text="${isEdit ? 'Update Case' : 'Add Case'}"></button>
         </form>
