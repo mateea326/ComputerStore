@@ -46,6 +46,7 @@
 ### 1. User Account Management
 **Description:** Users must be able to create accounts, login and manage their personal profile.
 
+
 **Acceptance Criteria:**
 - Users can register with valid email, unique username, and strong password.
 - Secure login using Spring Security and BCrypt password hashing.

@@ -3,7 +3,7 @@ package com.example.ComputerStore.service;
 import com.example.ComputerStore.dto.UserRegistrationDTO;
 import com.example.ComputerStore.dto.UserResponseDTO;
 import com.example.ComputerStore.model.User;
-import com.example.ComputerStore.repo.UserRepository;
+import com.example.ComputerStore.repo.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +23,16 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private CartRepository cartRepository;
+    @Mock
+    private CartItemRepository cartItemRepository;
+    @Mock
+    private WishlistRepository wishlistRepository;
+    @Mock
+    private OrderRepository orderRepository;
+    @Mock
+    private OrderItemRepository orderItemRepository;
 
     private UserService userService;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -31,7 +41,9 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository, passwordEncoder);
+        userService = new UserService(userRepository, passwordEncoder,
+                cartRepository, cartItemRepository, wishlistRepository,
+                orderRepository, orderItemRepository);
         
         testUser = new User();
         testUser.setUserId(1);

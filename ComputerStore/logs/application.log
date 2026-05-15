@@ -1,104 +1,661 @@
-<<<<<<< HEAD
-2026-05-05 13:48:36 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2026-05-05 13:48:36 [main] INFO  c.e.C.AdminIntegrationTest - Starting AdminIntegrationTest using Java 21.0.2 with PID 23660 (started by Admin in D:\ComputerStore\ComputerStore)
-2026-05-05 13:48:36 [main] DEBUG c.e.C.AdminIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
-2026-05-05 13:48:36 [main] INFO  c.e.C.AdminIntegrationTest - The following 1 profile is active: "test"
-2026-05-05 13:48:38 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-05 13:48:39 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 389 ms. Found 11 JPA repository interfaces.
-2026-05-05 13:48:40 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-05 13:48:41 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
-2026-05-05 13:48:41 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-05-05 13:48:41 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-05 13:48:41 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-05 13:48:42 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-2026-05-05 13:48:42 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-05 13:48:42 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-05-05 13:48:45 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-05-05 13:48:45 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-05 13:48:46 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-05-05 13:48:47 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@172058f3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@77feef20, org.springframework.security.web.context.SecurityContextHolderFilter@67c4c009, org.springframework.security.web.header.HeaderWriterFilter@7d578694, org.springframework.web.filter.CorsFilter@481dfca7, org.springframework.security.web.csrf.CsrfFilter@3de86254, org.springframework.security.web.authentication.logout.LogoutFilter@3a6894ac, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5f382a22, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@eddff60, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@680fd480, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@71b6ccab, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@f09a29b, org.springframework.security.web.access.ExceptionTranslationFilter@506f21c9, org.springframework.security.web.access.intercept.AuthorizationFilter@7ede2028]
-2026-05-05 13:48:48 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
-2026-05-05 13:48:49 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2026-05-05 13:48:49 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2026-05-05 13:48:49 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2026-05-05 13:48:49 [main] INFO  c.e.C.AdminIntegrationTest - Started AdminIntegrationTest in 13.258 seconds (process running for 16.878)
-2026-05-05 13:48:51 [main] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/admin' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
-2026-05-05 13:48:51 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@6f7e5288]
-2026-05-05 13:48:51 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
-2026-05-05 13:48:51 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = []
-2026-05-05 13:48:51 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = []. Execution time: 15 ms
-2026-05-05 13:48:51 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.getAllUsers() with argument[s] = []
-2026-05-05 13:48:51 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.getAllUsers() with result = [com.example.ComputerStore.model.User@195cca8f]. Execution time: 40 ms
-2026-05-05 13:48:51 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.OrderService.getAllOrders() with argument[s] = []
-2026-05-05 13:48:51 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.OrderService.getAllOrders() with result = []. Execution time: 4 ms
-2026-05-05 13:48:52 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.ComputerStoreApplicationTests]: ComputerStoreApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-05-05 13:48:52 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.ComputerStoreApplicationTests
-2026-05-05 13:48:52 [main] INFO  c.e.C.ComputerStoreApplicationTests - Starting ComputerStoreApplicationTests using Java 21.0.2 with PID 23660 (started by Admin in D:\ComputerStore\ComputerStore)
-2026-05-05 13:48:52 [main] DEBUG c.e.C.ComputerStoreApplicationTests - Running with Spring Boot v3.2.0, Spring v6.1.1
-2026-05-05 13:48:52 [main] INFO  c.e.C.ComputerStoreApplicationTests - The following 1 profile is active: "dev"
-2026-05-05 13:48:52 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-05 13:48:52 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 37 ms. Found 11 JPA repository interfaces.
-2026-05-05 13:48:53 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-05 13:48:53 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-05-05 13:48:53 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-05 13:48:53 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Starting...
-2026-05-05 13:48:53 [main] INFO  com.zaxxer.hikari.pool.HikariPool - ComputerHikariCP - Added connection org.postgresql.jdbc.PgConnection@7b65b524
-2026-05-05 13:48:53 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Start completed.
-2026-05-05 13:48:53 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-05-05 13:48:54 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-05-05 13:48:54 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-05 13:48:55 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-05-05 13:48:55 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@35b5c526, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@31b99ff5, org.springframework.security.web.context.SecurityContextHolderFilter@7059b7c9, org.springframework.security.web.header.HeaderWriterFilter@13540cc8, org.springframework.web.filter.CorsFilter@30dee743, org.springframework.security.web.csrf.CsrfFilter@6d1a9e8, org.springframework.security.web.authentication.logout.LogoutFilter@32b44a5d, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@17e2d099, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7b4ccec3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3c6f3a9f, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@794969a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@13dd8784, org.springframework.security.web.access.ExceptionTranslationFilter@291ddf3a, org.springframework.security.web.access.intercept.AuthorizationFilter@6aedcca1]
-2026-05-05 13:48:56 [main] INFO  c.e.C.ComputerStoreApplicationTests - Started ComputerStoreApplicationTests in 3.755 seconds (process running for 23.798)
-2026-05-05 13:48:57 [main] INFO  c.e.C.service.OrderService - Order created successfully: id=1, total=700.0
-2026-05-05 13:48:58 [main] INFO  c.e.C.service.ProductService - Product saved: id=1, name=Test Product
-2026-05-05 13:48:58 [main] INFO  c.e.C.service.ProductService - Product deleted: id=1
-2026-05-05 13:48:59 [main] INFO  c.e.C.service.UserService - New user registered: johndoe
-2026-05-05 13:48:59 [main] WARN  c.e.C.service.UserService - Failed login attempt for user: johndoe
-2026-05-05 13:48:59 [main] INFO  c.e.C.service.UserService - User deleted: id=1
-2026-05-05 13:48:59 [main] INFO  c.e.C.service.UserService - User updated: id=1
-2026-05-05 13:49:00 [main] INFO  c.e.C.service.UserService - User logged in via API: johndoe
-2026-05-05 13:49:00 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.StoreIntegrationTest]: StoreIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-05-05 13:49:00 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.StoreIntegrationTest
-2026-05-05 13:49:00 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@7f6698f4]
-2026-05-05 13:49:00 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
-2026-05-05 13:49:00 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
-2026-05-05 13:49:00 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
-2026-05-05 13:49:00 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@6dfe7c9b. Execution time: 47 ms
-2026-05-05 13:49:00 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 94 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = [Page request [number: 0, size 10, sort: name: ASC]]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = Page 1 of 1 containing com.example.ComputerStore.model.Product instances. Execution time: 66 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with argument[s] = [1]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@6dfe7c9b. Execution time: 6 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with result = []. Execution time: 18 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@562eb241]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@4b2dc8fa]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@455c5a44]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@5dfca231. Execution time: 10 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 23 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.addProductToCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@455c5a44, 4]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getProductDetails() with argument[s] = [4]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getProductDetails() with result = com.example.ComputerStore.model.Product@73a4417d. Execution time: 2 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.addProductToCart() with result = null. Execution time: 10 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@60f099f0]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@5dfca231. Execution time: 0 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 8 ms
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@60f099f0]
-2026-05-05 13:49:01 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
-2026-05-05 13:49:01 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-05-05 13:49:02 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-05-05 13:49:02 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-05-05 13:49:02 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-05-05 13:49:02 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
-2026-05-05 13:49:02 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
-=======
->>>>>>> origin/main
+2026-05-15 18:59:34 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-15 18:59:34 [main] INFO  c.e.C.ComputerStoreApplication - Starting ComputerStoreApplication using Java 25 with PID 28400 (C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore\target\classes started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 18:59:34 [main] DEBUG c.e.C.ComputerStoreApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 18:59:34 [main] INFO  c.e.C.ComputerStoreApplication - The following 1 profile is active: "dev"
+2026-05-15 18:59:35 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 18:59:35 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 56 ms. Found 11 JPA repository interfaces.
+2026-05-15 18:59:36 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-15 18:59:36 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-15 18:59:36 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-15 18:59:36 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-05-15 18:59:36 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-15 18:59:36 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1378 ms
+2026-05-15 18:59:36 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 18:59:36 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-15 18:59:36 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 18:59:36 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 18:59:36 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Starting...
+2026-05-15 18:59:37 [main] INFO  com.zaxxer.hikari.pool.HikariPool - ComputerHikariCP - Added connection org.postgresql.jdbc.PgConnection@44976b08
+2026-05-15 18:59:37 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Start completed.
+2026-05-15 18:59:37 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 18:59:38 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 18:59:38 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 18:59:39 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15 18:59:39 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 18:59:40 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@72dc9f9d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@45ec6bb3, org.springframework.security.web.context.SecurityContextHolderFilter@20ac726c, org.springframework.security.web.header.HeaderWriterFilter@6a49b3c7, org.springframework.web.filter.CorsFilter@219c32e3, org.springframework.security.web.csrf.CsrfFilter@4bcff08c, org.springframework.security.web.authentication.logout.LogoutFilter@75f67ea7, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@39bbe17c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@a9e31e8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@27c2f134, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@18f6ccf4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@fa3db48, org.springframework.security.web.access.ExceptionTranslationFilter@2af5eab6, org.springframework.security.web.access.intercept.AuthorizationFilter@2c7e2c5]
+2026-05-15 18:59:40 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-15 18:59:40 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-05-15 18:59:40 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 18:59:40 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
+2026-05-15 18:59:40 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+2026-05-15 18:59:40 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-15 18:59:40 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8081 or configure this application to listen on another port.
+
+2026-05-15 19:03:15 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-15 19:03:15 [main] INFO  c.e.C.ComputerStoreApplication - Starting ComputerStoreApplication using Java 25 with PID 28368 (C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore\target\classes started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:03:15 [main] DEBUG c.e.C.ComputerStoreApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:03:15 [main] INFO  c.e.C.ComputerStoreApplication - The following 1 profile is active: "dev"
+2026-05-15 19:03:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:03:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 55 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:03:17 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-15 19:03:17 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-15 19:03:17 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-15 19:03:17 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-05-15 19:03:17 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-15 19:03:17 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1324 ms
+2026-05-15 19:03:17 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:03:17 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-15 19:03:17 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:03:17 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:03:17 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Starting...
+2026-05-15 19:03:17 [main] INFO  com.zaxxer.hikari.pool.HikariPool - ComputerHikariCP - Added connection org.postgresql.jdbc.PgConnection@d76099a
+2026-05-15 19:03:17 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Start completed.
+2026-05-15 19:03:17 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:03:18 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:03:18 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:03:19 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15 19:03:19 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:03:20 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1bd98c48, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5d9ccad2, org.springframework.security.web.context.SecurityContextHolderFilter@d7d984c, org.springframework.security.web.header.HeaderWriterFilter@38bb297, org.springframework.web.filter.CorsFilter@22fb60f3, org.springframework.security.web.csrf.CsrfFilter@124ba047, org.springframework.security.web.authentication.logout.LogoutFilter@2555b92, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6b994b71, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@8ff4795, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@19bdfa3e, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@785aeba9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@dd3d0a6, org.springframework.security.web.access.ExceptionTranslationFilter@1afea182, org.springframework.security.web.access.intercept.AuthorizationFilter@5b8e2ea7]
+2026-05-15 19:03:20 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-15 19:03:20 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
+2026-05-15 19:03:20 [main] INFO  c.e.C.ComputerStoreApplication - Started ComputerStoreApplication in 4.995 seconds (process running for 5.297)
+2026-05-15 19:03:48 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15 19:03:48 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-15 19:03:48 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-05-15 19:03:48 [http-nio-8081-exec-1] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/login' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-05-15 19:03:48 [http-nio-8081-exec-1] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49c9a117]
+2026-05-15 19:03:48 [http-nio-8081-exec-1] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 1 ms
+2026-05-15 19:04:45 [http-nio-8081-exec-9] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@64cbb80c]
+2026-05-15 19:04:45 [http-nio-8081-exec-9] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:04:45 [http-nio-8081-exec-5] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/login' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-05-15 19:04:45 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CustomUserDetailsService.loadUserByUsername() with argument[s] = [admin]
+2026-05-15 19:04:45 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CustomUserDetailsService.loadUserByUsername() with result = org.springframework.security.core.userdetails.User [Username=admin, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]]. Execution time: 6 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@32647569]
+2026-05-15 19:05:13 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-2] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CustomUserDetailsService.loadUserByUsername() with argument[s] = [admin]
+2026-05-15 19:05:13 [http-nio-8081-exec-2] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CustomUserDetailsService.loadUserByUsername() with result = org.springframework.security.core.userdetails.User [Username=admin, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]]. Execution time: 6 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@32647569]
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@39188068. Execution time: 5 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 9 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = [Page request [number: 0, size 10, sort: name: ASC]]
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG o.s.jdbc.datasource.DataSourceUtils - Setting JDBC Connection [HikariProxyConnection@806901889 wrapping org.postgresql.jdbc.PgConnection@d76099a] read-only
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG o.s.jdbc.datasource.DataSourceUtils - Resetting read-only flag of JDBC Connection [HikariProxyConnection@806901889 wrapping org.postgresql.jdbc.PgConnection@d76099a]
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = Page 1 of 2 containing com.example.ComputerStore.model.Case instances. Execution time: 23 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with argument[s] = [5]
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@39188068. Execution time: 0 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with result = []. Execution time: 3 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@32647569]
+2026-05-15 19:05:13 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:13 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:13 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@7f11ef3b. Execution time: 2 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 4 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@32647569]
+2026-05-15 19:05:13 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:13 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:13 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@7acb40ce. Execution time: 2 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 4 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.saveProduct() with argument[s] = [com.example.ComputerStore.model.Processor@43a41d5b]
+2026-05-15 19:05:13 [http-nio-8081-exec-3] INFO  c.e.C.service.ProductService - Product saved: id=20, name=Test Processor Intel i9
+2026-05-15 19:05:13 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.saveProduct() with result = com.example.ComputerStore.model.Processor@43a41d5b. Execution time: 22 ms
+2026-05-15 19:05:13 [http-nio-8081-exec-3] INFO  c.e.C.controller.AdminController - Admin added processor: Test Processor Intel i9
+2026-05-15 19:05:40 [http-nio-8081-exec-6] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49a17820]
+2026-05-15 19:05:40 [http-nio-8081-exec-6] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-9] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CustomUserDetailsService.loadUserByUsername() with argument[s] = [admin]
+2026-05-15 19:05:40 [http-nio-8081-exec-9] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CustomUserDetailsService.loadUserByUsername() with result = org.springframework.security.core.userdetails.User [Username=admin, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]]. Execution time: 4 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49a17820]
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@7a35d3b. Execution time: 1 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 3 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = [Page request [number: 0, size 10, sort: name: ASC]]
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG o.s.jdbc.datasource.DataSourceUtils - Setting JDBC Connection [HikariProxyConnection@713730592 wrapping org.postgresql.jdbc.PgConnection@d76099a] read-only
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG o.s.jdbc.datasource.DataSourceUtils - Resetting read-only flag of JDBC Connection [HikariProxyConnection@713730592 wrapping org.postgresql.jdbc.PgConnection@d76099a]
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = Page 1 of 2 containing com.example.ComputerStore.model.Case instances. Execution time: 5 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@7a35d3b. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with result = []. Execution time: 3 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49a17820]
+2026-05-15 19:05:40 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@ac231a1. Execution time: 1 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 3 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49a17820]
+2026-05-15 19:05:40 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@141da82b. Execution time: 2 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 3 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.saveProduct() with argument[s] = [com.example.ComputerStore.model.GraphicsCard@c0acbfd]
+2026-05-15 19:05:40 [http-nio-8081-exec-7] INFO  c.e.C.service.ProductService - Product saved: id=21, name=Test RTX 4090 GPU Card
+2026-05-15 19:05:40 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.saveProduct() with result = com.example.ComputerStore.model.GraphicsCard@c0acbfd. Execution time: 36 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-7] INFO  c.e.C.controller.AdminController - Admin added GPU: Test RTX 4090 GPU Card
+2026-05-15 19:05:40 [http-nio-8081-exec-2] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49a17820]
+2026-05-15 19:05:40 [http-nio-8081-exec-2] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-2] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-2] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-2] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@24b93a2b. Execution time: 1 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-2] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 4 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49a17820]
+2026-05-15 19:05:40 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@47a5c9eb. Execution time: 2 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 4 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.saveProduct() with argument[s] = [com.example.ComputerStore.model.Motherboard@5214101f]
+2026-05-15 19:05:40 [http-nio-8081-exec-8] INFO  c.e.C.service.ProductService - Product saved: id=22, name=Test ASUS ROG Strix B650
+2026-05-15 19:05:40 [http-nio-8081-exec-8] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.saveProduct() with result = com.example.ComputerStore.model.Motherboard@5214101f. Execution time: 5 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-8] INFO  c.e.C.controller.AdminController - Admin added motherboard: Test ASUS ROG Strix B650
+2026-05-15 19:05:40 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49a17820]
+2026-05-15 19:05:40 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@6da06c33. Execution time: 2 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-4] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 4 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@49a17820]
+2026-05-15 19:05:40 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:40 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@4eb294d5. Execution time: 2 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 4 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.saveProduct() with argument[s] = [com.example.ComputerStore.model.Case@7b23e10a]
+2026-05-15 19:05:40 [http-nio-8081-exec-3] INFO  c.e.C.service.ProductService - Product saved: id=23, name=Test NZXT H510 Elite Case
+2026-05-15 19:05:40 [http-nio-8081-exec-3] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.saveProduct() with result = com.example.ComputerStore.model.Case@7b23e10a. Execution time: 5 ms
+2026-05-15 19:05:40 [http-nio-8081-exec-3] INFO  c.e.C.controller.AdminController - Admin added case: Test NZXT H510 Elite Case
+2026-05-15 19:05:54 [http-nio-8081-exec-6] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@ca3ef70]
+2026-05-15 19:05:54 [http-nio-8081-exec-6] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-9] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CustomUserDetailsService.loadUserByUsername() with argument[s] = [admin]
+2026-05-15 19:05:54 [http-nio-8081-exec-9] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CustomUserDetailsService.loadUserByUsername() with result = org.springframework.security.core.userdetails.User [Username=admin, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]]. Execution time: 5 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@ca3ef70]
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@7a900bc8. Execution time: 2 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 3 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = [Page request [number: 0, size 10, sort: name: ASC]]
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG o.s.jdbc.datasource.DataSourceUtils - Setting JDBC Connection [HikariProxyConnection@507810781 wrapping org.postgresql.jdbc.PgConnection@d76099a] read-only
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG o.s.jdbc.datasource.DataSourceUtils - Resetting read-only flag of JDBC Connection [HikariProxyConnection@507810781 wrapping org.postgresql.jdbc.PgConnection@d76099a]
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = Page 1 of 2 containing com.example.ComputerStore.model.Case instances. Execution time: 5 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with argument[s] = [5]
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@7a900bc8. Execution time: 0 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-5] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with result = []. Execution time: 1 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@ca3ef70]
+2026-05-15 19:05:54 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:54 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:54 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@77fa8739. Execution time: 1 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-10] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 4 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.apache.catalina.session.StandardSessionFacade@ca3ef70]
+2026-05-15 19:05:54 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [5]
+2026-05-15 19:05:54 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [5]
+2026-05-15 19:05:54 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@7aa9cad3. Execution time: 1 ms
+2026-05-15 19:05:54 [http-nio-8081-exec-7] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 3 ms
+2026-05-15 19:19:19 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-15 19:19:19 [main] INFO  c.e.C.AdminIntegrationTest - Starting AdminIntegrationTest using Java 25 with PID 26244 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:19:19 [main] DEBUG c.e.C.AdminIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:19:19 [main] INFO  c.e.C.AdminIntegrationTest - The following 1 profile is active: "test"
+2026-05-15 19:19:20 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:19:20 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 85 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:19:21 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:19:21 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-15 19:19:21 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:19:22 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:19:22 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-15 19:19:22 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-05-15 19:19:22 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-15 19:19:22 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:19:24 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:19:24 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:19:24 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15 19:19:25 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:19:26 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4eddcd66, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7f9296ff, org.springframework.security.web.context.SecurityContextHolderFilter@57633a5b, org.springframework.security.web.header.HeaderWriterFilter@37a1e8ed, org.springframework.web.filter.CorsFilter@1ab3d111, org.springframework.security.web.csrf.CsrfFilter@5a76f1ca, org.springframework.security.web.authentication.logout.LogoutFilter@3a4ab04b, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@760e0b3c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@748481eb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4a714d70, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7cb4f725, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@41e510bd, org.springframework.security.web.access.ExceptionTranslationFilter@20960817, org.springframework.security.web.access.intercept.AuthorizationFilter@279f4ba9]
+2026-05-15 19:19:26 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-05-15 19:19:26 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-05-15 19:19:26 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-05-15 19:19:26 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2026-05-15 19:19:26 [main] INFO  c.e.C.AdminIntegrationTest - Started AdminIntegrationTest in 7.454 seconds (process running for 9.071)
+2026-05-15 19:19:27 [main] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/admin' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-05-15 19:19:27 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@2fc19130]
+2026-05-15 19:19:27 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:19:27 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = []
+2026-05-15 19:19:27 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = []. Execution time: 9 ms
+2026-05-15 19:19:27 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.getAllUsers() with argument[s] = []
+2026-05-15 19:19:27 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.getAllUsers() with result = [com.example.ComputerStore.model.User@60cb002f]. Execution time: 25 ms
+2026-05-15 19:19:27 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.OrderService.getAllOrders() with argument[s] = []
+2026-05-15 19:19:27 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.OrderService.getAllOrders() with result = []. Execution time: 3 ms
+2026-05-15 19:19:28 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.ComputerStoreApplicationTests]: ComputerStoreApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-15 19:19:28 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.ComputerStoreApplicationTests
+2026-05-15 19:19:28 [main] INFO  c.e.C.ComputerStoreApplicationTests - Starting ComputerStoreApplicationTests using Java 25 with PID 26244 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:19:28 [main] DEBUG c.e.C.ComputerStoreApplicationTests - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:19:28 [main] INFO  c.e.C.ComputerStoreApplicationTests - The following 1 profile is active: "dev"
+2026-05-15 19:19:28 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:19:28 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 14 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:19:28 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:19:28 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:19:28 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:19:28 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Starting...
+2026-05-15 19:19:28 [main] INFO  com.zaxxer.hikari.pool.HikariPool - ComputerHikariCP - Added connection org.postgresql.jdbc.PgConnection@1be9e2c3
+2026-05-15 19:19:28 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Start completed.
+2026-05-15 19:19:28 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:19:28 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:19:28 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:19:29 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:19:29 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@26ec98ee, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2c5d47cf, org.springframework.security.web.context.SecurityContextHolderFilter@b9c597e, org.springframework.security.web.header.HeaderWriterFilter@69ebe496, org.springframework.web.filter.CorsFilter@7acfe67f, org.springframework.security.web.csrf.CsrfFilter@3a494952, org.springframework.security.web.authentication.logout.LogoutFilter@3ac6aeb2, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@478238db, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7b6f8286, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6581cd78, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@48beada7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@47a1bf14, org.springframework.security.web.access.ExceptionTranslationFilter@33b5b8b3, org.springframework.security.web.access.intercept.AuthorizationFilter@56bb900c]
+2026-05-15 19:19:29 [main] INFO  c.e.C.ComputerStoreApplicationTests - Started ComputerStoreApplicationTests in 1.33 seconds (process running for 11.64)
+2026-05-15 19:19:31 [main] INFO  c.e.C.service.UserService - New user registered: johndoe
+2026-05-15 19:19:32 [main] WARN  c.e.C.service.UserService - Failed login attempt for user: johndoe
+2026-05-15 19:19:32 [main] INFO  c.e.C.service.UserService - User and all related data deleted: id=1
+2026-05-15 19:19:32 [main] INFO  c.e.C.service.UserService - User updated: id=1
+2026-05-15 19:19:32 [main] INFO  c.e.C.service.UserService - User logged in via API: johndoe
+2026-05-15 19:19:33 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.StoreIntegrationTest]: StoreIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-15 19:19:33 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.StoreIntegrationTest
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@37e9d249]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@d2684d. Execution time: 8 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 27 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = [Page request [number: 0, size 10, sort: name: ASC]]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = Page 1 of 1 containing com.example.ComputerStore.model.Product instances. Execution time: 22 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with argument[s] = [1]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@d2684d. Execution time: 0 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with result = []. Execution time: 3 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@26d7ff7b]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@470bb897]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@e214db2]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@5386cb4f. Execution time: 2 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 8 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.addProductToCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@e214db2, 4]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getProductDetails() with argument[s] = [4]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getProductDetails() with result = com.example.ComputerStore.model.Product@58c82d81. Execution time: 1 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.addProductToCart() with result = null. Execution time: 1 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@3f21b0fb]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@5386cb4f. Execution time: 0 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 3 ms
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@3f21b0fb]
+2026-05-15 19:19:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:19:33 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:19:33 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-15 19:19:33 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-15 19:19:33 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:19:33 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
+2026-05-15 19:19:33 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+2026-05-15 19:21:35 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-15 19:21:35 [main] INFO  c.e.C.AdminIntegrationTest - Starting AdminIntegrationTest using Java 25 with PID 29564 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:21:35 [main] DEBUG c.e.C.AdminIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:21:35 [main] INFO  c.e.C.AdminIntegrationTest - The following 1 profile is active: "test"
+2026-05-15 19:21:36 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:21:36 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 85 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:21:36 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:21:36 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-15 19:21:37 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:21:37 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:21:37 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-15 19:21:37 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-05-15 19:21:37 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-15 19:21:37 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:21:39 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:21:39 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:21:39 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15 19:21:40 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:21:41 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@18204075, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@453f92db, org.springframework.security.web.context.SecurityContextHolderFilter@20960817, org.springframework.security.web.header.HeaderWriterFilter@4518c928, org.springframework.web.filter.CorsFilter@436e26ab, org.springframework.security.web.csrf.CsrfFilter@7e93a26e, org.springframework.security.web.authentication.logout.LogoutFilter@70d7c2bd, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@59e74cad, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5244fa3b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@37a1e8ed, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@9c2a5b5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5f1dcc7e, org.springframework.security.web.access.ExceptionTranslationFilter@1e3d6f18, org.springframework.security.web.access.intercept.AuthorizationFilter@44b788b5]
+2026-05-15 19:21:41 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-05-15 19:21:41 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-05-15 19:21:41 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-05-15 19:21:41 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2026-05-15 19:21:41 [main] INFO  c.e.C.AdminIntegrationTest - Started AdminIntegrationTest in 7.221 seconds (process running for 8.665)
+2026-05-15 19:21:42 [main] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/admin' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-05-15 19:21:42 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@2b76ca65]
+2026-05-15 19:21:42 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:21:42 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = []
+2026-05-15 19:21:42 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = []. Execution time: 9 ms
+2026-05-15 19:21:42 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.getAllUsers() with argument[s] = []
+2026-05-15 19:21:42 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.getAllUsers() with result = [com.example.ComputerStore.model.User@64254dd4]. Execution time: 27 ms
+2026-05-15 19:21:42 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.OrderService.getAllOrders() with argument[s] = []
+2026-05-15 19:21:42 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.OrderService.getAllOrders() with result = []. Execution time: 3 ms
+2026-05-15 19:21:43 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.ComputerStoreApplicationTests]: ComputerStoreApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-15 19:21:43 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.ComputerStoreApplicationTests
+2026-05-15 19:21:43 [main] INFO  c.e.C.ComputerStoreApplicationTests - Starting ComputerStoreApplicationTests using Java 25 with PID 29564 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:21:43 [main] DEBUG c.e.C.ComputerStoreApplicationTests - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:21:43 [main] INFO  c.e.C.ComputerStoreApplicationTests - The following 1 profile is active: "dev"
+2026-05-15 19:21:43 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:21:43 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:21:43 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:21:43 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:21:43 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:21:43 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Starting...
+2026-05-15 19:21:43 [main] INFO  com.zaxxer.hikari.pool.HikariPool - ComputerHikariCP - Added connection org.postgresql.jdbc.PgConnection@4ed31bc9
+2026-05-15 19:21:43 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Start completed.
+2026-05-15 19:21:43 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:21:43 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:21:43 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:21:44 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:21:44 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@43ed38bf, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4694d2a3, org.springframework.security.web.context.SecurityContextHolderFilter@3d3a70de, org.springframework.security.web.header.HeaderWriterFilter@3ac6aeb2, org.springframework.web.filter.CorsFilter@c878c7a, org.springframework.security.web.csrf.CsrfFilter@6581cd78, org.springframework.security.web.authentication.logout.LogoutFilter@26ec98ee, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@47a1bf14, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@56bb900c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@478238db, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@54874e6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4aae3648, org.springframework.security.web.access.ExceptionTranslationFilter@53785a0a, org.springframework.security.web.access.intercept.AuthorizationFilter@7acfe67f]
+2026-05-15 19:21:44 [main] INFO  c.e.C.ComputerStoreApplicationTests - Started ComputerStoreApplicationTests in 1.274 seconds (process running for 11.106)
+2026-05-15 19:21:46 [main] INFO  c.e.C.service.UserService - New user registered: johndoe
+2026-05-15 19:21:46 [main] WARN  c.e.C.service.UserService - Failed login attempt for user: johndoe
+2026-05-15 19:21:46 [main] INFO  c.e.C.service.UserService - User and all related data deleted: id=1
+2026-05-15 19:21:47 [main] INFO  c.e.C.service.UserService - User updated: id=1
+2026-05-15 19:21:47 [main] INFO  c.e.C.service.UserService - User logged in via API: johndoe
+2026-05-15 19:21:47 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.StoreIntegrationTest]: StoreIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-15 19:21:47 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.StoreIntegrationTest
+2026-05-15 19:21:47 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:21:47 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:21:47 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@2a4de75d. Execution time: 6 ms
+2026-05-15 19:21:47 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 23 ms
+2026-05-15 19:21:47 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@2c100949]
+2026-05-15 19:21:47 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:21:47 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = [Page request [number: 0, size 10, sort: name: ASC]]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = Page 1 of 1 containing com.example.ComputerStore.model.Product instances. Execution time: 29 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with argument[s] = [1]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@2a4de75d. Execution time: 0 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with result = []. Execution time: 5 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@46bb9d9c]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@53d1a4a4]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@79256d42. Execution time: 2 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 6 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@65c29525]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.addProductToCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@65c29525, 4]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getProductDetails() with argument[s] = [4]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getProductDetails() with result = com.example.ComputerStore.model.Product@2a8bff7f. Execution time: 1 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.addProductToCart() with result = null. Execution time: 2 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@79256d42. Execution time: 1 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 4 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@7537ffd3]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 1 ms
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@7537ffd3]
+2026-05-15 19:21:48 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:21:48 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:21:48 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-15 19:21:48 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-15 19:21:48 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:21:48 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
+2026-05-15 19:21:48 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+2026-05-15 19:22:25 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-15 19:22:25 [main] INFO  c.e.C.AdminIntegrationTest - Starting AdminIntegrationTest using Java 25 with PID 11608 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:22:25 [main] DEBUG c.e.C.AdminIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:22:25 [main] INFO  c.e.C.AdminIntegrationTest - The following 1 profile is active: "test"
+2026-05-15 19:22:26 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:22:26 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 82 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:22:27 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:22:27 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-15 19:22:27 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:22:27 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:22:27 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-15 19:22:28 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-05-15 19:22:28 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-15 19:22:28 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:22:29 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:22:29 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:22:30 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15 19:22:31 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:22:31 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@56000be1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1c15d2ef, org.springframework.security.web.context.SecurityContextHolderFilter@5f1dcc7e, org.springframework.security.web.header.HeaderWriterFilter@18204075, org.springframework.web.filter.CorsFilter@2892ce86, org.springframework.security.web.csrf.CsrfFilter@53244711, org.springframework.security.web.authentication.logout.LogoutFilter@69b2d0db, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6d3e7bd0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7cb4f725, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4eddcd66, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7b1d9907, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3fd0bf32, org.springframework.security.web.access.ExceptionTranslationFilter@279f4ba9, org.springframework.security.web.access.intercept.AuthorizationFilter@6855bae5]
+2026-05-15 19:22:32 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-05-15 19:22:32 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-05-15 19:22:32 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-05-15 19:22:32 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2026-05-15 19:22:32 [main] INFO  c.e.C.AdminIntegrationTest - Started AdminIntegrationTest in 7.104 seconds (process running for 8.529)
+2026-05-15 19:22:33 [main] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/admin' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-05-15 19:22:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@70786882]
+2026-05-15 19:22:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:22:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = []
+2026-05-15 19:22:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = []. Execution time: 9 ms
+2026-05-15 19:22:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.getAllUsers() with argument[s] = []
+2026-05-15 19:22:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.getAllUsers() with result = [com.example.ComputerStore.model.User@68c21071]. Execution time: 24 ms
+2026-05-15 19:22:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.OrderService.getAllOrders() with argument[s] = []
+2026-05-15 19:22:33 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.OrderService.getAllOrders() with result = []. Execution time: 3 ms
+2026-05-15 19:22:33 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.ComputerStoreApplicationTests]: ComputerStoreApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-15 19:22:33 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.ComputerStoreApplicationTests
+2026-05-15 19:22:33 [main] INFO  c.e.C.ComputerStoreApplicationTests - Starting ComputerStoreApplicationTests using Java 25 with PID 11608 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:22:33 [main] DEBUG c.e.C.ComputerStoreApplicationTests - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:22:33 [main] INFO  c.e.C.ComputerStoreApplicationTests - The following 1 profile is active: "dev"
+2026-05-15 19:22:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:22:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 15 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:22:33 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:22:33 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:22:33 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:22:33 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Starting...
+2026-05-15 19:22:33 [main] INFO  com.zaxxer.hikari.pool.HikariPool - ComputerHikariCP - Added connection org.postgresql.jdbc.PgConnection@7fb22dd4
+2026-05-15 19:22:33 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Start completed.
+2026-05-15 19:22:34 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:22:34 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:22:34 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:22:34 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:22:34 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@133e2570, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3a494952, org.springframework.security.web.context.SecurityContextHolderFilter@2a08e3b, org.springframework.security.web.header.HeaderWriterFilter@7614cb65, org.springframework.web.filter.CorsFilter@33b5b8b3, org.springframework.security.web.csrf.CsrfFilter@2403b94f, org.springframework.security.web.authentication.logout.LogoutFilter@790d30bb, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6b2c4b3b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3bd096e1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2fc50143, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7bb4360d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@69ebe496, org.springframework.security.web.access.ExceptionTranslationFilter@4acbd949, org.springframework.security.web.access.intercept.AuthorizationFilter@411d0865]
+2026-05-15 19:22:34 [main] INFO  c.e.C.ComputerStoreApplicationTests - Started ComputerStoreApplicationTests in 1.264 seconds (process running for 10.947)
+2026-05-15 19:22:36 [main] INFO  c.e.C.service.ProductService - Product saved: id=1, name=Test Product
+2026-05-15 19:22:37 [main] INFO  c.e.C.service.UserService - New user registered: johndoe
+2026-05-15 19:22:37 [main] WARN  c.e.C.service.UserService - Failed login attempt for user: johndoe
+2026-05-15 19:22:37 [main] INFO  c.e.C.service.UserService - User and all related data deleted: id=1
+2026-05-15 19:22:37 [main] INFO  c.e.C.service.UserService - User updated: id=1
+2026-05-15 19:22:37 [main] INFO  c.e.C.service.UserService - User logged in via API: johndoe
+2026-05-15 19:22:38 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.StoreIntegrationTest]: StoreIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-15 19:22:38 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.StoreIntegrationTest
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@595629ea]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@62efa1c3. Execution time: 8 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 27 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = [Page request [number: 0, size 10, sort: name: ASC]]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = Page 1 of 1 containing com.example.ComputerStore.model.Product instances. Execution time: 22 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with argument[s] = [1]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@62efa1c3. Execution time: 0 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with result = []. Execution time: 4 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@24b30426]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@508c5015]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@5840731]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@613ac7e8. Execution time: 2 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 6 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.addProductToCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@5840731, 4]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getProductDetails() with argument[s] = [4]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getProductDetails() with result = com.example.ComputerStore.model.Product@26d7ff7b. Execution time: 1 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.addProductToCart() with result = null. Execution time: 3 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@507415ec]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@613ac7e8. Execution time: 1 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 3 ms
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@507415ec]
+2026-05-15 19:22:38 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:22:38 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:22:38 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-15 19:22:38 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-15 19:22:38 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:22:38 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
+2026-05-15 19:22:38 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+2026-05-15 19:23:32 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-15 19:23:32 [main] INFO  c.e.C.AdminIntegrationTest - Starting AdminIntegrationTest using Java 25 with PID 4704 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:23:32 [main] DEBUG c.e.C.AdminIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:23:32 [main] INFO  c.e.C.AdminIntegrationTest - The following 1 profile is active: "test"
+2026-05-15 19:23:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:23:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 85 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:23:34 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:23:34 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-15 19:23:34 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:23:34 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:23:34 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-15 19:23:35 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-05-15 19:23:35 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-15 19:23:35 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:23:36 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:23:36 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:23:37 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15 19:23:38 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:23:38 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@393b6884, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@72b9c9ed, org.springframework.security.web.context.SecurityContextHolderFilter@2c4236c5, org.springframework.security.web.header.HeaderWriterFilter@4bfbed32, org.springframework.web.filter.CorsFilter@2964baa8, org.springframework.security.web.csrf.CsrfFilter@676de6d5, org.springframework.security.web.authentication.logout.LogoutFilter@279f4ba9, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@1c9b1a57, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5457ac90, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@53244711, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@471bc4c5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@30c07ead, org.springframework.security.web.access.ExceptionTranslationFilter@6f86933c, org.springframework.security.web.access.intercept.AuthorizationFilter@678bee2f]
+2026-05-15 19:23:39 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-05-15 19:23:39 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-05-15 19:23:39 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-05-15 19:23:39 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2026-05-15 19:23:39 [main] INFO  c.e.C.AdminIntegrationTest - Started AdminIntegrationTest in 7.343 seconds (process running for 8.817)
+2026-05-15 19:23:39 [main] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/admin' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-05-15 19:23:40 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@7add3a83]
+2026-05-15 19:23:40 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:23:40 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = []
+2026-05-15 19:23:40 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = []. Execution time: 9 ms
+2026-05-15 19:23:40 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.getAllUsers() with argument[s] = []
+2026-05-15 19:23:40 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.getAllUsers() with result = [com.example.ComputerStore.model.User@2d34b597]. Execution time: 26 ms
+2026-05-15 19:23:40 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.OrderService.getAllOrders() with argument[s] = []
+2026-05-15 19:23:40 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.OrderService.getAllOrders() with result = []. Execution time: 2 ms
+2026-05-15 19:23:40 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.ComputerStoreApplicationTests]: ComputerStoreApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-15 19:23:40 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.ComputerStoreApplicationTests
+2026-05-15 19:23:40 [main] INFO  c.e.C.ComputerStoreApplicationTests - Starting ComputerStoreApplicationTests using Java 25 with PID 4704 (started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:23:40 [main] DEBUG c.e.C.ComputerStoreApplicationTests - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:23:40 [main] INFO  c.e.C.ComputerStoreApplicationTests - The following 1 profile is active: "dev"
+2026-05-15 19:23:40 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:23:40 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 17 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:23:40 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:23:40 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:23:40 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:23:40 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Starting...
+2026-05-15 19:23:40 [main] INFO  com.zaxxer.hikari.pool.HikariPool - ComputerHikariCP - Added connection org.postgresql.jdbc.PgConnection@5150aee4
+2026-05-15 19:23:40 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Start completed.
+2026-05-15 19:23:40 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:23:41 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:23:41 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:23:41 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:23:41 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@60acd762, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@cd101e, org.springframework.security.web.context.SecurityContextHolderFilter@26ec98ee, org.springframework.security.web.header.HeaderWriterFilter@48beada7, org.springframework.web.filter.CorsFilter@3099a821, org.springframework.security.web.csrf.CsrfFilter@56bb900c, org.springframework.security.web.authentication.logout.LogoutFilter@54874e6, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@c878c7a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2c5d47cf, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7acfe67f, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@4aae3648, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@bbed40c, org.springframework.security.web.access.ExceptionTranslationFilter@478238db, org.springframework.security.web.access.intercept.AuthorizationFilter@4694d2a3]
+2026-05-15 19:23:41 [main] INFO  c.e.C.ComputerStoreApplicationTests - Started ComputerStoreApplicationTests in 1.304 seconds (process running for 11.309)
+2026-05-15 19:23:43 [main] INFO  c.e.C.service.ProductService - Product saved: id=1, name=Test Product
+2026-05-15 19:23:44 [main] INFO  c.e.C.service.UserService - New user registered: johndoe
+2026-05-15 19:23:44 [main] WARN  c.e.C.service.UserService - Failed login attempt for user: johndoe
+2026-05-15 19:23:44 [main] INFO  c.e.C.service.UserService - User and all related data deleted: id=1
+2026-05-15 19:23:44 [main] INFO  c.e.C.service.UserService - User updated: id=1
+2026-05-15 19:23:44 [main] INFO  c.e.C.service.UserService - User logged in via API: johndoe
+2026-05-15 19:23:45 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ComputerStore.StoreIntegrationTest]: StoreIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-15 19:23:45 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.ComputerStore.ComputerStoreApplication for test class com.example.ComputerStore.StoreIntegrationTest
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@1cfb641b]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@32c94428. Execution time: 8 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 27 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getAllProducts() with argument[s] = [Page request [number: 0, size 10, sort: name: ASC]]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getAllProducts() with result = Page 1 of 1 containing com.example.ComputerStore.model.Product instances. Execution time: 23 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with argument[s] = [1]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@32c94428. Execution time: 0 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProductIds() with result = []. Execution time: 6 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@44fb1361]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@587f3ca3]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@33b66b8a]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@8a71b1e. Execution time: 2 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 7 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.addProductToCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@33b66b8a, 4]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.ProductService.getProductDetails() with argument[s] = [4]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.ProductService.getProductDetails() with result = com.example.ComputerStore.model.Product@46bc14c3. Execution time: 1 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.addProductToCart() with result = null. Execution time: 4 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@143336e3]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with argument[s] = [1]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.UserService.findUserById() with argument[s] = [1]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.UserService.findUserById() with result = com.example.ComputerStore.model.User@8a71b1e. Execution time: 1 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.WishlistService.getWishlistProducts() with result = []. Execution time: 3 ms
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Start] Enter: com.example.ComputerStore.service.CartService.getCart() with argument[s] = [org.springframework.mock.web.MockHttpSession@143336e3]
+2026-05-15 19:23:45 [main] DEBUG c.e.C.config.LoggingAspect - AOP [Success] Exit: com.example.ComputerStore.service.CartService.getCart() with result = {}. Execution time: 0 ms
+2026-05-15 19:23:45 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:23:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-15 19:23:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-15 19:23:46 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:23:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
+2026-05-15 19:23:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+2026-05-15 19:28:56 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-05-15 19:28:56 [main] INFO  c.e.C.ComputerStoreApplication - Starting ComputerStoreApplication using Java 25 with PID 15172 (C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore\target\classes started by Mateea in C:\Users\Mateea\Desktop\proiecte\ComputerStore\ComputerStore)
+2026-05-15 19:28:56 [main] DEBUG c.e.C.ComputerStoreApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-15 19:28:56 [main] INFO  c.e.C.ComputerStoreApplication - The following 1 profile is active: "dev"
+2026-05-15 19:28:59 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15 19:28:59 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 99 ms. Found 11 JPA repository interfaces.
+2026-05-15 19:29:00 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-15 19:29:00 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-15 19:29:00 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-15 19:29:00 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-05-15 19:29:00 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-15 19:29:00 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4021 ms
+2026-05-15 19:29:00 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-15 19:29:00 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-05-15 19:29:01 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-15 19:29:01 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15 19:29:01 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Starting...
+2026-05-15 19:29:01 [main] INFO  com.zaxxer.hikari.pool.HikariPool - ComputerHikariCP - Added connection org.postgresql.jdbc.PgConnection@78bad03b
+2026-05-15 19:29:01 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Start completed.
+2026-05-15 19:29:01 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-15 19:29:02 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-15 19:29:03 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:29:03 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15 19:29:04 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15 19:29:04 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@310045fc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@ae20523, org.springframework.security.web.context.SecurityContextHolderFilter@48c42253, org.springframework.security.web.header.HeaderWriterFilter@c7ec499, org.springframework.web.filter.CorsFilter@4a282c78, org.springframework.security.web.csrf.CsrfFilter@3f02dc34, org.springframework.security.web.authentication.logout.LogoutFilter@688c914e, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@775c865f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@ace45e9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5c943847, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@6dc010a2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2700609f, org.springframework.security.web.access.ExceptionTranslationFilter@1b25ebea, org.springframework.security.web.access.intercept.AuthorizationFilter@7dfc0fda]
+2026-05-15 19:29:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-15 19:29:05 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-05-15 19:29:05 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15 19:29:05 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown initiated...
+2026-05-15 19:29:05 [main] INFO  com.zaxxer.hikari.HikariDataSource - ComputerHikariCP - Shutdown completed.
+2026-05-15 19:29:05 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-15 19:29:05 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8081 or configure this application to listen on another port.
+

@@ -75,6 +75,9 @@ public class ProductService {
         Product existing = getProductDetails(id);
         existing.setName(updated.getName());
         existing.setPrice(updated.getPrice());
+        if (updated.getImageUrl() != null && !updated.getImageUrl().isBlank()) {
+            existing.setImageUrl(updated.getImageUrl());
+        }
 
         if (existing instanceof Processor p && updated instanceof Processor u) {
             p.setCoreCount(u.getCoreCount());
