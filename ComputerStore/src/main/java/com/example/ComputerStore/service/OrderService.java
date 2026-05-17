@@ -123,9 +123,12 @@ public class OrderService {
 
     @Transactional
     public void deleteOrder(Integer orderId) {
-        // Curățare manuală a item-urilor pentru a evita erorile de constrângere pe date vechi
-        orderItemRepository.deleteByOrderId(orderId);
-        orderRepository.deleteById(orderId);
+        Order order = getOrderById(orderId);
+        // Scoatem comanda din lista user-ului pentru a sincroniza relatia bidirectionala
+        if (order.getUser() != null && order.getUser().getOrders() != null) {
+            order.getUser().getOrders().remove(order);
+        }
+        orderRepository.delete(order);
         log.info("Order and its items deleted: id={}", orderId);
     }
 }

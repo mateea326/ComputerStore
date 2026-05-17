@@ -12,7 +12,7 @@
         }
         body {
             font-family: "Georgia", serif;
-            background: #eeffff;
+            background: white;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,6 +25,14 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             width: 100%;
             max-width: 400px;
+        }
+        .big-container {
+            background: #eeffff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 410px;
         }
         h1 {
             color: #333;
@@ -126,6 +134,7 @@
     </style>
 </head>
 <body>
+<div class="big-container">
 <div class="container">
     <h1>Login</h1>
 
@@ -176,6 +185,7 @@
     <div class="register-link">
         Don't have an account? <a href="/register">Register here</a>
     </div>
+</div>
 </div>
 <img th:src="@{/images/img.png}" class="corner-img" id="img-left" alt="">
 <img th:src="@{/images/img.png}" class="corner-img" id="img-right" alt="">
