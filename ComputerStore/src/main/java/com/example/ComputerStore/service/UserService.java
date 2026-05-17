@@ -136,28 +136,10 @@ public class UserService {
         User userToDelete = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
-        // 1. Curățăm coșul (Cart)
-        if (userToDelete.getCart() != null) {
-            cartItemRepository.deleteByCartId(userToDelete.getCart().getCartId());
-            cartRepository.delete(userToDelete.getCart());
-        }
-
-        // 2. Curățăm wishlist-ul (produsele din tabelul de legătură)
-        if (userToDelete.getWishlist() != null) {
-            wishlistRepository.deleteProductsByWishlistId(userToDelete.getWishlist().getWishlistId());
-            wishlistRepository.delete(userToDelete.getWishlist());
-        }
-
-        // 3. Curățăm comenzile (Orders)
-        if (userToDelete.getOrders() != null) {
-            for (com.example.ComputerStore.model.Order order : userToDelete.getOrders()) {
-                orderItemRepository.deleteByOrderId(order.getOrderId());
-            }
-            orderRepository.deleteAll(userToDelete.getOrders());
-        } 
-
-        // 4. Ștergem utilizatorul
+        // JPA CascadeType.ALL and orphanRemoval=true will automatically
+        // delete the associated Cart, Wishlist, Orders, and OrderItems.
         userRepository.delete(userToDelete);
+        
         log.info("User and all related data deleted: id={}", id);
         return mapToResponseDTO(userToDelete);
     }
@@ -170,5 +152,23 @@ public class UserService {
     // READ – toți utilizatorii cu paginare și sortare
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    // UPDATE – schimbare rol utilizator de către admin
+    public void changeUserRole(Integer userId, String newRole) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+            throw new IllegalArgumentException("Cannot modify the role of an existing ADMIN!");
+        }
+
+        if (!"ADMIN".equalsIgnoreCase(newRole)) {
+            throw new IllegalArgumentException("Only upgrades to ADMIN are allowed.");
+        }
+
+        user.setRole(newRole.toUpperCase());
+        userRepository.save(user);
+        log.info("Role changed for user id={} to {}", userId, newRole.toUpperCase());
     }
 }

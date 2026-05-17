@@ -346,13 +346,27 @@ public class AdminController {
     @PostMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         User user = userService.findUserById(id);
-        if ("admin".equals(user.getUsername())) {
-            redirectAttributes.addFlashAttribute("error", "The main admin account cannot be deleted!");
+        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Admin accounts cannot be deleted!");
             return "redirect:/admin/users";
         }
         userService.deleteUser(id);
         log.info("Admin deleted user: id={}", id);
         redirectAttributes.addFlashAttribute("success", "User deleted successfully!");
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/users/change-role/{id}")
+    public String changeUserRole(@PathVariable Integer id,
+                                 @RequestParam("newRole") String newRole,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            userService.changeUserRole(id, newRole);
+            log.info("Admin changed role for user id={} to {}", id, newRole);
+            redirectAttributes.addFlashAttribute("success", "Role updated successfully!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
         return "redirect:/admin/users";
     }
 
