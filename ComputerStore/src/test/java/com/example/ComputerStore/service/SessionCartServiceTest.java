@@ -1,7 +1,14 @@
 package com.example.ComputerStore.service;
 
+import com.example.ComputerStore.exception.EmptyCartException;
+import com.example.ComputerStore.model.Cart;
+import com.example.ComputerStore.model.CartItem;
 import com.example.ComputerStore.model.Order;
 import com.example.ComputerStore.model.Product;
+import com.example.ComputerStore.model.User;
+import com.example.ComputerStore.repo.CartItemRepository;
+import com.example.ComputerStore.repo.CartRepository;
+import com.example.ComputerStore.repo.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,12 +17,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -29,35 +37,59 @@ class SessionCartServiceTest {
     private ProductService productService;
 
     @Mock
+    private CartRepository cartRepository;
+
+    @Mock
+    private CartItemRepository cartItemRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
     private HttpSession mockSession;
 
     @InjectMocks
-    private CartService sessionCartService;
+    private CartService cartService;
 
-    private Map<Integer, Integer> testCart;
+    private User testUser;
+    private Cart testCart;
 
     @BeforeEach
     void setUp() {
-        testCart = new HashMap<>();
+        testUser = new User();
+        testUser.setUserId(1);
+
+        testCart = new Cart();
+        testCart.setCartId(1);
+        testCart.setUser(testUser);
+        testCart.setItems(new ArrayList<>());
     }
 
     @Test
     void getCart_NewSession_ReturnsEmptyCart() {
-        when(mockSession.getAttribute("USER_CART")).thenReturn(null);
+        when(mockSession.getAttribute("userId")).thenReturn(null);
 
-        Map<Integer, Integer> cart = sessionCartService.getCart(mockSession);
+        Map<Integer, Integer> cart = cartService.getCart(mockSession);
 
         assertNotNull(cart);
         assertTrue(cart.isEmpty());
-        verify(mockSession).setAttribute("USER_CART", cart);
     }
 
     @Test
     void getCart_ExistingCart_ReturnsCart() {
-        testCart.put(1, 2);
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
+        when(mockSession.getAttribute("userId")).thenReturn(1);
+        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        
+        Product p = new Product();
+        p.setProductId(1);
+        CartItem item = new CartItem();
+        item.setProduct(p);
+        item.setQuantity(2);
+        testCart.getItems().add(item);
+        
+        when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
 
-        Map<Integer, Integer> cart = sessionCartService.getCart(mockSession);
+        Map<Integer, Integer> cart = cartService.getCart(mockSession);
 
         assertNotNull(cart);
         assertEquals(1, cart.size());
@@ -66,39 +98,51 @@ class SessionCartServiceTest {
 
     @Test
     void addProductToCart_ValidProduct_AddsToCart() {
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
+        when(mockSession.getAttribute("userId")).thenReturn(1);
+        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
+        
         Product mockProduct = new Product();
+        mockProduct.setProductId(1);
         when(productService.getProductDetails(1)).thenReturn(mockProduct);
 
-        sessionCartService.addProductToCart(mockSession, 1);
+        cartService.addProductToCart(mockSession, 1);
 
-        assertEquals(1, testCart.get(1));
-        verify(productService).getProductDetails(1);
+        verify(cartItemRepository).save(any(CartItem.class));
     }
 
     @Test
     void checkout_ValidCart_CreatesOrderAndClearsCart() {
-        testCart.put(1, 2);
-        when(mockSession.getAttribute("USER_CART")).thenReturn(testCart);
-        Order mockOrder = new Order();
-        // Updated to use createOrder as per new implementation
-        when(orderService.createOrder(anyInt(), anyMap()))
-                .thenReturn(mockOrder);
+        when(mockSession.getAttribute("userId")).thenReturn(1);
+        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        
+        Product p = new Product();
+        p.setProductId(1);
+        CartItem item = new CartItem();
+        item.setProduct(p);
+        item.setQuantity(2);
+        testCart.getItems().add(item);
+        
+        when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
 
-        Order result = sessionCartService.checkout(mockSession, 1);
+        Order mockOrder = new Order();
+        when(orderService.createOrder(eq(1), anyMap())).thenReturn(mockOrder);
+
+        Order result = cartService.checkout(mockSession, 1);
 
         assertNotNull(result);
-        assertTrue(testCart.isEmpty());
-        verify(orderService).createOrder(eq(1), any());
+        verify(orderService).createOrder(eq(1), anyMap());
+        verify(cartItemRepository).deleteByCartId(1);
     }
 
     @Test
     void checkout_EmptyCart_ThrowsException() {
-        when(mockSession.getAttribute("USER_CART")).thenReturn(new HashMap<>());
+        when(mockSession.getAttribute("userId")).thenReturn(1);
+        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
 
-        // Updated to expect EmptyCartException
-        assertThrows(com.example.ComputerStore.exception.EmptyCartException.class, () -> {
-            sessionCartService.checkout(mockSession, 1);
+        assertThrows(EmptyCartException.class, () -> {
+            cartService.checkout(mockSession, 1);
         });
     }
 }

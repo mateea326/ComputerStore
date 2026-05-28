@@ -1,7 +1,11 @@
 package com.example.ComputerStore.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class UserLoginDTO {
+    @NotBlank(message = "Username cannot be empty")
     private String username;
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 
     public UserLoginDTO() {}

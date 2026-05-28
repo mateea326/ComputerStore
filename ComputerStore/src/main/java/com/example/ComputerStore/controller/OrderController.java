@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -103,5 +104,30 @@ public class OrderController {
         }
         List<Order> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
+    }
+
+    @Operation(summary = "Create a new order")
+    @PostMapping
+    public ResponseEntity<Order> createOrder(
+            @RequestParam Integer userId,
+            @RequestBody Map<Integer, Integer> cart) {
+        Order newOrder = orderService.createOrder(userId, cart);
+        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update an existing order")
+    @PutMapping("/{orderId}")
+    public ResponseEntity<Order> updateOrder(
+            @PathVariable Integer orderId,
+            @RequestBody Map<Integer, Integer> newCart) {
+        Order updatedOrder = orderService.updateOrder(orderId, newCart);
+        return ResponseEntity.ok(updatedOrder);
+    }
+
+    @Operation(summary = "Delete an order")
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Integer orderId) {
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.noContent().build();
     }
 }
