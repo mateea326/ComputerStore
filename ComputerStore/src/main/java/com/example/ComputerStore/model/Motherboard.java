@@ -2,12 +2,21 @@ package com.example.ComputerStore.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "motherboards")
 public class Motherboard extends Product {
+    @NotNull(message = "Slots count is required")
+    @Min(value = 1, message = "Slots count must be at least 1")
     private Integer slots;
+
+    @NotBlank(message = "CPU socket is required")
     private String cpu_socket;
+
+    @NotBlank(message = "Chipset is required")
     private String chipset;
 
     public Motherboard() {}

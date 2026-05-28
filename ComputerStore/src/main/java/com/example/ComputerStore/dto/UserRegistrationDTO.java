@@ -2,6 +2,7 @@ package com.example.ComputerStore.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserRegistrationDTO {
@@ -16,6 +17,7 @@ public class UserRegistrationDTO {
 
     @NotBlank(message = "Input phone number")
     @Size(max = 20)
+    @Pattern(regexp = "^\\d+$", message = "Phone number must contain only digits")
     private String phoneNumber;
 
     @NotBlank(message = "Input address")
