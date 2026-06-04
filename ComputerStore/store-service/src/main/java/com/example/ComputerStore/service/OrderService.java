@@ -5,6 +5,7 @@ import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.*;
 import com.example.ComputerStore.repo.OrderRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,7 @@ public class OrderService {
     }
 
     @CircuitBreaker(name = "orderService", fallbackMethod = "getOrderHistoryFallback")
+    @Retry(name = "orderService")
     public List<Order> getOrderHistory(Integer userId) {
         User user = userService.findUserById(userId);
         return orderRepository.findByUser(user);
@@ -55,6 +57,7 @@ public class OrderService {
 
     // Unificarea logicii de creare a comenzii
     @CircuitBreaker(name = "orderService", fallbackMethod = "createOrderFallback")
+    @Retry(name = "orderService")
     public Order createOrder(Integer userId, Map<Integer, Integer> cart) {
         if (cart == null || cart.isEmpty()) {
             throw new EmptyCartException();

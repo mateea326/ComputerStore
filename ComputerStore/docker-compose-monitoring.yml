@@ -1,0 +1,110 @@
+version: '3.8'
+
+# ============================================================
+# ComputerStore — Monitoring Stack
+# Servicii: Prometheus (9090) + Grafana (3000) + Zipkin (9411)
+# Pornire: docker compose -f docker-compose-monitoring.yml up -d
+# ============================================================
+
+services:
+
+  # ── Prometheus ─────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: computerstore-prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--storage.tsdb.retention.time=7d'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Grafana ─────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: computerstore-grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/computerstore-dashboard.json
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+    volumes:
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Zipkin — Distributed Tracing (BONUS) ────────────────────
+  zipkin:
+    image: openzipkin/zipkin:3.0
+    container_name: computerstore-zipkin
+    environment:
+      - STORAGE_TYPE=mem          # In-memory storage (niciun DB necesar)
+    ports:
+      - "9411:9411"
+    networks:
+      - monitoring
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9411/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Redis — NoSQL & Caching (Req 9) ──────────────────────────
+  redis:
+    image: redis:7.2-alpine
+    container_name: computerstore-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - monitoring
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# ── Volumes & Networks ──────────────────────────────────────
+volumes:
+  grafana-data:
+    name: computerstore-grafana-data
+  redis-data:
+    name: computerstore-redis-data
+
+networks:
+  monitoring:
+    name: computerstore-monitoring
+    driver: bridge

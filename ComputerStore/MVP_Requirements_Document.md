@@ -244,3 +244,37 @@
 - **Security:** 100% of sensitive data is encrypted; no unauthorized access to admin panels.
 - **Reliability:** Successful order persistence and transactional integrity across all flows.
 - **Quality:** All 50+ unit and integration tests passing in the CI/CD pipeline.
+
+---
+
+## Enterprise Refactoring & Microservices Updates
+
+În urma actualizărilor recente, proiectul a evoluat spre o arhitectură robustă de microservicii, integrând standarde Enterprise:
+
+### Cerința 4: API Gateway
+- **Spring Cloud Gateway** folosit ca un singur punct de intrare (Single Entry Point).
+- **Rate Limiting:** Implementat pentru prevenirea abuzurilor pe bază de adresă IP.
+- **Filtering:** `LoggingFilter` pentru interceptarea și urmărirea cererilor și răspunsurilor HTTP (adăugare de ID-uri unice `X-Request-Id`).
+
+### Cerința 5: Monitorizare și Metrici
+- **Prometheus & Grafana:** Colectare metrici via Actuator și vizualizare pe un Dashboard Grafana dedicat (CPU, HTTP errors, request duration, business metrics).
+- **Health Checks:** Implementare custom pentru monitorizarea sănătății bazelor de date.
+- **Distributed Tracing (Bonus):** Integrare **Zipkin** pentru a urmări propagarea requesturilor în lanțul de microservicii.
+
+### Cerința 6: Securitate Distribuită
+- **Stateless JWT:** Migrare de la sesiuni bazate pe server la o abordare distribuită bazată pe **JSON Web Tokens (JWT)**.
+- **Feign Client Propagation:** Propagarea securizată a tokenurilor JWT prin cererile interne între microservicii.
+- **HTTPS (Bonus):** Comunicație securizată SSL pentru API Gateway.
+
+### Cerința 7: Resilience & Fault Tolerance
+- **Circuit Breaker & Fallback:** Utilizare **Resilience4j** pentru protejarea cererilor externe. Fallback-uri implementate pentru a întoarce răspunsuri gracefully în caz de indisponibilitate (fail-safe).
+- **Retry Mechanism:** Configurat prin `@Retry` pentru restabilirea conexiunilor la eșecuri tranzitorii.
+
+### Cerința 8: Design Patterns (CQRS)
+- **CQRS (Command Query Responsibility Segregation):** Separat la nivel logic în `store-service`.
+  - `ProductQueryService` — procesează exclusiv cereri de citire (GET).
+  - `ProductCommandService` — procesează modificări de stare (POST, PUT, DELETE).
+
+### Cerința 9: NoSQL și Caching
+- **Redis (In-Memory Data Structure Store):** Adăugat ca serviciu în `docker-compose`. Funcționează ca bază de date NoSQL rapidă.
+- **Caching Layer pe Produse:** S-au adăugat adnotări de caching pe Query Service (`@Cacheable`) pentru extragerea instantanee a produselor din memorie. La adăugarea/modificarea/ștergerea unui produs prin Command Service, se execută automat invalidaea cache-ului (`@CacheEvict`) pentru a păstra consistența. Reducere masivă a timpului de răspuns pentru endpoint-urile de catalog.

@@ -13,123 +13,52 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
+    private final ProductQueryService productQueryService;
+    private final ProductCommandService productCommandService;
 
-    private final ProductRepository productRepository;
-    private final MotherboardRepository motherboardRepository;
-    private final GraphicsCardRepository graphicsCardRepository;
-    private final ProcessorRepository processorRepository;
-    private final CaseRepository caseRepository;
-    private final WishlistRepository wishlistRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final CartItemRepository cartItemRepository;
-
-    public ProductService(ProductRepository productRepository,
-                          MotherboardRepository motherboardRepository,
-                          GraphicsCardRepository graphicsCardRepository,
-                          ProcessorRepository processorRepository,
-                          CaseRepository caseRepository,
-                          WishlistRepository wishlistRepository,
-                          OrderItemRepository orderItemRepository,
-                          CartItemRepository cartItemRepository) {
-        this.productRepository = productRepository;
-        this.motherboardRepository = motherboardRepository;
-        this.graphicsCardRepository = graphicsCardRepository;
-        this.processorRepository = processorRepository;
-        this.caseRepository = caseRepository;
-        this.wishlistRepository = wishlistRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.cartItemRepository = cartItemRepository;
+    public ProductService(ProductQueryService productQueryService,
+                          ProductCommandService productCommandService) {
+        this.productQueryService = productQueryService;
+        this.productCommandService = productCommandService;
     }
 
-    // CREATE / UPDATE
+    // CREATE / UPDATE - CQRS Command
     public Product saveProduct(Product product) {
-        Product saved = productRepository.save(product);
-        log.info("Product saved: id={}, name={}", saved.getProductId(), saved.getName());
-        return saved;
+        return productCommandService.saveProduct(product);
     }
 
-    // READ – toate produsele (fără paginare)
+    // READ – CQRS Query
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productQueryService.getAllProducts();
     }
 
-    // READ – toate produsele cu paginare
+    // READ – CQRS Query
     public Page<Product> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+        return productQueryService.getAllProducts(pageable);
     }
 
-    // READ – produs după ID
+    // READ – CQRS Query
     public Product getProductDetails(Integer id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+        return productQueryService.getProductDetails(id);
     }
 
-    // READ - Popularity
+    // READ - CQRS Query
     public Page<Product> getAllProductsOrderByPopularity(Pageable pageable) {
-        return productRepository.findAllOrderByPopularity(pageable);
+        return productQueryService.getAllProductsOrderByPopularity(pageable);
     }
 
-    // UPDATE – editare produs existent
+    // UPDATE – CQRS Command
     public Product updateProduct(Integer id, Product updated) {
-        Product existing = getProductDetails(id);
-        existing.setName(updated.getName());
-        existing.setPrice(updated.getPrice());
-        if (updated.getImageUrl() != null && !updated.getImageUrl().isBlank()) {
-            existing.setImageUrl(updated.getImageUrl());
-        }
-
-        if (existing instanceof Processor p && updated instanceof Processor u) {
-            p.setCoreCount(u.getCoreCount());
-            p.setCoreClock(u.getCoreClock());
-            p.setSocket(u.getSocket());
-        } else if (existing instanceof GraphicsCard g && updated instanceof GraphicsCard u) {
-            g.setMemorySize(u.getMemorySize());
-            g.setCoreClock(u.getCoreClock());
-            g.setMemoryClock(u.getMemoryClock());
-        } else if (existing instanceof Motherboard m && updated instanceof Motherboard u) {
-            m.setSlots(u.getSlots());
-            m.setCpu_socket(u.getCpu_socket());
-            m.setChipset(u.getChipset());
-        } else if (existing instanceof Case c && updated instanceof Case u) {
-            c.setVents(u.getVents());
-            c.setType(u.getType());
-            c.setFormat(u.getFormat());
-        }
-
-        Product saved = productRepository.save(existing);
-        log.info("Product updated: id={}", id);
-        return saved;
+        return productCommandService.updateProduct(id, updated);
     }
 
-    // DELETE
-    @org.springframework.transaction.annotation.Transactional
+    // DELETE - CQRS Command
     public void deleteProduct(Integer id) {
-        Product product = getProductDetails(id);
-        
-        // Remove from wishlists (native query for join table)
-        wishlistRepository.removeProductFromAllWishlists(id);
-        
-        // Remove from order items
-        orderItemRepository.deleteByProduct(product);
-        
-        // Remove from cart items
-        cartItemRepository.deleteByProduct(product);
-        
-        productRepository.delete(product);
-        log.info("Product and its related items deleted: id={}", id);
+        productCommandService.deleteProduct(id);
     }
 
-    // READ – filtrare după tip de produs
+    // READ – CQRS Query
     public List<? extends Product> filterProductsByType(String type) {
-        String normalizedType = type.toLowerCase().trim();
-
-        return switch (normalizedType) {
-            case "motherboards" -> motherboardRepository.findAll();
-            case "graphics cards", "gpus" -> graphicsCardRepository.findAll();
-            case "processors", "cpus" -> processorRepository.findAll();
-            case "cases" -> caseRepository.findAll();
-            default -> throw new IllegalArgumentException("Invalid product type: " + type);
-        };
+        return productQueryService.filterProductsByType(type);
     }
 }

@@ -1,0 +1,59 @@
+package com.example.ComputerStore.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+
+/**
+ * Health Indicator custom pentru baza de date a user-service.
+ * Apare la /actuator/health ca "userDatabase".
+ */
+
+@Component("userDatabase")
+public class UserDatabaseHealthIndicator implements HealthIndicator {
+
+    private static final Logger log = LoggerFactory.getLogger(UserDatabaseHealthIndicator.class);
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public UserDatabaseHealthIndicator(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+
+    @Override
+    public Health health() {
+        try {
+            Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
+
+            if (result != null && result == 1) {
+                Integer userCount = jdbcTemplate.queryForObject(
+                        "SELECT COUNT(*) FROM computer_store.\"user\"", Integer.class
+                );
+
+                return Health.up()
+                        .withDetail("database", "PostgreSQL")
+                        .withDetail("schema", "computer_store")
+                        .withDetail("status", "Connected")
+                        .withDetail("usersCount", userCount != null ? userCount : 0)
+                        .withDetail("query", "SELECT 1 → OK")
+                        .build();
+            } else {
+                return Health.down()
+                        .withDetail("database", "PostgreSQL")
+                        .withDetail("error", "Unexpected query result")
+                        .build();
+            }
+        } catch (Exception e) {
+            log.error("[HEALTH] User database health check failed: {}", e.getMessage());
+            return Health.down()
+                    .withDetail("database", "PostgreSQL")
+                    .withDetail("error", e.getMessage())
+                    .withDetail("status", "Disconnected")
+                    .build();
+        }
+    }
+}

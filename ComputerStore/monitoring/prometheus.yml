@@ -1,0 +1,62 @@
+global:
+  scrape_interval: 15s        # Colectăm metrici la fiecare 15 secunde
+  evaluation_interval: 15s    # Evaluăm regulile la fiecare 15 secunde
+  external_labels:
+    monitor: 'computerstore-monitor'
+    environment: 'dev'
+
+# ===== Alertmanager (opțional, configurat pentru viitor) =====
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']
+
+# ===== Scrape Configurations =====
+scrape_configs:
+
+  # Prometheus auto-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # API Gateway (port 8080)
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+        labels:
+          service: 'api-gateway'
+          application: 'api-gateway'
+
+  # Store Service (port 8081)
+  - job_name: 'store-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['host.docker.internal:8081']
+        labels:
+          service: 'store-service'
+          application: 'store-service'
+
+  # User Service (port 8082)
+  - job_name: 'user-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['host.docker.internal:8082']
+        labels:
+          service: 'user-service'
+          application: 'user-service'
+
+  # Discovery Server / Eureka (port 8761)
+  - job_name: 'discovery-server'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['host.docker.internal:8761']
+        labels:
+          service: 'discovery-server'
+          application: 'discovery-server'

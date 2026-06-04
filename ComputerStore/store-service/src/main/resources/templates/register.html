@@ -12,7 +12,7 @@
         }
         body {
             font-family: "Georgia", serif;
-            background: linear-gradient(100deg, #9cd5d1 0%, #ffffff 100%);
+            background: white;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,7 +25,16 @@
             border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
+        }
+        .big-container {
+            background: #eeffff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 470px;
+            margin: 40px auto;
         }
         h1 {
             color: #333;
@@ -43,7 +52,7 @@
         }
         input {
             width: 100%;
-            padding: 10px;
+            padding: 11px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
@@ -76,6 +85,15 @@
             margin-bottom: 20px;
             border-left: 4px solid #dc3580;
         }
+        .field-error {
+            background: #fee;
+            color: #dc3580;
+            padding: 6px 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-size: 12px;
+            border-left: 3px solid #dc3580;
+        }
         .login-link {
             text-align: center;
             margin-top: 20px;
@@ -89,9 +107,38 @@
         .login-link a:hover {
             text-decoration: underline;
         }
+        .corner-img {
+            position: fixed;
+            bottom: 20px;
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            opacity: 0.9;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        #img-left {
+            left: 20px;
+            transform: perspective(1000px) rotateY(35deg);
+            filter: drop-shadow(-10px 10px 15px rgba(0,0,0,0.2));
+            transition: transform 0.5s ease;
+        }
+
+        #img-right {
+            right: 20px;
+            transform: perspective(1000px) rotateY(-35deg);
+            filter: drop-shadow(10px 10px 15px rgba(0,0,0,0.2));
+            transition: transform 0.5s ease;
+        }
+
+        .corner-img:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.1);
+        }
     </style>
 </head>
 <body>
+<div class="big-container">
 <div class="container">
     <h1>Create an account</h1>
 
@@ -101,49 +148,49 @@
         <div class="form-group">
             <label for="firstName">First Name</label>
             <input type="text" id="firstName" name="firstName" required>
-            <div id="firstNameError" class="field-error" style="color: #dc3580; font-size: 12px; display: none;"></div>
+            <div id="firstNameError" class="field-error" style="display: none;"></div>
         </div>
 
         <div class="form-group">
             <label for="lastName">Last Name</label>
             <input type="text" id="lastName" name="lastName" required>
-            <div id="lastNameError" class="field-error" style="color: #dc3580; font-size: 12px; display: none;"></div>
+            <div id="lastNameError" class="field-error" style="display: none;"></div>
         </div>
 
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
-            <div id="emailError" class="field-error" style="color: #dc3580; font-size: 12px; display: none;"></div>
+            <div id="emailError" class="field-error" style="display: none;"></div>
         </div>
 
         <div class="form-group">
             <label for="phoneNumber">Phone Number</label>
             <input type="text" id="phoneNumber" name="phoneNumber" required>
-            <div id="phoneNumberError" class="field-error" style="color: #dc3580; font-size: 12px; display: none;"></div>
+            <div id="phoneNumberError" class="field-error" style="display: none;"></div>
         </div>
 
         <div class="form-group">
             <label for="address">Address</label>
             <input type="text" id="address" name="address" required>
-            <div id="addressError" class="field-error" style="color: #dc3580; font-size: 12px; display: none;"></div>
+            <div id="addressError" class="field-error" style="display: none;"></div>
         </div>
 
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
-            <div id="usernameError" class="field-error" style="color: #dc3580; font-size: 12px; display: none;"></div>
+            <div id="usernameError" class="field-error" style="display: none;"></div>
         </div>
 
         <div class="form-group">
             <label for="password">Password (min 8 characters)</label>
             <input type="password" id="password" name="password" minlength="8" required>
-            <div id="passwordError" class="field-error" style="color: #dc3580; font-size: 12px; display: none;"></div>
+            <div id="passwordError" class="field-error" style="display: none;"></div>
         </div>
 
         <div class="form-group">
             <label for="confirmPassword">Confirm Password</label>
             <input type="password" id="confirmPassword" name="confirmPassword" minlength="8" required>
-            <div id="confirmPasswordError" class="field-error" style="color: #dc3580; font-size: 12px; display: none;"></div>
+            <div id="confirmPasswordError" class="field-error" style="display: none;"></div>
         </div>
 
         <button type="submit">Register</button>
@@ -177,10 +224,12 @@
         }
     </script>
 
-
     <div class="login-link">
         Already have an account? <a href="/login">Login here</a>
     </div>
 </div>
+</div>
+<img th:src="@{/images/img.png}" class="corner-img" id="img-left" alt="">
+<img th:src="@{/images/img.png}" class="corner-img" id="img-right" alt="">
 </body>
 </html>
