@@ -21,6 +21,7 @@
 
     <modules>
         <module>config-server</module>
+        <module>discovery-server</module>
         <module>store-service</module>
         <module>user-service</module>
     </modules>

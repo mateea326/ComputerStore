@@ -145,4 +145,45 @@ public class UserController {
         UserResponseDTO deletedUser = userService.deleteUser(id);
         return ResponseEntity.ok(deletedUser);
     }
+
+    @GetMapping("/internal/id/{id}")
+    public ResponseEntity<com.example.ComputerStore.model.User> getUserByIdInternal(@PathVariable Integer id) {
+        try {
+            com.example.ComputerStore.model.User user = userService.findUserById(id);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/internal/username/{username}")
+    public ResponseEntity<com.example.ComputerStore.model.User> getUserByUsernameInternal(@PathVariable String username) {
+        try {
+            com.example.ComputerStore.model.User user = userService.findUserByUsername(username);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<org.springframework.data.domain.Page<com.example.ComputerStore.model.User>> getAllUsers(
+            @org.springframework.data.web.PageableDefault(size = 10) org.springframework.data.domain.Pageable pageable) {
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<java.util.List<com.example.ComputerStore.model.User>> getAllUsersList() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PostMapping("/{id}/role")
+    public ResponseEntity<Void> changeUserRole(@PathVariable Integer id, @RequestParam String newRole) {
+        try {
+            userService.changeUserRole(id, newRole);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

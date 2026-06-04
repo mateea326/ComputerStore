@@ -2,25 +2,18 @@ package com.example.ComputerStore.service;
 
 import com.example.ComputerStore.dto.UserRegistrationDTO;
 import com.example.ComputerStore.dto.UserResponseDTO;
-import com.example.ComputerStore.exception.DuplicateResourceException;
 import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.User;
-import com.example.ComputerStore.repo.UserRepository;
+import com.example.ComputerStore.client.UserServiceClient;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import com.example.ComputerStore.repo.CartRepository;
-import com.example.ComputerStore.repo.CartItemRepository;
-import com.example.ComputerStore.repo.WishlistRepository;
-import com.example.ComputerStore.repo.OrderRepository;
-import com.example.ComputerStore.repo.OrderItemRepository;
+import java.util.Collections;
 
 @Service
 @Transactional
@@ -28,28 +21,13 @@ public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    private final UserRepository userRepository;
+    private final UserServiceClient userServiceClient;
     private final PasswordEncoder passwordEncoder;
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
-    private final WishlistRepository wishlistRepository;
-    private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
 
-    public UserService(UserRepository userRepository, 
-                       PasswordEncoder passwordEncoder,
-                       CartRepository cartRepository,
-                       CartItemRepository cartItemRepository,
-                       WishlistRepository wishlistRepository,
-                       OrderRepository orderRepository,
-                       OrderItemRepository orderItemRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserServiceClient userServiceClient,
+                       PasswordEncoder passwordEncoder) {
+        this.userServiceClient = userServiceClient;
         this.passwordEncoder = passwordEncoder;
-        this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.wishlistRepository = wishlistRepository;
-        this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
     }
 
     // MAPPER: Entity -> DTO răspuns (fără parolă)
@@ -65,110 +43,147 @@ public class UserService {
         return responseDTO;
     }
 
-    // CREATE – înregistrare utilizator nou
+    // CREATE – înregistrare utilizator nou prin Feign Client
+    @CircuitBreaker(name = "userService", fallbackMethod = "registerUserFallback")
     public UserResponseDTO registerNewUser(UserRegistrationDTO registrationDTO) {
-        // Validare parole
-        if (!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())) {
-            throw new IllegalArgumentException("Passwords do not match");
-        }
+        log.info("Registering user via Feign Client: {}", registrationDTO.getUsername());
+        return userServiceClient.registerUser(registrationDTO);
+    }
 
-        // Unicitate username și email
-        if (userRepository.findByUsername(registrationDTO.getUsername()).isPresent()) {
-            throw new DuplicateResourceException("User", "username", registrationDTO.getUsername());
-        }
-        if (userRepository.findByEmail(registrationDTO.getEmail()).isPresent()) {
-            throw new DuplicateResourceException("User", "email", registrationDTO.getEmail());
-        }
-
-        User user = new User();
-        user.setFirstName(registrationDTO.getFirstName());
-        user.setLastName(registrationDTO.getLastName());
-        user.setEmail(registrationDTO.getEmail());
-        user.setPhoneNumber(registrationDTO.getPhoneNumber());
-        user.setAddress(registrationDTO.getAddress());
-        user.setUsername(registrationDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
-
-        User savedUser = userRepository.save(user);
-        log.info("New user registered: {}", savedUser.getUsername());
-        return mapToResponseDTO(savedUser);
+    // Fallback pentru registerNewUser
+    public UserResponseDTO registerUserFallback(UserRegistrationDTO registrationDTO, Exception ex) {
+        log.error("[CIRCUIT BREAKER] registerNewUser fallback activat pentru user={}: {}", registrationDTO.getUsername(), ex.getMessage());
+        UserResponseDTO fallback = new UserResponseDTO();
+        fallback.setUsername("SERVICE_UNAVAILABLE");
+        return fallback;
     }
 
     // READ – autentificare manuală (folosit de API REST, nu de Spring Security)
+    @CircuitBreaker(name = "userService", fallbackMethod = "loginFallback")
     public UserResponseDTO login(String username, String password) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid username or password"));
+        User user = null;
+        try {
+            user = userServiceClient.getUserByUsernameInternal(username);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Invalid username or password");
+        }
+
+        if (user == null) {
+            throw new ResourceNotFoundException("Invalid username or password");
+        }
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             log.warn("Failed login attempt for user: {}", username);
             throw new ResourceNotFoundException("Invalid username or password");
         }
 
-        log.info("User logged in via API: {}", username);
+        log.info("User logged in via Feign API: {}", username);
         return mapToResponseDTO(user);
     }
 
-    // UPDATE – editare profil utilizator
+    // Fallback pentru login
+    public UserResponseDTO loginFallback(String username, String password, Exception ex) {
+        log.error("[CIRCUIT BREAKER] login fallback activat pentru user={}: {}", username, ex.getMessage());
+        throw new ResourceNotFoundException("Serviciul de autentificare este temporar indisponibil. Incercati din nou.");
+    }
+
+    // UPDATE – editare profil utilizator prin Feign Client
+    @CircuitBreaker(name = "userService", fallbackMethod = "updateUserFallback")
     public UserResponseDTO updateUser(Integer userId, UserRegistrationDTO updatedDetails) {
-        User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        log.info("Updating user id={} via Feign Client", userId);
+        return userServiceClient.updateUser(userId, updatedDetails);
+    }
 
-        existingUser.setFirstName(updatedDetails.getFirstName());
-        existingUser.setLastName(updatedDetails.getLastName());
-        existingUser.setPhoneNumber(updatedDetails.getPhoneNumber());
-        existingUser.setAddress(updatedDetails.getAddress());
-        existingUser.setEmail(updatedDetails.getEmail());
-
-        User savedUser = userRepository.save(existingUser);
-        log.info("User updated: id={}", userId);
-        return mapToResponseDTO(savedUser);
+    // Fallback pentru updateUser
+    public UserResponseDTO updateUserFallback(Integer userId, UserRegistrationDTO updatedDetails, Exception ex) {
+        log.error("[CIRCUIT BREAKER] updateUser fallback activat pentru id={}: {}", userId, ex.getMessage());
+        UserResponseDTO fallback = new UserResponseDTO();
+        fallback.setUsername("SERVICE_UNAVAILABLE");
+        return fallback;
     }
 
     // READ – găsire utilizator după ID (pentru alte servicii)
+    @CircuitBreaker(name = "userService", fallbackMethod = "findUserByIdFallback")
     public User findUserById(Integer id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        log.info("Fetching user id={} via Feign Client", id);
+        User user = userServiceClient.getUserByIdInternal(id);
+        if (user == null) {
+            throw new ResourceNotFoundException("User", "id", id);
+        }
+        return user;
     }
 
-    // DELETE – ștergere cont utilizator
-    @Transactional
+    // Fallback pentru findUserById
+    public User findUserByIdFallback(Integer id, Exception ex) {
+        log.error("[CIRCUIT BREAKER] findUserById fallback activat pentru id={}: {}", id, ex.getMessage());
+        User fallback = new User();
+        fallback.setUserId(id);
+        fallback.setUsername("unavailable");
+        fallback.setFirstName("User");
+        fallback.setLastName("Unavailable");
+        return fallback;
+    }
+
+    // DELETE – ștergere cont utilizator prin Feign Client
+    @CircuitBreaker(name = "userService", fallbackMethod = "deleteUserFallback")
     public UserResponseDTO deleteUser(Integer id) {
-        User userToDelete = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-
-        // JPA CascadeType.ALL and orphanRemoval=true will automatically
-        // delete the associated Cart, Wishlist, Orders, and OrderItems.
-        userRepository.delete(userToDelete);
-        
-        log.info("User and all related data deleted: id={}", id);
-        return mapToResponseDTO(userToDelete);
+        log.info("Deleting user id={} via Feign Client", id);
+        return userServiceClient.deleteUser(id);
     }
 
-    // READ – toți utilizatorii (fără paginare)
+    // Fallback pentru deleteUser
+    public UserResponseDTO deleteUserFallback(Integer id, Exception ex) {
+        log.error("[CIRCUIT BREAKER] deleteUser fallback activat pentru id={}: {}", id, ex.getMessage());
+        UserResponseDTO fallback = new UserResponseDTO();
+        fallback.setUsername("SERVICE_UNAVAILABLE");
+        return fallback;
+    }
+
+    // READ – toți utilizatorii (fără paginare) prin Feign Client
+    @CircuitBreaker(name = "userService", fallbackMethod = "getAllUsersFallback")
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        log.info("Fetching all users via Feign Client");
+        return userServiceClient.getAllUsersList();
     }
 
-    // READ – toți utilizatorii cu paginare și sortare
-    public Page<User> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    // Fallback pentru getAllUsers
+    public List<User> getAllUsersFallback(Exception ex) {
+        log.error("[CIRCUIT BREAKER] getAllUsers fallback activat: {}", ex.getMessage());
+        return Collections.emptyList();
     }
 
-    // UPDATE – schimbare rol utilizator de către admin
+    // READ – toți utilizatorii cu paginare prin Feign Client
+    @CircuitBreaker(name = "userService", fallbackMethod = "getAllUsersPaginatedFallback")
+    public org.springframework.data.domain.Page<User> getAllUsers(org.springframework.data.domain.Pageable pageable) {
+        log.info("Fetching paginated users via Feign Client");
+        String sortParam = pageable.getSort().toString().replace(": ", ",");
+        com.example.ComputerStore.dto.CustomPage<User> customPage = userServiceClient.getAllUsers(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                sortParam
+        );
+        return new org.springframework.data.domain.PageImpl<>(
+                customPage.getContent(),
+                pageable,
+                customPage.getTotalElements()
+        );
+    }
+
+    // Fallback pentru getAllUsers paginat
+    public org.springframework.data.domain.Page<User> getAllUsersPaginatedFallback(org.springframework.data.domain.Pageable pageable, Exception ex) {
+        log.error("[CIRCUIT BREAKER] getAllUsersPaginated fallback activat: {}", ex.getMessage());
+        return org.springframework.data.domain.Page.empty(pageable);
+    }
+
+    // UPDATE – schimbare rol utilizator prin Feign Client
+    @CircuitBreaker(name = "userService", fallbackMethod = "changeUserRoleFallback")
     public void changeUserRole(Integer userId, String newRole) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        log.info("Changing role for user id={} to {} via Feign Client", userId, newRole);
+        userServiceClient.changeUserRole(userId, newRole);
+    }
 
-        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-            throw new IllegalArgumentException("Cannot modify the role of an existing ADMIN!");
-        }
-
-        if (!"ADMIN".equalsIgnoreCase(newRole)) {
-            throw new IllegalArgumentException("Only upgrades to ADMIN are allowed.");
-        }
-
-        user.setRole(newRole.toUpperCase());
-        userRepository.save(user);
-        log.info("Role changed for user id={} to {}", userId, newRole.toUpperCase());
+    // Fallback pentru changeUserRole
+    public void changeUserRoleFallback(Integer userId, String newRole, Exception ex) {
+        log.error("[CIRCUIT BREAKER] changeUserRole fallback activat pentru id={}: {}", userId, ex.getMessage());
     }
 }

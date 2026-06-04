@@ -19,9 +19,13 @@ public class AdminIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @org.springframework.boot.test.mock.mockito.MockBean
+    private com.example.ComputerStore.client.UserServiceClient userServiceClient;
+
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
     void testAdminAccess_WithAdminRole() throws Exception {
+        org.mockito.Mockito.when(userServiceClient.getAllUsersList()).thenReturn(java.util.Collections.emptyList());
         mockMvc.perform(get("/admin"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/dashboard"));

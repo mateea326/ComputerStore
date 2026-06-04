@@ -1,7 +1,7 @@
 package com.example.ComputerStore.config;
 
 import com.example.ComputerStore.model.User;
-import com.example.ComputerStore.repo.UserRepository;
+import com.example.ComputerStore.client.UserServiceClient;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,16 +15,19 @@ import java.io.IOException;
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final UserRepository userRepository;
+    private final UserServiceClient userServiceClient;
 
-    public CustomLoginSuccessHandler(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomLoginSuccessHandler(UserServiceClient userServiceClient) {
+        this.userServiceClient = userServiceClient;
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userServiceClient.getUserByUsernameInternal(username);
+        if (user == null) {
+            throw new ServletException("User details could not be retrieved from user-service for user: " + username);
+        }
 
         HttpSession session = request.getSession();
         session.setAttribute("userId", user.getUserId());

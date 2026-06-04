@@ -8,7 +8,6 @@ import com.example.ComputerStore.model.Product;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.repo.CartItemRepository;
 import com.example.ComputerStore.repo.CartRepository;
-import com.example.ComputerStore.repo.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,7 @@ class SessionCartServiceTest {
     private CartItemRepository cartItemRepository;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Mock
     private HttpSession mockSession;
@@ -78,7 +77,7 @@ class SessionCartServiceTest {
     @Test
     void getCart_ExistingCart_ReturnsCart() {
         when(mockSession.getAttribute("userId")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userService.findUserById(1)).thenReturn(testUser);
         
         Product p = new Product();
         p.setProductId(1);
@@ -99,7 +98,7 @@ class SessionCartServiceTest {
     @Test
     void addProductToCart_ValidProduct_AddsToCart() {
         when(mockSession.getAttribute("userId")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userService.findUserById(1)).thenReturn(testUser);
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
         
         Product mockProduct = new Product();
@@ -114,7 +113,7 @@ class SessionCartServiceTest {
     @Test
     void checkout_ValidCart_CreatesOrderAndClearsCart() {
         when(mockSession.getAttribute("userId")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userService.findUserById(1)).thenReturn(testUser);
         
         Product p = new Product();
         p.setProductId(1);
@@ -138,7 +137,7 @@ class SessionCartServiceTest {
     @Test
     void checkout_EmptyCart_ThrowsException() {
         when(mockSession.getAttribute("userId")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userService.findUserById(1)).thenReturn(testUser);
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
 
         assertThrows(EmptyCartException.class, () -> {

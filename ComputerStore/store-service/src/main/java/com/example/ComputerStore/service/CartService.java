@@ -8,7 +8,6 @@ import com.example.ComputerStore.model.Product;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.repo.CartItemRepository;
 import com.example.ComputerStore.repo.CartRepository;
-import com.example.ComputerStore.repo.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,22 +23,22 @@ public class CartService {
     private final ProductService productService;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public CartService(OrderService orderService,
                        ProductService productService,
                        CartRepository cartRepository,
                        CartItemRepository cartItemRepository,
-                       UserRepository userRepository) {
+                       UserService userService) {
         this.orderService = orderService;
         this.productService = productService;
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     private Cart getOrCreateDbCart(Integer userId) {
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userService.findUserById(userId);
         return cartRepository.findByUser(user).orElseGet(() -> {
             Cart newCart = new Cart();
             newCart.setUser(user);

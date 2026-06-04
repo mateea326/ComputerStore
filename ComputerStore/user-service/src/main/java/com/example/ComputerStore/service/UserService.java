@@ -110,6 +110,12 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 
+    // READ – găsire utilizator după username (pentru alte servicii)
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    }
+
     // DELETE – ștergere cont utilizator
     @Transactional
     public UserResponseDTO deleteUser(Integer id) {

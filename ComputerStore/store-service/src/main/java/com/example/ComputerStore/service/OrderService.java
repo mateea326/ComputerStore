@@ -4,6 +4,7 @@ import com.example.ComputerStore.exception.EmptyCartException;
 import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.*;
 import com.example.ComputerStore.repo.OrderRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -35,9 +36,16 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
     }
 
+    @CircuitBreaker(name = "orderService", fallbackMethod = "getOrderHistoryFallback")
     public List<Order> getOrderHistory(Integer userId) {
         User user = userService.findUserById(userId);
         return orderRepository.findByUser(user);
+    }
+
+    // Fallback pentru getOrderHistory
+    public List<Order> getOrderHistoryFallback(Integer userId, Exception ex) {
+        log.error("[CIRCUIT BREAKER] getOrderHistory fallback activat pentru userId={}: {}", userId, ex.getMessage());
+        return Collections.emptyList();
     }
 
     public Page<Order> getOrderHistory(Integer userId, Pageable pageable) {
@@ -46,6 +54,7 @@ public class OrderService {
     }
 
     // Unificarea logicii de creare a comenzii
+    @CircuitBreaker(name = "orderService", fallbackMethod = "createOrderFallback")
     public Order createOrder(Integer userId, Map<Integer, Integer> cart) {
         if (cart == null || cart.isEmpty()) {
             throw new EmptyCartException();
@@ -77,6 +86,12 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
         log.info("Order created successfully: id={}, total={}", savedOrder.getOrderId(), savedOrder.getTotalPrice());
         return savedOrder;
+    }
+
+    // Fallback pentru createOrder
+    public Order createOrderFallback(Integer userId, Map<Integer, Integer> cart, Exception ex) {
+        log.error("[CIRCUIT BREAKER] createOrder fallback activat pentru userId={}: {}", userId, ex.getMessage());
+        throw new RuntimeException("Serviciul de comenzi este temporar indisponibil. Va rugam incercati din nou.");
     }
 
     // Alias pentru compatibilitate

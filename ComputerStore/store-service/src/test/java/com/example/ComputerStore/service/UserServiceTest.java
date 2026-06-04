@@ -3,7 +3,7 @@ package com.example.ComputerStore.service;
 import com.example.ComputerStore.dto.UserRegistrationDTO;
 import com.example.ComputerStore.dto.UserResponseDTO;
 import com.example.ComputerStore.model.User;
-import com.example.ComputerStore.repo.*;
+import com.example.ComputerStore.client.UserServiceClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,17 +20,7 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository;
-    @Mock
-    private CartRepository cartRepository;
-    @Mock
-    private CartItemRepository cartItemRepository;
-    @Mock
-    private WishlistRepository wishlistRepository;
-    @Mock
-    private OrderRepository orderRepository;
-    @Mock
-    private OrderItemRepository orderItemRepository;
+    private UserServiceClient userServiceClient;
 
     private UserService userService;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -41,9 +29,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository, passwordEncoder,
-                cartRepository, cartItemRepository, wishlistRepository,
-                orderRepository, orderItemRepository);
+        userService = new UserService(userServiceClient, passwordEncoder);
         
         testUser = new User();
         testUser.setUserId(1);
@@ -64,21 +50,23 @@ class UserServiceTest {
                 "john@example.com", "johndoe", "password123", "password123"
         );
 
-        when(userRepository.findByUsername(regDto.getUsername())).thenReturn(Optional.empty());
-        when(userRepository.findByEmail(regDto.getEmail())).thenReturn(Optional.empty());
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
+        UserResponseDTO mockResponse = new UserResponseDTO();
+        mockResponse.setUserId(1);
+        mockResponse.setUsername("johndoe");
+
+        when(userServiceClient.registerUser(any(UserRegistrationDTO.class))).thenReturn(mockResponse);
 
         UserResponseDTO result = userService.registerNewUser(regDto);
 
         assertNotNull(result);
         assertEquals(regDto.getUsername(), result.getUsername());
-        verify(userRepository, times(1)).save(any(User.class));
+        verify(userServiceClient, times(1)).registerUser(any(UserRegistrationDTO.class));
     }
 
     @Test
     void login_Success() {
-        when(userRepository.findByUsername(testUser.getUsername()))
-                .thenReturn(Optional.of(testUser));
+        when(userServiceClient.getUserByUsernameInternal(testUser.getUsername()))
+                .thenReturn(testUser);
 
         UserResponseDTO result = userService.login("johndoe", "password123");
 
@@ -88,7 +76,7 @@ class UserServiceTest {
 
     @Test
     void login_Failure_GenericMessage() {
-        when(userRepository.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
+        when(userServiceClient.getUserByUsernameInternal("johndoe")).thenReturn(testUser);
 
         com.example.ComputerStore.exception.ResourceNotFoundException exception = assertThrows(
                 com.example.ComputerStore.exception.ResourceNotFoundException.class,
@@ -106,53 +94,48 @@ class UserServiceTest {
         updateDto.setPhoneNumber("0987654321");
         updateDto.setAddress("456 Oak Ave");
 
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        UserResponseDTO mockResponse = new UserResponseDTO();
+        mockResponse.setUserId(1);
+        mockResponse.setFirstName("Jane");
+
+        when(userServiceClient.updateUser(eq(1), any(UserRegistrationDTO.class))).thenReturn(mockResponse);
 
         UserResponseDTO result = userService.updateUser(1, updateDto);
 
         assertNotNull(result);
         assertEquals("Jane", result.getFirstName());
-        verify(userRepository, times(1)).save(any(User.class));
+        verify(userServiceClient, times(1)).updateUser(eq(1), any(UserRegistrationDTO.class));
     }
 
     @Test
     void deleteUser_Success() {
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
-        doNothing().when(userRepository).delete(testUser);
+        UserResponseDTO mockResponse = new UserResponseDTO();
+        mockResponse.setUserId(1);
+
+        when(userServiceClient.deleteUser(1)).thenReturn(mockResponse);
 
         UserResponseDTO result = userService.deleteUser(1);
 
         assertNotNull(result);
         assertEquals(testUser.getUserId(), result.getUserId());
-        verify(userRepository, times(1)).delete(testUser);
+        verify(userServiceClient, times(1)).deleteUser(1);
     }
+
     @Test
-    void registerNewUser_DuplicateUsername_ThrowsException() {
-        UserRegistrationDTO regDto = new UserRegistrationDTO(
-                "John", "Doe", "1234567890", "123 Main St",
-                "john@example.com", "johndoe", "password123", "password123"
-        );
+    void findUserById_Success() {
+        when(userServiceClient.getUserByIdInternal(1)).thenReturn(testUser);
 
-        when(userRepository.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
+        User result = userService.findUserById(1);
 
-        assertThrows(com.example.ComputerStore.exception.DuplicateResourceException.class, 
-                () -> userService.registerNewUser(regDto));
+        assertNotNull(result);
+        assertEquals(testUser.getUserId(), result.getUserId());
     }
 
     @Test
     void findUserById_NotFound_ThrowsException() {
-        when(userRepository.findById(999)).thenReturn(Optional.empty());
+        when(userServiceClient.getUserByIdInternal(999)).thenReturn(null);
 
         assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, 
                 () -> userService.findUserById(999));
-    }
-
-    @Test
-    void deleteUser_NotFound_ThrowsException() {
-        when(userRepository.findById(999)).thenReturn(Optional.empty());
-
-        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, 
-                () -> userService.deleteUser(999));
     }
 }
