@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,6 +35,9 @@ public class AdminController {
     private final UserService userService;
     private final OrderService orderService;
 
+    @Value("${upload.path:uploads/products}")
+    private String uploadPath;
+
     public AdminController(ProductService productService,
                            UserService userService,
                            OrderService orderService) {
@@ -43,7 +47,7 @@ public class AdminController {
     }
 
     /**
-     * Saves uploaded image to static/images/products/ and returns the URL path.
+     * Saves uploaded image to the external uploads folder and returns the URL path.
      * Returns null if no file was uploaded.
      */
     private String handleImageUpload(MultipartFile imageFile) throws IOException {
@@ -56,13 +60,14 @@ public class AdminController {
                 : ".jpg";
         String filename = UUID.randomUUID() + extension;
 
-        Path uploadDir = Paths.get("src/main/resources/static/images/products");
+        Path uploadDir = Paths.get(uploadPath);
         Files.createDirectories(uploadDir);
         Path filePath = uploadDir.resolve(filename);
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         log.info("Image uploaded: {}", filePath);
-        return "/images/products/" + filename;
+        // URL: Spring serves "uploads/" folder as static, so /products/<filename> maps to uploads/products/<filename>
+        return "/products/" + filename;
     }
 
     // ---- Dashboard ----
