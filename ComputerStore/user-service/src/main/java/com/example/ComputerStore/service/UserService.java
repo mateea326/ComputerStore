@@ -53,7 +53,7 @@ public class UserService {
         }
 
         // Unicitate username și email
-        if (userRepository.findByUsername(registrationDTO.getUsername()).isPresent()) {
+        if (userRepository.findFirstByUsernameIgnoreCase(registrationDTO.getUsername()).isPresent()) {
             throw new DuplicateResourceException("User", "username", registrationDTO.getUsername());
         }
         if (userRepository.findByEmail(registrationDTO.getEmail()).isPresent()) {
@@ -76,7 +76,7 @@ public class UserService {
 
     // READ – autentificare manuală (folosit de API REST, nu de Spring Security)
     public UserResponseDTO login(String username, String password) {
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findFirstByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid username or password"));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -112,7 +112,7 @@ public class UserService {
 
     // READ – găsire utilizator după username (pentru alte servicii)
     public User findUserByUsername(String username) {
-        return userRepository.findByUsername(username)
+        return userRepository.findFirstByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
     }
 

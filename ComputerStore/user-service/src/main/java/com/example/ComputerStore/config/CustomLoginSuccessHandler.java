@@ -24,7 +24,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findFirstByUsernameIgnoreCase(username).orElseThrow();
 
         HttpSession session = request.getSession();
         session.setAttribute("userId", user.getUserId());

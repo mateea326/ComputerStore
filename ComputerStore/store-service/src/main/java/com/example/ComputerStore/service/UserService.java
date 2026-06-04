@@ -24,11 +24,14 @@ public class UserService {
 
     private final UserServiceClient userServiceClient;
     private final PasswordEncoder passwordEncoder;
+    private final com.example.ComputerStore.repo.UserRepository userRepository;
 
     public UserService(UserServiceClient userServiceClient,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       com.example.ComputerStore.repo.UserRepository userRepository) {
         this.userServiceClient = userServiceClient;
         this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
     // MAPPER: Entity -> DTO răspuns (fără parolă)
@@ -110,12 +113,9 @@ public class UserService {
     @CircuitBreaker(name = "userService", fallbackMethod = "findUserByIdFallback")
     @Retry(name = "userService")
     public User findUserById(Integer id) {
-        log.info("Fetching user id={} via Feign Client", id);
-        User user = userServiceClient.getUserByIdInternal(id);
-        if (user == null) {
-            throw new ResourceNotFoundException("User", "id", id);
-        }
-        return user;
+        log.info("Fetching user id={} from local DB", id);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 
     // Fallback pentru findUserById

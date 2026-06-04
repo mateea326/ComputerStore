@@ -22,6 +22,9 @@ class UserServiceTest {
     @Mock
     private UserServiceClient userServiceClient;
 
+    @Mock
+    private com.example.ComputerStore.repo.UserRepository userRepository;
+
     private UserService userService;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -29,7 +32,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userServiceClient, passwordEncoder);
+        userService = new UserService(userServiceClient, passwordEncoder, userRepository);
         
         testUser = new User();
         testUser.setUserId(1);
@@ -123,7 +126,7 @@ class UserServiceTest {
 
     @Test
     void findUserById_Success() {
-        when(userServiceClient.getUserByIdInternal(1)).thenReturn(testUser);
+        when(userRepository.findById(1)).thenReturn(java.util.Optional.of(testUser));
 
         User result = userService.findUserById(1);
 
@@ -133,7 +136,7 @@ class UserServiceTest {
 
     @Test
     void findUserById_NotFound_ThrowsException() {
-        when(userServiceClient.getUserByIdInternal(999)).thenReturn(null);
+        when(userRepository.findById(999)).thenReturn(java.util.Optional.empty());
 
         assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, 
                 () -> userService.findUserById(999));

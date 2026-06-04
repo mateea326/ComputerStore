@@ -20,8 +20,12 @@ public class GlobalControllerAdvice {
 
     @ModelAttribute("cartCount")
     public int getCartCount(HttpSession session) {
-        Map<Integer, Integer> cart = cartService.getCart(session);
-        return cart.values().stream().mapToInt(Integer::intValue).sum();
+        try {
+            Map<Integer, Integer> cart = cartService.getCart(session);
+            return cart.values().stream().mapToInt(Integer::intValue).sum();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @ModelAttribute("wishlistCount")

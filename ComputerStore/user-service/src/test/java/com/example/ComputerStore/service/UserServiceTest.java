@@ -53,7 +53,7 @@ class UserServiceTest {
                 "john@example.com", "johndoe", "password123", "password123"
         );
 
-        when(userRepository.findByUsername(regDto.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findFirstByUsernameIgnoreCase(regDto.getUsername())).thenReturn(Optional.empty());
         when(userRepository.findByEmail(regDto.getEmail())).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
@@ -66,7 +66,7 @@ class UserServiceTest {
 
     @Test
     void login_Success() {
-        when(userRepository.findByUsername(testUser.getUsername()))
+        when(userRepository.findFirstByUsernameIgnoreCase(testUser.getUsername()))
                 .thenReturn(Optional.of(testUser));
 
         UserResponseDTO result = userService.login("johndoe", "password123");
@@ -77,7 +77,7 @@ class UserServiceTest {
 
     @Test
     void login_Failure_GenericMessage() {
-        when(userRepository.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
+        when(userRepository.findFirstByUsernameIgnoreCase("johndoe")).thenReturn(Optional.of(testUser));
 
         com.example.ComputerStore.exception.ResourceNotFoundException exception = assertThrows(
                 com.example.ComputerStore.exception.ResourceNotFoundException.class,
@@ -123,7 +123,7 @@ class UserServiceTest {
                 "john@example.com", "johndoe", "password123", "password123"
         );
 
-        when(userRepository.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
+        when(userRepository.findFirstByUsernameIgnoreCase("johndoe")).thenReturn(Optional.of(testUser));
 
         assertThrows(com.example.ComputerStore.exception.DuplicateResourceException.class, 
                 () -> userService.registerNewUser(regDto));

@@ -159,7 +159,14 @@ public class ViewController {
 
         Map<Integer, Integer> cart = cartService.getCart(session);
         List<Product> cartProducts = cart.keySet().stream()
-                .map(productService::getProductDetails)
+                .map(productId -> {
+                    try {
+                        return productService.getProductDetails(productId);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .filter(java.util.Objects::nonNull)
                 .toList();
 
         double total = cartProducts.stream()
@@ -208,7 +215,14 @@ public class ViewController {
         }
 
         List<Product> cartProducts = cart.keySet().stream()
-                .map(productService::getProductDetails)
+                .map(productId -> {
+                    try {
+                        return productService.getProductDetails(productId);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .filter(java.util.Objects::nonNull)
                 .toList();
 
         Map<Integer, Product> productMap = new HashMap<>();
@@ -356,6 +370,9 @@ public class ViewController {
             updateDto.setEmail(email);
             updateDto.setPhoneNumber(phoneNumber);
             updateDto.setAddress(address);
+            updateDto.setUsername("dummyUsername");
+            updateDto.setPassword("dummyPassword123");
+            updateDto.setConfirmPassword("dummyPassword123");
 
             userService.updateUser(userId, updateDto);
 

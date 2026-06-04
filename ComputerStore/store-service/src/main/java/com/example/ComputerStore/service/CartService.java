@@ -132,9 +132,6 @@ public class CartService {
         if (userId == null) return;
         
         Cart dbCart = getOrCreateDbCart(userId);
-        if (dbCart.getCartId() != null) {
-            cartItemRepository.deleteByCartId(dbCart.getCartId());
-        }
         if (dbCart.getItems() != null) {
             dbCart.getItems().clear();
         }

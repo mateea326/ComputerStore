@@ -73,9 +73,17 @@ public class AdminController {
     // ---- Dashboard ----
     @GetMapping
     public String adminDashboard(Model model) {
-        model.addAttribute("totalProducts", productService.getAllProducts().size());
-        model.addAttribute("totalUsers", userService.getAllUsers().size());
-        model.addAttribute("totalOrders", orderService.getAllOrders().size());
+        int totalProducts = 0;
+        int totalUsers = 0;
+        int totalOrders = 0;
+        
+        try { totalProducts = productService.getAllProducts().size(); } catch (Exception e) { log.error("Failed to get total products", e); }
+        try { totalUsers = userService.getAllUsers().size(); } catch (Exception e) { log.error("Failed to get total users", e); }
+        try { totalOrders = orderService.getAllOrders().size(); } catch (Exception e) { log.error("Failed to get total orders", e); }
+        
+        model.addAttribute("totalProducts", totalProducts);
+        model.addAttribute("totalUsers", totalUsers);
+        model.addAttribute("totalOrders", totalOrders);
         return "admin/dashboard";
     }
 

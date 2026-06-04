@@ -42,7 +42,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-                .ignoringRequestMatchers("/login", "/register", "/api/**", "/swagger-ui/**", "/v3/api-docs/**")
+                .ignoringRequestMatchers("/login", "/register", "/api/**", "/swagger-ui/**", "/v3/api-docs/**", "/cart/**", "/wishlist/**", "/order-history/**", "/account-settings/**", "/checkout/**")
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth

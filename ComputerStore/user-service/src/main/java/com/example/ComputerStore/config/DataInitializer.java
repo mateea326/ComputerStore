@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@org.springframework.transaction.annotation.Transactional
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
@@ -19,7 +20,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        userRepository.findByUsername("admin").ifPresentOrElse(
+        userRepository.findFirstByUsernameIgnoreCase("admin").ifPresentOrElse(
             admin -> {
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setRole("ADMIN");
