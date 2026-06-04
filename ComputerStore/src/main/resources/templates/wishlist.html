@@ -160,11 +160,12 @@
 
     <div th:if="${!wishlistProducts.isEmpty()}">
         <div class="wishlist-item" th:each="product : ${wishlistProducts}">
-            <div style="width: 80px; height: 80px; background: #f8f9fa; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-right: 20px;">
-                <img th:if="${product instanceof T(com.example.ComputerStore.model.Processor)}" src="https://img.icons8.com/fluency/48/cpu.png" alt="CPU">
-                <img th:if="${product instanceof T(com.example.ComputerStore.model.GraphicsCard)}" src="https://img.icons8.com/fluency/48/video-card.png" alt="GPU">
-                <img th:if="${product instanceof T(com.example.ComputerStore.model.Motherboard)}" src="https://img.icons8.com/fluency/48/motherboard.png" alt="MB">
-                <img th:if="${#strings.contains(product.class.name, 'Case')}" src="https://img.icons8.com/fluency/48/computer-case.png" alt="Case">
+            <div style="width: 80px; height: 80px; background: #f8f9fa; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-right: 20px; overflow: hidden; flex-shrink: 0;">
+                <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" alt="product" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.Processor)}" src="/images/processor.jpg" alt="CPU" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.GraphicsCard)}" src="/images/graphics_card.jpg" alt="GPU" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.Motherboard)}" src="/images/motherboard.jpg" alt="MB" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" src="/images/case.jpg" alt="Case" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="item-info">
                 <div class="item-name" th:text="${product.name}"></div>
