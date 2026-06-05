@@ -352,6 +352,7 @@ public class AdminController {
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
+        model.addAttribute("size", size);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);
         return "admin/users";
