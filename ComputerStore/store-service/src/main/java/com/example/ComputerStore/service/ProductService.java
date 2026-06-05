@@ -47,6 +47,11 @@ public class ProductService {
         return productQueryService.getAllProductsOrderByPopularity(pageable);
     }
 
+    // READ - CQRS Query
+    public Page<Product> searchProducts(String search, Pageable pageable) {
+        return productQueryService.searchProducts(search, pageable);
+    }
+
     // UPDATE – CQRS Command
     public Product updateProduct(Integer id, Product updated) {
         return productCommandService.updateProduct(id, updated);

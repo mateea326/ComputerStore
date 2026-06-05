@@ -1,5 +1,22 @@
 <nav th:fragment="header" class="navbar" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <style>
+        .navbar {
+            background: #7bb8b4;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-left, .navbar-center, .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-left { flex: 1; justify-content: flex-start; }
+        .navbar-center { flex: 1; justify-content: center; }
+        .navbar-right { flex: 1; justify-content: flex-end; gap: 15px; }
+
         .nav-icon-link {
             padding: 8px !important;
             display: flex !important;
@@ -28,18 +45,93 @@
             font-weight: bold;
             border: 2px solid #7bb8b4;
         }
-        .navbar-right {
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .navbar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .navbar-center h1 {
+            font-size: 24px;
+            margin: 0;
+            white-space: nowrap;
+        }
+        .navbar-center a:hover {
+            background: transparent;
+            opacity: 0.8;
+        }
+        /* Search Bar styles */
+        .search-container {
+            position: relative;
             display: flex;
-            gap: 15px;
             align-items: center;
         }
+        .search-input {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            padding: 0;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .search-input::placeholder { color: rgba(255,255,255,0.7); }
+        .search-container.active .search-input {
+            width: 200px;
+            opacity: 1;
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.5);
+            margin-left: 10px;
+        }
+        .search-input:focus {
+            outline: none;
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+        .search-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .search-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
     </style>
-    <h1 th:text="${adminTitle} ?: 'Computer Store'">Computer Store</h1>
+    
+    <div class="navbar-left">
+        <div class="search-container" id="navSearchContainer">
+            <button type="button" class="search-btn" onclick="document.getElementById('navSearchContainer').classList.toggle('active'); document.getElementById('searchInput').focus();" title="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <form action="/products" method="get" style="margin:0;">
+                <input type="text" name="search" id="searchInput" class="search-input" placeholder="Search products...">
+            </form>
+        </div>
+    </div>
+    
+    <div class="navbar-center">
+        <a href="/products" style="padding: 0;">
+            <h1>Computer Store</h1>
+        </a>
+    </div>
+
     <div class="navbar-right">
-        <span th:if="${userName}" th:text="'Welcome, ' + ${userName}"></span>
+        <span th:if="${userName}" th:text="'Welcome, ' + ${userName}" style="white-space: nowrap;"></span>
         
-        <a th:if="${isAdmin}" href="/admin">Admin Panel</a>
-        <a href="/products">Products</a>
+        <a th:if="${isAdmin}" href="/admin" style="white-space: nowrap;">Admin Panel</a>
 
         <!-- Wishlist Icon with Badge -->
         <a href="/wishlist" class="nav-icon-link" title="Wishlist">
@@ -57,7 +149,6 @@
             </div>
         </a>
 
-        <a href="/order-history">Orders</a>
         <!-- Account Icon -->
         <a href="/account-settings" class="nav-icon-link" title="Account Settings">
             <div class="nav-icon-container">

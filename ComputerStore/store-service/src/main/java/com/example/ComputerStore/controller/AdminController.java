@@ -223,10 +223,11 @@ public class AdminController {
     public String editProductForm(@PathVariable Integer id, Model model) {
         Product product = productService.getProductDetails(id);
         model.addAttribute("product", product);
+        String className = product.getClass().getName();
         String type = "processor";
-        if (product instanceof GraphicsCard) type = "gpu";
-        else if (product instanceof Motherboard) type = "motherboard";
-        else if (product instanceof Case) type = "case";
+        if (className.contains("GraphicsCard")) type = "gpu";
+        else if (className.contains("Motherboard")) type = "motherboard";
+        else if (className.contains("Case")) type = "case";
         
         model.addAttribute("productType", type);
         model.addAttribute("isEdit", true);

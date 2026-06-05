@@ -217,9 +217,9 @@
         <div class="cart-item" th:each="product : ${cartProducts}">
         <div style="width: 80px; height: 80px; background: #f8f9fa; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-right: 20px; overflow: hidden; flex-shrink: 0;">
                 <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" alt="product" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.Processor)}" src="/images/processor.jpg" alt="CPU" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.GraphicsCard)}" src="/images/graphics_card.jpg" alt="GPU" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.Motherboard)}" src="/images/motherboard.jpg" alt="MB" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Processor')}" src="/images/processor.jpg" alt="CPU" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'GraphicsCard')}" src="/images/graphics_card.jpg" alt="GPU" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Motherboard')}" src="/images/motherboard.jpg" alt="MB" style="width: 100%; height: 100%; object-fit: cover;">
                 <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" src="/images/case.jpg" alt="Case" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="item-info">

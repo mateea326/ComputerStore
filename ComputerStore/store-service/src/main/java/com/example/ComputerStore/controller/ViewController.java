@@ -88,6 +88,7 @@ public class ViewController {
 
     @GetMapping("/products")
     public String productsPage(@RequestParam(required = false) String type,
+                               @RequestParam(required = false) String search,
                                @RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size,
                                @RequestParam(defaultValue = "name") String sortBy,
@@ -104,8 +105,22 @@ public class ViewController {
 
         if (type != null && !type.isEmpty()) {
             List<? extends Product> products = productService.filterProductsByType(type);
+            // If search is also provided, filter manually in memory
+            if (search != null && !search.isEmpty()) {
+                String s = search.toLowerCase();
+                products = products.stream()
+                        .filter(p -> p.getName() != null && p.getName().toLowerCase().contains(s))
+                        .toList();
+            }
             model.addAttribute("products", products);
             model.addAttribute("isPaginated", false);
+        } else if (search != null && !search.isEmpty()) {
+            Page<Product> productPage = productService.searchProducts(search, pageable);
+            model.addAttribute("products", productPage.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", productPage.getTotalPages());
+            model.addAttribute("totalItems", productPage.getTotalElements());
+            model.addAttribute("isPaginated", true);
         } else {
             Page<Product> productPage;
             if ("popularity".equalsIgnoreCase(sortBy)) {
@@ -274,7 +289,7 @@ public class ViewController {
         try {
             cartService.checkout(session, userId);
             redirectAttributes.addFlashAttribute("success", "Payment processed and order placed successfully!");
-            return "redirect:/products";
+            return "redirect:/order-history";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/checkout";

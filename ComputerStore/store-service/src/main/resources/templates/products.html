@@ -169,47 +169,155 @@
             font-weight: 600;
             color: #333;
         }
+
+        /* New Layout Styles */
+        .filter-navbar {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+        .filter-link {
+            color: #666;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .filter-link:hover, .filter-link.active {
+            color: #7bb8b4;
+        }
+
+        .page-layout {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Custom Dropdown Styles */
+        .custom-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px;
+            user-select: none;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 100;
+            padding: 15px 0;
+        }
+        .dropdown-content.show {
+            display: block;
+        }
+        .sort-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 25px;
+            color: #333;
+            text-decoration: none;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .sort-item:hover {
+            background-color: #f9f9f9;
+        }
+        .sort-item.active {
+            color: #7bb8b4;
+        }
     </style>
+    <script>
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.closest('.custom-dropdown')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
 
 <nav th:replace="~{fragments/navbar :: header}"></nav>
 
-<div class="container">
+<!-- Filter Sub-Navbar -->
+<div class="filter-navbar">
+    <a href="/products" class="filter-link" th:classappend="${selectedType == null} ? 'active' : ''">All Products</a>
+    <a href="/products?type=processors" class="filter-link" th:classappend="${selectedType == 'processors'} ? 'active' : ''">Processors</a>
+    <a href="/products?type=motherboards" class="filter-link" th:classappend="${selectedType == 'motherboards'} ? 'active' : ''">Motherboards</a>
+    <a href="/products?type=graphics cards" class="filter-link" th:classappend="${selectedType == 'graphics cards'} ? 'active' : ''">Graphics Cards</a>
+    <a href="/products?type=cases" class="filter-link" th:classappend="${selectedType == 'cases'} ? 'active' : ''">Cases</a>
+</div>
 
-    <div class="filters">
-        <h2>Filter by type</h2>
-        <div class="filter-buttons">
-            <a href="/products" class="filter-btn" th:classappend="${selectedType == null} ? 'active' : ''">All Products</a>
-            <a href="/products?type=processors" class="filter-btn" th:classappend="${selectedType == 'processors'} ? 'active' : ''">Processors</a>
-            <a href="/products?type=motherboards" class="filter-btn" th:classappend="${selectedType == 'motherboards'} ? 'active' : ''">Motherboards</a>
-            <a href="/products?type=graphics cards" class="filter-btn" th:classappend="${selectedType == 'graphics cards'} ? 'active' : ''">Graphics Cards</a>
-            <a href="/products?type=cases" class="filter-btn" th:classappend="${selectedType == 'cases'} ? 'active' : ''">Cases</a>
-        </div>
-    </div>
+<div class="page-layout">
+    
+    <div class="top-controls">
+        <form id="pageSizeForm" method="get" action="/products" style="margin: 0;">
+            <input type="hidden" name="sortBy" th:value="${sortBy}">
+            <input type="hidden" name="direction" th:value="${direction}">
+            <input type="hidden" name="type" th:value="${selectedType}">
+            <input type="hidden" name="search" th:value="${param.search}">
+            <select name="size" id="size" onchange="document.getElementById('pageSizeForm').submit()" style="padding: 8px 15px; border-radius: 5px; border: 1px solid #ddd; color: #555; outline: none; cursor: pointer; background: white;">
+                <option value="5" th:selected="${size == 5}">5 items/page</option>
+                <option value="10" th:selected="${size == 10}">10 items/page</option>
+                <option value="20" th:selected="${size == 20}">20 items/page</option>
+                <option value="50" th:selected="${size == 50}">50 items/page</option>
+            </select>
+        </form>
 
-    <div class="sorting" style="justify-content: space-between;">
-        <div>
-            <span style="font-weight: 600; color: #333;">Sort by:</span>
-            <a th:href="@{/products(sortBy='name', direction='asc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'asc'} ? 'active' : ''">Name A-Z</a>
-            <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">Name Z-A</a>
-            <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">Price Low-High</a>
-            <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">Price High-Low</a>
-            <a th:href="@{/products(sortBy='popularity', direction='desc', type=${selectedType}, size=${size})}" class="filter-btn" th:classappend="${sortBy == 'popularity'} ? 'active' : ''">Popularity</a>
-        </div>
-        <div>
-            <form id="pageSizeForm" method="get" action="/products" style="display: flex; align-items: center; gap: 10px;">
-                <input type="hidden" name="sortBy" th:value="${sortBy}">
-                <input type="hidden" name="direction" th:value="${direction}">
-                <input type="hidden" name="type" th:value="${selectedType}">
-                <label for="size" style="font-weight: 600; margin: 0;">Items per page:</label>
-                <select name="size" id="size" onchange="document.getElementById('pageSizeForm').submit()" style="padding: 5px; border-radius: 5px; border: 1px solid #7bb8b4; color: #7bb8b4; font-weight: 600;">
-                    <option value="5" th:selected="${size == 5}">5</option>
-                    <option value="10" th:selected="${size == 10}">10</option>
-                    <option value="20" th:selected="${size == 20}">20</option>
-                    <option value="50" th:selected="${size == 50}">50</option>
-                </select>
-            </form>
+        <div style="position: relative;">
+            <div class="custom-dropdown" onclick="document.getElementById('sortMenu').classList.toggle('show')">
+                <span style="color: #7bb8b4; font-size: 16px;" 
+                      th:text="${sortBy == 'popularity' ? 'cele mai populare' : (sortBy == 'name' && direction == 'asc' ? 'nume (a-z)' : (sortBy == 'name' && direction == 'desc' ? 'nume (z-a)' : (sortBy == 'price' && direction == 'asc' ? 'de la cele mai ieftine' : 'de la cele mai scumpe')))}">
+                      cele mai populare
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            
+            <div class="dropdown-content" id="sortMenu">
+                <a th:href="@{/products(sortBy='popularity', direction='desc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'popularity'} ? 'active' : ''">
+                    cele mai populare <svg th:if="${sortBy == 'popularity'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </a>
+                <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">
+                    de la cele mai ieftine <svg th:if="${sortBy == 'price' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </a>
+                <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">
+                    de la cele mai scumpe <svg th:if="${sortBy == 'price' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </a>
+                <a th:href="@{/products(sortBy='name', direction='asc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'name' && direction == 'asc'} ? 'active' : ''">
+                    nume (a-z) <svg th:if="${sortBy == 'name' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </a>
+                <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">
+                    nume (z-a) <svg th:if="${sortBy == 'name' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -225,9 +333,9 @@
             <div style="width: 100%; height: 150px; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
                 <!-- Custom image if uploaded, otherwise fallback to category default -->
                 <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" th:alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.Processor)}" src="/images/processor.jpg" alt="Processor" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.GraphicsCard)}" src="/images/graphics_card.jpg" alt="Graphics Card" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and product instanceof T(com.example.ComputerStore.model.Motherboard)}" src="/images/motherboard.jpg" alt="Motherboard" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Processor')}" src="/images/processor.jpg" alt="Processor" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'GraphicsCard')}" src="/images/graphics_card.jpg" alt="Graphics Card" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Motherboard')}" src="/images/motherboard.jpg" alt="Motherboard" style="width: 100%; height: 100%; object-fit: cover;">
                 <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" src="/images/case.jpg" alt="Case" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
 
@@ -268,9 +376,10 @@
     </div>
 
     <div th:if="${isPaginated}" class="pagination" style="margin-top: 30px; justify-content: center;">
-        <a th:if="${currentPage > 0}" th:href="@{/products(page=${currentPage - 1}, sortBy=${sortBy}, direction=${direction}, type=${selectedType}, size=${size})}" class="filter-btn">← Previous</a>
+        <a th:if="${currentPage > 0}" th:href="@{/products(page=${currentPage - 1}, sortBy=${sortBy}, direction=${direction}, type=${selectedType}, size=${size}, search=${param.search})}" class="filter-btn">← Previous</a>
         <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${totalPages}"></span>
-        <a th:if="${currentPage < totalPages - 1}" th:href="@{/products(page=${currentPage + 1}, sortBy=${sortBy}, direction=${direction}, type=${selectedType}, size=${size})}" class="filter-btn">Next →</a>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/products(page=${currentPage + 1}, sortBy=${sortBy}, direction=${direction}, type=${selectedType}, size=${size}, search=${param.search})}" class="filter-btn">Next →</a>
+    </div>
     </div>
 </div>
 </body>

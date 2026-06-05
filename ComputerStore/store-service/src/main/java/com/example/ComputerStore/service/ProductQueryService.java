@@ -40,6 +40,10 @@ public class ProductQueryService {
         return productRepository.findAll(pageable);
     }
 
+    public Page<Product> searchProducts(String search, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(search, pageable);
+    }
+
     @Cacheable(value = "product", key = "#id")
     public Product getProductDetails(Integer id) {
         return productRepository.findById(id)
