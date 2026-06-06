@@ -71,4 +71,4 @@ docker compose -f docker-compose-monitoring.yml up -d
 ## Documentation
 For an in-depth view of the entities, relationship definitions, and business requirements: [MVP Requirements Document](ComputerStore/MVP_Requirements_Document.md).
 
-For a summary of how AI agents were used during development: [AI Usage Report](ComputerStore/AI_USAGE_REPORT.md).
+For a summary of how AI agents were used during development: [AI Usage Report](ComputerStore/AI_usage_report.md).
