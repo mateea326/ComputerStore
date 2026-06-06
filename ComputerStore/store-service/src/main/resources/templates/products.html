@@ -295,27 +295,27 @@
         <div style="position: relative;">
             <div class="custom-dropdown" onclick="document.getElementById('sortMenu').classList.toggle('show')">
                 <span style="color: #7bb8b4; font-size: 16px;" 
-                      th:text="${sortBy == 'popularity' ? 'cele mai populare' : (sortBy == 'name' && direction == 'asc' ? 'nume (a-z)' : (sortBy == 'name' && direction == 'desc' ? 'nume (z-a)' : (sortBy == 'price' && direction == 'asc' ? 'de la cele mai ieftine' : 'de la cele mai scumpe')))}">
-                      cele mai populare
+                      th:text="${sortBy == 'popularity' ? 'Most Popular' : (sortBy == 'name' && direction == 'asc' ? 'Name (A-Z)' : (sortBy == 'name' && direction == 'desc' ? 'Name (Z-A)' : (sortBy == 'price' && direction == 'asc' ? 'Price: Low to High' : 'Price: High to Low')))}">
+                      Most Popular
                 </span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
             
             <div class="dropdown-content" id="sortMenu">
                 <a th:href="@{/products(sortBy='popularity', direction='desc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'popularity'} ? 'active' : ''">
-                    cele mai populare <svg th:if="${sortBy == 'popularity'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Most Popular <svg th:if="${sortBy == 'popularity'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
                 <a th:href="@{/products(sortBy='price', direction='asc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'price' && direction == 'asc'} ? 'active' : ''">
-                    de la cele mai ieftine <svg th:if="${sortBy == 'price' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Price: Low to High <svg th:if="${sortBy == 'price' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
                 <a th:href="@{/products(sortBy='price', direction='desc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'price' && direction == 'desc'} ? 'active' : ''">
-                    de la cele mai scumpe <svg th:if="${sortBy == 'price' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Price: High to Low <svg th:if="${sortBy == 'price' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
                 <a th:href="@{/products(sortBy='name', direction='asc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'name' && direction == 'asc'} ? 'active' : ''">
-                    nume (a-z) <svg th:if="${sortBy == 'name' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Name (A-Z) <svg th:if="${sortBy == 'name' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
                 <a th:href="@{/products(sortBy='name', direction='desc', type=${selectedType}, size=${size}, search=${param.search})}" class="sort-item" th:classappend="${sortBy == 'name' && direction == 'desc'} ? 'active' : ''">
-                    nume (z-a) <svg th:if="${sortBy == 'name' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Name (Z-A) <svg th:if="${sortBy == 'name' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
             </div>
         </div>

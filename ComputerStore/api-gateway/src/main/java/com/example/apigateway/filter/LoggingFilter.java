@@ -16,10 +16,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
- * Global Logging Filter — se execută pentru FIECARE request primit de Gateway.
+ * Global Logging Filter - se executa pentru FIECARE request primit de Gateway.
  * <p>
- * Request filtering: adaugă headerele X-Request-Id și X-Gateway-Source
- * Response filtering: adaugă X-Response-Time și X-Processed-By
+ * Request filtering: adauga headerele X-Request-Id si X-Gateway-Source
+ * Response filtering: adauga X-Response-Time si X-Processed-By
  */
 @Component
 public class LoggingFilter implements GlobalFilter, Ordered {
@@ -32,44 +32,41 @@ public class LoggingFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        String clientIp = getClientIp(request);
 
-        // Generăm un ID unic per request pentru tracing manual
+        // Generam un ID unic per request pentru tracing manual
         String requestId = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         long startTime = System.currentTimeMillis();
 
-        // ── REQUEST FILTER ────────────────────────────────────────────────────
-        // Adăugăm headerele de request
-        ServerHttpRequest mutatedRequest = request.mutate()
+        // -- REQUEST FILTER ----------------------------------------------------
+        // Adaugam headerele de request
+        ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
                 .header("X-Request-Id", requestId)
-                .header("X-Gateway-Source", "ComputerStore-Gateway")
-                .header("X-Request-Timestamp", LocalDateTime.now().format(FORMATTER))
+                .header("X-Gateway-Source", "spring-cloud-gateway")
                 .build();
 
-        log.info("[GATEWAY] [{}] → {} {} | IP: {} | Headers: Content-Type={}",
+        log.info("[GATEWAY] [{}] -> {} {} | IP: {} | Headers: Content-Type={}",
                 requestId,
                 request.getMethod(),
-                request.getURI().getPath(),
-                getClientIp(request),
-                request.getHeaders().getFirst("Content-Type"));
+                request.getURI(),
+                clientIp,
+                request.getHeaders().getContentType());
 
-        ServerWebExchange mutatedExchange = exchange.mutate()
-                .request(mutatedRequest)
-                .build();
+        ServerWebExchange modifiedExchange = exchange.mutate().request(modifiedRequest).build();
 
-        // ── RESPONSE FILTER ───────────────────────────────────────────────────
-        return chain.filter(mutatedExchange).then(Mono.fromRunnable(() -> {
-            ServerHttpResponse response = mutatedExchange.getResponse();
+        // -- RESPONSE FILTER ---------------------------------------------------
+        return chain.filter(modifiedExchange).then(Mono.fromRunnable(() -> {
+            ServerHttpResponse response = exchange.getResponse();
             long duration = System.currentTimeMillis() - startTime;
 
-            // Adăugăm headerele de response
+            // Adaugam headerele de response
             response.getHeaders().add("X-Response-Time", duration + "ms");
-            response.getHeaders().add("X-Processed-By", "ComputerStore-API-Gateway");
-            response.getHeaders().add("X-Request-Id", requestId);
+            response.getHeaders().add("X-Processed-By", "api-gateway");
 
-            log.info("[GATEWAY] [{}] ← {} {} | Status: {} | Duration: {}ms",
+            log.info("[GATEWAY] [{}] <- {} {} | Status: {} | Duration: {}ms",
                     requestId,
                     request.getMethod(),
-                    request.getURI().getPath(),
+                    request.getURI(),
                     response.getStatusCode(),
                     duration);
         }));
@@ -88,7 +85,7 @@ public class LoggingFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        // Prioritate maximă — se execută primul
+        // Prioritate maxima - se executa primul
         return Ordered.HIGHEST_PRECEDENCE;
     }
 }

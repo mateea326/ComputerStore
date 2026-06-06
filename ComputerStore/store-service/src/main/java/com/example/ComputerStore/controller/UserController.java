@@ -50,11 +50,11 @@ public class UserController {
             @Parameter(description = "User registration details", required = true)
             @Valid @RequestBody UserRegistrationDTO userDTO) {
 
-        // Curățăm datele de intrare pentru securitate (XSS)[cite: 1]
+        // Curatam datele de intrare pentru securitate (XSS)[cite: 1]
         userDTO.setUsername(HtmlUtils.htmlEscape(userDTO.getUsername()));
         userDTO.setEmail(HtmlUtils.htmlEscape(userDTO.getEmail()));
 
-        // Serviciul se ocupă de transformarea DTO în Entitate și salvare[cite: 24]
+        // Serviciul se ocupa de transformarea DTO in Entitate si salvare[cite: 24]
         UserResponseDTO newUser = userService.registerNewUser(userDTO);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
@@ -83,17 +83,17 @@ public class UserController {
             @Parameter(description = "Login credentials (username and password)", required = true)
             @RequestBody UserLoginDTO loginDetails) {
 
-        // Verificăm dacă datele de autentificare sunt prezente[cite: 1]
+        // Verificam daca datele de autentificare sunt prezente[cite: 1]
         if (loginDetails.getUsername() == null || loginDetails.getPassword() == null) {
             return ResponseEntity.badRequest().body("Username or password missing");
         }
 
         try {
-            // Tentativă de autentificare prin intermediul serviciului[cite: 24]
+            // Tentativa de autentificare prin intermediul serviciului[cite: 24]
             UserResponseDTO user = userService.login(loginDetails.getUsername(), loginDetails.getPassword());
             return ResponseEntity.ok(user);
         } catch (IllegalArgumentException e) {
-            // Returnăm 401 Unauthorized în cazul în care credențialele sunt greșite[cite: 1]
+            // Returnam 401 Unauthorized in cazul in care credentialele sunt gresite[cite: 1]
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
@@ -118,7 +118,7 @@ public class UserController {
             @Parameter(description = "User ID", required = true) @PathVariable Integer id,
             @Parameter(description = "Updated user details", required = true) @Valid @RequestBody UserRegistrationDTO updatedDetails) {
 
-        // Actualizăm profilul folosind DTO-ul primit[cite: 24]
+        // Actualizam profilul folosind DTO-ul primit[cite: 24]
         UserResponseDTO updated = userService.updateUser(id, updatedDetails);
         return ResponseEntity.ok(updated);
     }
@@ -141,7 +141,7 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> deleteUser(
             @Parameter(description = "User ID", required = true) @PathVariable Integer id) {
 
-        // Ștergem utilizatorul și returnăm detaliile acestuia pentru confirmare[cite: 24]
+        // Stergem utilizatorul si returnam detaliile acestuia pentru confirmare[cite: 24]
         UserResponseDTO deletedUser = userService.deleteUser(id);
         return ResponseEntity.ok(deletedUser);
     }

@@ -27,17 +27,17 @@ public class ProductService {
         return productCommandService.saveProduct(product);
     }
 
-    // READ – CQRS Query
+    // READ - CQRS Query
     public List<Product> getAllProducts() {
         return productQueryService.getAllProducts();
     }
 
-    // READ – CQRS Query
+    // READ - CQRS Query
     public Page<Product> getAllProducts(Pageable pageable) {
         return productQueryService.getAllProducts(pageable);
     }
 
-    // READ – CQRS Query
+    // READ - CQRS Query
     public Product getProductDetails(Integer id) {
         return productQueryService.getProductDetails(id);
     }
@@ -52,7 +52,7 @@ public class ProductService {
         return productQueryService.searchProducts(search, pageable);
     }
 
-    // UPDATE – CQRS Command
+    // UPDATE - CQRS Command
     public Product updateProduct(Integer id, Product updated) {
         return productCommandService.updateProduct(id, updated);
     }
@@ -62,7 +62,7 @@ public class ProductService {
         productCommandService.deleteProduct(id);
     }
 
-    // READ – CQRS Query
+    // READ - CQRS Query
     public List<? extends Product> filterProductsByType(String type) {
         return productQueryService.filterProductsByType(type);
     }

@@ -23,14 +23,14 @@ public class FeignClientInterceptor implements RequestInterceptor {
         if (requestAttributes != null) {
             HttpServletRequest request = requestAttributes.getRequest();
 
-            // 1. Încercăm să preluăm token-ul din header-ul Authorization existent
+            // 1. Incercam sa preluam token-ul din header-ul Authorization existent
             String authHeader = request.getHeader("Authorization");
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 template.header("Authorization", authHeader);
                 return;
             }
 
-            // 2. Dacă nu este în header, îl căutăm în Cookie (pentru UI Thymeleaf)
+            // 2. Daca nu este in header, il cautam in Cookie (pentru UI Thymeleaf)
             if (request.getCookies() != null) {
                 for (Cookie cookie : request.getCookies()) {
                     if (jwtCookieName.equals(cookie.getName())) {

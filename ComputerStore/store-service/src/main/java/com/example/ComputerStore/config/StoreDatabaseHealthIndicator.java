@@ -27,11 +27,11 @@ public class StoreDatabaseHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         try {
-            // Verificăm conexiunea cu o query simplă
+            // Verificam conexiunea cu o query simpla
             Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
 
             if (result != null && result == 1) {
-                // Obținem câteva statistici utile
+                // Obtinem cateva statistici utile
                 Integer productCount = jdbcTemplate.queryForObject(
                         "SELECT COUNT(*) FROM computer_store.product", Integer.class
                 );
@@ -41,7 +41,7 @@ public class StoreDatabaseHealthIndicator implements HealthIndicator {
                         .withDetail("schema", "computer_store")
                         .withDetail("status", "Connected")
                         .withDetail("productsCount", productCount != null ? productCount : 0)
-                        .withDetail("query", "SELECT 1 → OK")
+                        .withDetail("query", "SELECT 1 -> OK")
                         .build();
             } else {
                 return Health.down()

@@ -14,8 +14,8 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Configurație metrici custom pentru API Gateway.
- * Expuse la /actuator/prometheus și colectate de Prometheus.
+ * Configuratie metrici custom pentru API Gateway.
+ * Expuse la /actuator/prometheus si colectate de Prometheus.
  */
 @Configuration
 public class GatewayMetricsConfig {
@@ -23,7 +23,7 @@ public class GatewayMetricsConfig {
     private static final Logger log = LoggerFactory.getLogger(GatewayMetricsConfig.class);
 
     /**
-     * Counter: numărul total de request-uri rutate prin gateway, pe serviciu.
+     * Counter: numarul total de request-uri rutate prin gateway, pe serviciu.
      */
     @Bean
     public Counter gatewayTotalRequestsCounter(MeterRegistry meterRegistry) {
@@ -33,8 +33,8 @@ public class GatewayMetricsConfig {
     }
 
     /**
-     * GlobalFilter care înregistrează metrici per rută.
-     * Implementează GlobalFilter + Ordered pentru a seta prioritatea corect.
+     * GlobalFilter care inregistreaza metrici per ruta.
+     * Implementeaza GlobalFilter + Ordered pentru a seta prioritatea corect.
      */
     @Bean
     public GlobalFilter metricsFilter(MeterRegistry meterRegistry) {
@@ -42,7 +42,7 @@ public class GatewayMetricsConfig {
     }
 
     /**
-     * Clasă internă statică pentru a putea implementa atât GlobalFilter cât și Ordered.
+     * Clasa interna statica pentru a putea implementa atat GlobalFilter cat si Ordered.
      */
     private static class MetricsGlobalFilter implements GlobalFilter, Ordered {
 
@@ -57,7 +57,7 @@ public class GatewayMetricsConfig {
             String path = exchange.getRequest().getURI().getPath();
             String method = exchange.getRequest().getMethod().name();
 
-            // Identificăm serviciul țintă din path
+            // Identificam serviciul tinta din path
             String targetService = "unknown";
             if (path.startsWith("/api/store")) {
                 targetService = "store-service";
@@ -74,7 +74,7 @@ public class GatewayMetricsConfig {
                         ? exchange.getResponse().getStatusCode().value()
                         : 0;
 
-                // Counter per serviciu + metodă HTTP
+                // Counter per serviciu + metoda HTTP
                 Counter.builder("gateway.requests.routed")
                         .description("Requests routed to downstream services")
                         .tag("service", service)

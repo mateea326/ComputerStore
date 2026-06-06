@@ -3,49 +3,10 @@
 ## Project Overview
 **ComputerStore** - An e-commerce platform for computer hardware components.
 
-**Technology Stack:**
-- **Backend:** Java 21, Spring Boot 3.2.0
-- **Security:** Spring Security 6.2 (RBAC, CSRF Protection, BCrypt)
-- **Database:** PostgreSQL (Persistence), H2 (Testing)
-- **Frontend:** Thymeleaf
-- **Logging:** Spring AOP (Aspect-Oriented Programming)
-- **Testing:** JUnit 5, Mockito, Jacoco (Code Coverage)
-- **API Documentation:** SpringDoc OpenAPI (Swagger)
-
----
-
-## Technical Architecture
-
-### Database Schema (11 Entities)
-
-**Entities:**
-1. **users** - Secure user accounts (user_id, first_name, last_name, phone_number, address, email, username, password, role)
-2. **products** - Base product catalog (product_id, name, price)
-3. **processors** - CPU specifications (product_id FK, core_count, core_clock, socket)
-4. **graphicscards** - GPU specifications (product_id FK, memory_size, core_clock, memory_clock)
-5. **motherboards** - Motherboard specifications (product_id FK, slots, cpu_socket, chipset)
-6. **cases** - Chassis specifications (product_id FK, vents, type, format)
-7. **orders** - Customer orders (order_id, user_id FK, order_date, total_price)
-8. **order_items** - Order line items (order_item_id, order_id FK, product_id FK, quantity, price_at_purchase)
-9. **carts** - Persistent shopping carts (cart_id, user_id FK)
-10. **cart_items** - Items within a cart (cart_item_id, cart_id FK, product_id FK, quantity)
-11. **wishlists** - User wishlists (wishlist_id, user_id FK)
-
-### Key Relationships
-1. **User → Orders** (One-to-Many) - A user can place multiple orders.
-2. **User → Cart** (One-to-One) - Each user has one shopping cart.
-3. **User → Wishlist** (One-to-One) - Each user has one wishlist.
-4. **Order → OrderItems** (One-to-Many) - One order contains multiple products.
-5. **Cart → CartItems** (One-to-Many) - A cart manages multiple items.
-6. **Product → Subclasses** (Joined Inheritance) - Specialized components inherit from the Product base.
-
----
-
 ## Business Requirements
 
 ### 1. User Account Management
 **Description:** Users must be able to create accounts, login and manage their personal profile.
-
 
 **Acceptance Criteria:**
 - Users can register with valid email, unique username, and strong password.
@@ -244,37 +205,3 @@
 - **Security:** 100% of sensitive data is encrypted; no unauthorized access to admin panels.
 - **Reliability:** Successful order persistence and transactional integrity across all flows.
 - **Quality:** All 50+ unit and integration tests passing in the CI/CD pipeline.
-
----
-
-## Enterprise Refactoring & Microservices Updates
-
-În urma actualizărilor recente, proiectul a evoluat spre o arhitectură robustă de microservicii, integrând standarde Enterprise:
-
-### Cerința 4: API Gateway
-- **Spring Cloud Gateway** folosit ca un singur punct de intrare (Single Entry Point).
-- **Rate Limiting:** Implementat pentru prevenirea abuzurilor pe bază de adresă IP.
-- **Filtering:** `LoggingFilter` pentru interceptarea și urmărirea cererilor și răspunsurilor HTTP (adăugare de ID-uri unice `X-Request-Id`).
-
-### Cerința 5: Monitorizare și Metrici
-- **Prometheus & Grafana:** Colectare metrici via Actuator și vizualizare pe un Dashboard Grafana dedicat (CPU, HTTP errors, request duration, business metrics).
-- **Health Checks:** Implementare custom pentru monitorizarea sănătății bazelor de date.
-- **Distributed Tracing (Bonus):** Integrare **Zipkin** pentru a urmări propagarea requesturilor în lanțul de microservicii.
-
-### Cerința 6: Securitate Distribuită
-- **Stateless JWT:** Migrare de la sesiuni bazate pe server la o abordare distribuită bazată pe **JSON Web Tokens (JWT)**.
-- **Feign Client Propagation:** Propagarea securizată a tokenurilor JWT prin cererile interne între microservicii.
-- **HTTPS (Bonus):** Comunicație securizată SSL pentru API Gateway.
-
-### Cerința 7: Resilience & Fault Tolerance
-- **Circuit Breaker & Fallback:** Utilizare **Resilience4j** pentru protejarea cererilor externe. Fallback-uri implementate pentru a întoarce răspunsuri gracefully în caz de indisponibilitate (fail-safe).
-- **Retry Mechanism:** Configurat prin `@Retry` pentru restabilirea conexiunilor la eșecuri tranzitorii.
-
-### Cerința 8: Design Patterns (CQRS)
-- **CQRS (Command Query Responsibility Segregation):** Separat la nivel logic în `store-service`.
-  - `ProductQueryService` — procesează exclusiv cereri de citire (GET).
-  - `ProductCommandService` — procesează modificări de stare (POST, PUT, DELETE).
-
-### Cerința 9: NoSQL și Caching
-- **Redis (In-Memory Data Structure Store):** Adăugat ca serviciu în `docker-compose`. Funcționează ca bază de date NoSQL rapidă.
-- **Caching Layer pe Produse:** S-au adăugat adnotări de caching pe Query Service (`@Cacheable`) pentru extragerea instantanee a produselor din memorie. La adăugarea/modificarea/ștergerea unui produs prin Command Service, se execută automat invalidaea cache-ului (`@CacheEvict`) pentru a păstra consistența. Reducere masivă a timpului de răspuns pentru endpoint-urile de catalog.

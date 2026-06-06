@@ -32,7 +32,7 @@ public class UserService {
     }
 
 
-    // MAPPER: Entity -> DTO răspuns (fără parolă)
+    // MAPPER: Entity -> DTO raspuns (fara parola)
     private UserResponseDTO mapToResponseDTO(User user) {
         UserResponseDTO responseDTO = new UserResponseDTO();
         responseDTO.setUserId(user.getUserId());
@@ -45,14 +45,14 @@ public class UserService {
         return responseDTO;
     }
 
-    // CREATE – înregistrare utilizator nou
+    // CREATE - inregistrare utilizator nou
     public UserResponseDTO registerNewUser(UserRegistrationDTO registrationDTO) {
         // Validare parole
         if (!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        // Unicitate username și email
+        // Unicitate username si email
         if (userRepository.findFirstByUsernameIgnoreCase(registrationDTO.getUsername()).isPresent()) {
             throw new DuplicateResourceException("User", "username", registrationDTO.getUsername());
         }
@@ -74,7 +74,7 @@ public class UserService {
         return mapToResponseDTO(savedUser);
     }
 
-    // READ – autentificare manuală (folosit de API REST, nu de Spring Security)
+    // READ - autentificare manuala (folosit de API REST, nu de Spring Security)
     public UserResponseDTO login(String username, String password) {
         User user = userRepository.findFirstByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid username or password"));
@@ -88,7 +88,7 @@ public class UserService {
         return mapToResponseDTO(user);
     }
 
-    // UPDATE – editare profil utilizator
+    // UPDATE - editare profil utilizator
     public UserResponseDTO updateUser(Integer userId, UserRegistrationDTO updatedDetails) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
@@ -104,19 +104,19 @@ public class UserService {
         return mapToResponseDTO(savedUser);
     }
 
-    // READ – găsire utilizator după ID (pentru alte servicii)
+    // READ - gasire utilizator dupa ID (pentru alte servicii)
     public User findUserById(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 
-    // READ – găsire utilizator după username (pentru alte servicii)
+    // READ - gasire utilizator dupa username (pentru alte servicii)
     public User findUserByUsername(String username) {
         return userRepository.findFirstByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
     }
 
-    // DELETE – ștergere cont utilizator
+    // DELETE - stergere cont utilizator
     @Transactional
     public UserResponseDTO deleteUser(Integer id) {
         User userToDelete = userRepository.findById(id)
@@ -130,17 +130,17 @@ public class UserService {
         return mapToResponseDTO(userToDelete);
     }
 
-    // READ – toți utilizatorii (fără paginare)
+    // READ - toti utilizatorii (fara paginare)
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // READ – toți utilizatorii cu paginare și sortare
+    // READ - toti utilizatorii cu paginare si sortare
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
-    // UPDATE – schimbare rol utilizator de către admin
+    // UPDATE - schimbare rol utilizator de catre admin
     public void changeUserRole(Integer userId, String newRole) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));

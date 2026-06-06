@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Configurație API Gateway:
- * - Routes programatice pentru store-service și user-service
+ * Configuratie API Gateway:
+ * - Routes programatice pentru store-service si user-service
  * - Key Resolver pentru rate limiting (identificare per IP)
  * - CORS global configuration
  */
@@ -31,7 +31,7 @@ public class GatewayConfig {
 
     /**
      * KeyResolver pentru Rate Limiting.
-     * Identifică clientul după IP (sau după header Authorization dacă există).
+     * Identifica clientul dupa IP (sau dupa header Authorization daca exista).
      * Folosit de RequestRateLimiterGatewayFilterFactory din application.yml.
      */
     @Bean
@@ -39,7 +39,7 @@ public class GatewayConfig {
         return exchange -> {
             ServerHttpRequest request = exchange.getRequest();
 
-            // Preferăm X-Forwarded-For (client real în spatele unui proxy)
+            // Preferam X-Forwarded-For (client real in spatele unui proxy)
             String forwardedFor = request.getHeaders().getFirst("X-Forwarded-For");
             if (forwardedFor != null && !forwardedFor.isBlank()) {
                 return Mono.just(forwardedFor.split(",")[0].trim());
@@ -55,7 +55,7 @@ public class GatewayConfig {
     }
 
     /**
-     * CORS Configuration — permite accesul din browsere la API Gateway.
+     * CORS Configuration - permite accesul din browsere la API Gateway.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

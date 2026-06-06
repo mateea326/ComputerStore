@@ -70,12 +70,29 @@ services:
       retries: 10
       start_period: 30s
 
-  # ── User Service ──
+  # ── User Service (Instance 1) ──
   user-service:
     build: ./user-service
     container_name: cs-user-service
     ports:
       - "8082:8082"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/computer_store?currentSchema=computer_store
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+
+  # ── User Service (Instance 2 for Load Balancing Demo) ──
+  user-service-2:
+    build: ./user-service
+    container_name: cs-user-service-2
+    ports:
+      - "8083:8082"
     depends_on:
       discovery-server:
         condition: service_healthy

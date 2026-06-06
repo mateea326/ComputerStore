@@ -10,19 +10,19 @@ import org.springframework.context.annotation.Configuration;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Configurație metrici custom pentru store-service.
+ * Configuratie metrici custom pentru store-service.
  * Toate metricile sunt automat expuse la /actuator/prometheus
- * și colectate de Prometheus.
+ * si colectate de Prometheus.
  */
 @Configuration
 public class MetricsConfig {
 
-    // Gauge: numărul curent de produse active în magazin
+    // Gauge: numarul curent de produse active in magazin
     private final AtomicInteger activeProductsCount = new AtomicInteger(0);
 
     /**
      * Counter: comenzi plasate cu succes.
-     * Etichetat cu tipul de plată pentru analiză.
+     * Etichetat cu tipul de plata pentru analiza.
      */
     @Bean
     public Counter ordersPlacedCounter(MeterRegistry meterRegistry) {
@@ -33,7 +33,7 @@ public class MetricsConfig {
     }
 
     /**
-     * Counter: produse adăugate în coș.
+     * Counter: produse adaugate in cos.
      */
     @Bean
     public Counter cartAddedCounter(MeterRegistry meterRegistry) {
@@ -44,7 +44,7 @@ public class MetricsConfig {
     }
 
     /**
-     * Counter: produse adăugate/scoase din wishlist.
+     * Counter: produse adaugate/scoase din wishlist.
      */
     @Bean
     public Counter wishlistOperationsCounter(MeterRegistry meterRegistry) {
@@ -55,7 +55,7 @@ public class MetricsConfig {
     }
 
     /**
-     * Gauge: număr curent de produse active (actualizat de ProductService).
+     * Gauge: numar curent de produse active (actualizat de ProductService).
      */
     @Bean
     public Gauge activeProductsGauge(MeterRegistry meterRegistry) {
@@ -74,7 +74,7 @@ public class MetricsConfig {
     }
 
     /**
-     * Timer: durata procesării comenzilor.
+     * Timer: durata procesarii comenzilor.
      */
     @Bean
     public Timer orderProcessingTimer(MeterRegistry meterRegistry) {

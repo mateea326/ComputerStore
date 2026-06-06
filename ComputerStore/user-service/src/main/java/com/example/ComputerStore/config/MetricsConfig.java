@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Configuration;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Configurație metrici custom pentru user-service.
+ * Configuratie metrici custom pentru user-service.
  * Toate metricile sunt automat expuse la /actuator/prometheus.
  */
 @Configuration
 public class MetricsConfig {
 
-    // Gauge: utilizatori activi (logați în sesiunile curente)
+    // Gauge: utilizatori activi (logati in sesiunile curente)
     private final AtomicInteger activeUsersCount = new AtomicInteger(0);
 
     /**
-     * Counter: autentificări reușite.
+     * Counter: autentificari reusite.
      */
     @Bean
     public Counter userLoginSuccessCounter(MeterRegistry meterRegistry) {
@@ -31,7 +31,7 @@ public class MetricsConfig {
     }
 
     /**
-     * Counter: autentificări eșuate (credențiale greșite).
+     * Counter: autentificari esuate (credentiale gresite).
      */
     @Bean
     public Counter userLoginFailureCounter(MeterRegistry meterRegistry) {
@@ -42,7 +42,7 @@ public class MetricsConfig {
     }
 
     /**
-     * Counter: înregistrări noi de utilizatori.
+     * Counter: inregistrari noi de utilizatori.
      */
     @Bean
     public Counter userRegistrationCounter(MeterRegistry meterRegistry) {
@@ -53,7 +53,7 @@ public class MetricsConfig {
     }
 
     /**
-     * Gauge: utilizatori activi în memorie.
+     * Gauge: utilizatori activi in memorie.
      */
     @Bean
     public Gauge activeUsersGauge(MeterRegistry meterRegistry) {
@@ -72,7 +72,7 @@ public class MetricsConfig {
     }
 
     /**
-     * Timer: durata autentificării.
+     * Timer: durata autentificarii.
      */
     @Bean
     public Timer userAuthenticationTimer(MeterRegistry meterRegistry) {

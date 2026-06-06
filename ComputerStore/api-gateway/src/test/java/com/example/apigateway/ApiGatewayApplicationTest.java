@@ -15,6 +15,6 @@ class ApiGatewayApplicationTest {
 
     @Test
     void contextLoads() {
-        // Verificăm că contextul Spring se încarcă corect
+        // Verificam ca contextul Spring se incarca corect
     }
 }

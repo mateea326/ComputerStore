@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Size;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "type") // "type" va fi câmpul din JSON care decide clasa
+        property = "type") // "type" va fi campul din JSON care decide clasa
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Processor.class, name = "processor"),
         @JsonSubTypes.Type(value = GraphicsCard.class, name = "gpu"),

@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    // DTO pentru răspunsul de eroare REST
+    // DTO pentru raspunsul de eroare REST
     public record ErrorResponse(
             LocalDateTime timestamp,
             int status,

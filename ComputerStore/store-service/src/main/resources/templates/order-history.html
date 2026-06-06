@@ -229,24 +229,24 @@
         <div style="position: relative;">
             <div class="custom-dropdown" onclick="document.getElementById('sortMenu').classList.toggle('show')">
                 <span style="color: #7bb8b4; font-size: 16px;" 
-                      th:text="${sortBy == 'orderDate' && direction == 'desc' ? 'cele mai noi' : (sortBy == 'orderDate' && direction == 'asc' ? 'cele mai vechi' : (sortBy == 'totalPrice' && direction == 'asc' ? 'de la cele mai ieftine' : 'de la cele mai scumpe'))}">
-                      cele mai noi
+                      th:text="${sortBy == 'orderDate' && direction == 'desc' ? 'Newest First' : (sortBy == 'orderDate' && direction == 'asc' ? 'Oldest First' : (sortBy == 'totalPrice' && direction == 'asc' ? 'Price: Low to High' : 'Price: High to Low'))}">
+                      Newest First
                 </span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
             
             <div class="dropdown-content" id="sortMenu">
                 <a th:href="@{/order-history(sortBy='orderDate', direction='desc', size=${size})}" class="sort-item" th:classappend="${sortBy == 'orderDate' && direction == 'desc'} ? 'active' : ''">
-                    cele mai noi <svg th:if="${sortBy == 'orderDate' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Newest First <svg th:if="${sortBy == 'orderDate' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
                 <a th:href="@{/order-history(sortBy='orderDate', direction='asc', size=${size})}" class="sort-item" th:classappend="${sortBy == 'orderDate' && direction == 'asc'} ? 'active' : ''">
-                    cele mai vechi <svg th:if="${sortBy == 'orderDate' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Oldest First <svg th:if="${sortBy == 'orderDate' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
                 <a th:href="@{/order-history(sortBy='totalPrice', direction='asc', size=${size})}" class="sort-item" th:classappend="${sortBy == 'totalPrice' && direction == 'asc'} ? 'active' : ''">
-                    de la cele mai ieftine <svg th:if="${sortBy == 'totalPrice' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Price: Low to High <svg th:if="${sortBy == 'totalPrice' && direction == 'asc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
                 <a th:href="@{/order-history(sortBy='totalPrice', direction='desc', size=${size})}" class="sort-item" th:classappend="${sortBy == 'totalPrice' && direction == 'desc'} ? 'active' : ''">
-                    de la cele mai scumpe <svg th:if="${sortBy == 'totalPrice' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Price: High to Low <svg th:if="${sortBy == 'totalPrice' && direction == 'desc'}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7bb8b4" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </a>
             </div>
         </div>

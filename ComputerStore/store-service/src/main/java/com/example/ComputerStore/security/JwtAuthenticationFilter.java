@@ -40,13 +40,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String jwt = null;
 
-        // 1. Încercăm să luăm JWT-ul din Header (pentru API calls / Feign)
+        // 1. Incercam sa luam JWT-ul din Header (pentru API calls / Feign)
         final String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
         }
 
-        // 2. Dacă nu e în Header, încercăm din Cookie (pentru UI Thymeleaf)
+        // 2. Daca nu e in Header, incercam din Cookie (pentru UI Thymeleaf)
         if (jwt == null && request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if (jwtCookieName.equals(cookie.getName())) {
@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        // Dacă avem token și nu e deja autentificat în context
+        // Daca avem token si nu e deja autentificat in context
         if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(jwt)) {
                 Claims claims = jwtUtil.extractAllClaims(jwt);
@@ -74,10 +74,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 
-                // Setăm securitatea în context (STATELESS)
+                // Setam securitatea in context (STATELESS)
                 SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                // Asigurăm că sesiunea are userId și userName populate (necesar pentru controller-ul legacy de Thymeleaf)
+                // Asiguram ca sesiunea are userId si userName populate (necesar pentru controller-ul legacy de Thymeleaf)
                 jakarta.servlet.http.HttpSession session = request.getSession(true);
                 if (session.getAttribute("userId") == null) {
                     try {

@@ -43,10 +43,10 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             throw new ServletException("User details could not be retrieved from user-service for user: " + username);
         }
 
-        // Generăm JWT
+        // Generam JWT
         String jwt = jwtUtil.generateToken((UserDetails) authentication.getPrincipal());
 
-        // Creăm cookie-ul HttpOnly
+        // Cream cookie-ul HttpOnly
         Cookie jwtCookie = new Cookie(jwtCookieName, jwt);
         jwtCookie.setHttpOnly(true);
         jwtCookie.setSecure(false); // set to true if using HTTPS in prod

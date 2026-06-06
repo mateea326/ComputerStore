@@ -13,8 +13,8 @@ import java.util.List;
 
 /**
  * Fallback implementation pentru UserServiceClient.
- * Această clasă este apelată automat de Feign + Circuit Breaker
- * când user-service este indisponibil sau răspunde prea lent.
+ * Aceasta clasa este apelata automat de Feign + Circuit Breaker
+ * cand user-service este indisponibil sau raspunde prea lent.
  */
 @Component
 public class UserServiceFallback implements UserServiceClient {
@@ -35,7 +35,7 @@ public class UserServiceFallback implements UserServiceClient {
     @Override
     public User getUserByUsernameInternal(String username) {
         log.warn("[CIRCUIT BREAKER - FALLBACK] user-service indisponibil! getUserByUsernameInternal(username={}) -> returnez null", username);
-        // Returnăm null ca să fie prins de Spring Security și să refuze autentificarea
+        // Returnam null ca sa fie prins de Spring Security si sa refuze autentificarea
         return null;
     }
 

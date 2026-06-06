@@ -16,7 +16,7 @@ public class LoggingAspect {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    // Pointcut care acoperă toate metodele din pachetul service
+    // Pointcut care acopera toate metodele din pachetul service
     @Pointcut("execution(* com.example.ComputerStore.service.*.*(..))")
     public void serviceMethods() {}
 

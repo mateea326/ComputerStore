@@ -39,7 +39,7 @@ public class UserDatabaseHealthIndicator implements HealthIndicator {
                         .withDetail("schema", "computer_store")
                         .withDetail("status", "Connected")
                         .withDetail("usersCount", userCount != null ? userCount : 0)
-                        .withDetail("query", "SELECT 1 → OK")
+                        .withDetail("query", "SELECT 1 -> OK")
                         .build();
             } else {
                 return Health.down()

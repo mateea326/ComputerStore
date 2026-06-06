@@ -34,7 +34,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // MAPPER: Entity -> DTO răspuns (fără parolă)
+    // MAPPER: Entity -> DTO raspuns (fara parola)
     private UserResponseDTO mapToResponseDTO(User user) {
         UserResponseDTO responseDTO = new UserResponseDTO();
         responseDTO.setUserId(user.getUserId());
@@ -47,7 +47,7 @@ public class UserService {
         return responseDTO;
     }
 
-    // CREATE – înregistrare utilizator nou prin Feign Client
+    // CREATE - inregistrare utilizator nou prin Feign Client
     @CircuitBreaker(name = "userService", fallbackMethod = "registerUserFallback")
     @Retry(name = "userService")
     public UserResponseDTO registerNewUser(UserRegistrationDTO registrationDTO) {
@@ -63,7 +63,7 @@ public class UserService {
         return fallback;
     }
 
-    // READ – autentificare manuală (folosit de API REST, nu de Spring Security)
+    // READ - autentificare manuala (folosit de API REST, nu de Spring Security)
     @CircuitBreaker(name = "userService", fallbackMethod = "loginFallback")
     @Retry(name = "userService")
     public UserResponseDTO login(String username, String password) {
@@ -93,7 +93,7 @@ public class UserService {
         throw new ResourceNotFoundException("Serviciul de autentificare este temporar indisponibil. Incercati din nou.");
     }
 
-    // UPDATE – editare profil utilizator prin Feign Client
+    // UPDATE - editare profil utilizator prin Feign Client
     @CircuitBreaker(name = "userService", fallbackMethod = "updateUserFallback")
     @Retry(name = "userService")
     public UserResponseDTO updateUser(Integer userId, UserRegistrationDTO updatedDetails) {
@@ -109,7 +109,7 @@ public class UserService {
         return fallback;
     }
 
-    // READ – găsire utilizator după ID (pentru alte servicii)
+    // READ - gasire utilizator dupa ID (pentru alte servicii)
     @CircuitBreaker(name = "userService", fallbackMethod = "findUserByIdFallback")
     @Retry(name = "userService")
     public User findUserById(Integer id) {
@@ -129,7 +129,7 @@ public class UserService {
         return fallback;
     }
 
-    // DELETE – ștergere cont utilizator prin Feign Client
+    // DELETE - stergere cont utilizator prin Feign Client
     @CircuitBreaker(name = "userService", fallbackMethod = "deleteUserFallback")
     @Retry(name = "userService")
     public UserResponseDTO deleteUser(Integer id) {
@@ -145,7 +145,7 @@ public class UserService {
         return fallback;
     }
 
-    // READ – toți utilizatorii (fără paginare) prin Feign Client
+    // READ - toti utilizatorii (fara paginare) prin Feign Client
     @CircuitBreaker(name = "userService", fallbackMethod = "getAllUsersFallback")
     @Retry(name = "userService")
     public List<User> getAllUsers() {
@@ -159,7 +159,7 @@ public class UserService {
         return Collections.emptyList();
     }
 
-    // READ – toți utilizatorii cu paginare prin Feign Client
+    // READ - toti utilizatorii cu paginare prin Feign Client
     @CircuitBreaker(name = "userService", fallbackMethod = "getAllUsersPaginatedFallback")
     @Retry(name = "userService")
     public org.springframework.data.domain.Page<User> getAllUsers(org.springframework.data.domain.Pageable pageable) {
@@ -183,7 +183,7 @@ public class UserService {
         return org.springframework.data.domain.Page.empty(pageable);
     }
 
-    // UPDATE – schimbare rol utilizator prin Feign Client
+    // UPDATE - schimbare rol utilizator prin Feign Client
     @CircuitBreaker(name = "userService", fallbackMethod = "changeUserRoleFallback")
     @Retry(name = "userService")
     public void changeUserRole(Integer userId, String newRole) {
