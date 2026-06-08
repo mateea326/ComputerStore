@@ -197,5 +197,75 @@
         <a href="/admin/products" class="back-link">← Back to Products</a>
     </div>
 </div>
+
+<script>
+    function showError(inputEl, message) {
+        var existing = inputEl.parentNode.querySelector('.js-error');
+        if (!existing) {
+            existing = document.createElement('div');
+            existing.className = 'field-error js-error';
+            inputEl.parentNode.appendChild(existing);
+        }
+        existing.textContent = message;
+        inputEl.style.borderColor = '#dc3545';
+    }
+
+    function clearError(inputEl) {
+        var existing = inputEl.parentNode.querySelector('.js-error');
+        if (existing) existing.textContent = '';
+        inputEl.style.borderColor = '';
+    }
+
+    function validateProductForm(form) {
+        var valid = true;
+
+        // Name validation
+        var nameInput = form.querySelector('input[name="name"]');
+        if (nameInput) {
+            if (nameInput.value.trim().length < 5) {
+                showError(nameInput, 'Name must be at least 5 characters.');
+                valid = false;
+            } else {
+                clearError(nameInput);
+            }
+        }
+
+        // Price validation
+        var priceInput = form.querySelector('input[name="price"]');
+        if (priceInput) {
+            var price = parseFloat(priceInput.value);
+            if (isNaN(price) || price <= 0) {
+                showError(priceInput, 'Price must be a positive number.');
+                valid = false;
+            } else {
+                clearError(priceInput);
+            }
+        }
+
+        // Numeric fields - must be positive if filled in
+        var numericFields = form.querySelectorAll('input[type="number"]');
+        numericFields.forEach(function(field) {
+            if (field === priceInput) return; // already checked
+            if (field.value !== '' && parseFloat(field.value) < 0) {
+                showError(field, 'Value must be 0 or greater.');
+                valid = false;
+            } else {
+                clearError(field);
+            }
+        });
+
+        return valid;
+    }
+
+    // Attach onsubmit to all product forms
+    document.querySelectorAll('form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            if (!validateProductForm(form)) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -78,6 +78,14 @@
             outline: none;
             border-color: #7bb8b4;
         }
+        input.invalid {
+            border-color: #dc3580;
+        }
+        .field-error {
+            color: #dc3580;
+            font-size: 12px;
+            margin-top: 3px;
+        }
         .button-group {
             display: flex;
             gap: 15px;
@@ -212,35 +220,40 @@
         <div th:if="${error}" class="error" th:text="${error}"></div>
         <div th:if="${success}" class="success" th:text="${success}"></div>
 
-        <form method="post" th:action="@{/account-settings/update}">
+        <form id="accountForm" method="post" th:action="@{/account-settings/update}" onsubmit="return validateAccountForm()">
             <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input type="text" id="firstName" name="firstName"
                        th:value="${user?.firstName}" required>
+                <div id="firstNameError" class="field-error"></div>
             </div>
 
             <div class="form-group">
                 <label for="lastName">Last Name</label>
                 <input type="text" id="lastName" name="lastName"
                        th:value="${user?.lastName}" required>
+                <div id="lastNameError" class="field-error"></div>
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email"
                        th:value="${user?.email}" required>
+                <div id="emailError" class="field-error"></div>
             </div>
 
             <div class="form-group">
                 <label for="phoneNumber">Phone Number</label>
                 <input type="text" id="phoneNumber" name="phoneNumber"
                        th:value="${user?.phoneNumber}" required>
+                <div id="phoneNumberError" class="field-error"></div>
             </div>
 
             <div class="form-group">
                 <label for="address">Address</label>
                 <input type="text" id="address" name="address"
                        th:value="${user?.address}" required>
+                <div id="addressError" class="field-error"></div>
             </div>
 
             <div class="button-group">
@@ -281,6 +294,42 @@
 </div>
 
 <script>
+    function setError(id, message) {
+        const input = document.getElementById(id);
+        const errorDiv = document.getElementById(id + 'Error');
+        if (message) {
+            errorDiv.textContent = message;
+            input.classList.add('invalid');
+            return false;
+        }
+        errorDiv.textContent = '';
+        input.classList.remove('invalid');
+        return true;
+    }
+
+    function validateAccountForm() {
+        let valid = true;
+
+        const firstName = document.getElementById('firstName').value.trim();
+        if (!setError('firstName', firstName.length < 2 ? 'First name must be at least 2 characters' : '')) valid = false;
+
+        const lastName = document.getElementById('lastName').value.trim();
+        if (!setError('lastName', lastName.length < 2 ? 'Last name must be at least 2 characters' : '')) valid = false;
+
+        const email = document.getElementById('email').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!setError('email', !emailRegex.test(email) ? 'Please enter a valid email address' : '')) valid = false;
+
+        const phone = document.getElementById('phoneNumber').value.trim();
+        const phoneRegex = /^\+?[0-9\s-]{7,20}$/;
+        if (!setError('phoneNumber', !phoneRegex.test(phone) ? 'Phone number must contain 7-20 digits' : '')) valid = false;
+
+        const address = document.getElementById('address').value.trim();
+        if (!setError('address', address.length < 5 ? 'Please enter a valid address' : '')) valid = false;
+
+        return valid;
+    }
+
     function showDeleteModal() {
         document.getElementById('deleteModal').style.display = 'block';
     }
