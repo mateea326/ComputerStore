@@ -4,6 +4,7 @@ import com.example.ComputerStore.exception.EmptyCartException;
 import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.*;
 import com.example.ComputerStore.repo.OrderRepository;
+import com.example.ComputerStore.client.NotificationServiceClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
@@ -26,15 +27,18 @@ public class OrderService {
     private final UserService userService;
     private final ProductService productService;
     private final com.example.ComputerStore.repo.OrderItemRepository orderItemRepository;
+    private final NotificationServiceClient notificationServiceClient;
 
     public OrderService(OrderRepository orderRepository,
                         UserService userService,
                         ProductService productService,
-                        com.example.ComputerStore.repo.OrderItemRepository orderItemRepository) {
+                        com.example.ComputerStore.repo.OrderItemRepository orderItemRepository,
+                        NotificationServiceClient notificationServiceClient) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.productService = productService;
         this.orderItemRepository = orderItemRepository;
+        this.notificationServiceClient = notificationServiceClient;
     }
 
     @CircuitBreaker(name = "orderService", fallbackMethod = "getOrderHistoryFallback")
@@ -88,6 +92,19 @@ public class OrderService {
         order.setTotalPrice(totalPrice);
         Order savedOrder = orderRepository.save(order);
         log.info("Order created successfully: id={}, total={}", savedOrder.getOrderId(), savedOrder.getTotalPrice());
+
+        // Trimitem notificarea asincron/izolat prin Feign
+        try {
+            Map<String, Object> notificationPayload = new HashMap<>();
+            notificationPayload.put("recipient", user.getEmail());
+            notificationPayload.put("type", "EMAIL");
+            notificationPayload.put("message", "Comanda ta cu ID-ul " + savedOrder.getOrderId() + " a fost inregistrata cu succes! Total: " + savedOrder.getTotalPrice() + " RON.");
+            notificationServiceClient.sendNotification(notificationPayload);
+            log.info("Notification sent for order: id={}", savedOrder.getOrderId());
+        } catch (Exception e) {
+            log.error("Nu s-a putut trimite notificarea pentru comanda ID={}: {}", savedOrder.getOrderId(), e.getMessage());
+        }
+
         return savedOrder;
     }
 

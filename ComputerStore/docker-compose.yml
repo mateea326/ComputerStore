@@ -19,6 +19,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -45,6 +46,8 @@ services:
       - "8888:8888"
     environment:
       SPRING_PROFILES_ACTIVE: native
+    volumes:
+      - ./config-repo:/app/config-repo
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8888/actuator/health"]
       interval: 15s
@@ -83,7 +86,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/computer_store?currentSchema=computer_store
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
 
@@ -100,7 +103,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/computer_store?currentSchema=computer_store
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
 
@@ -121,7 +124,7 @@ services:
         condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/computer_store?currentSchema=computer_store
       SPRING_DATA_REDIS_HOST: redis
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
@@ -137,7 +140,21 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+
+  # ── Notification Service ──
+  notification-service:
+    build: ./notification-service
+    container_name: cs-notification-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
 
 volumes:

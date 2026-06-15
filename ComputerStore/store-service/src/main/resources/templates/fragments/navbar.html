@@ -116,14 +116,14 @@
             <button type="button" class="search-btn" onclick="document.getElementById('navSearchContainer').classList.toggle('active'); document.getElementById('searchInput').focus();" title="Search">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </button>
-            <form action="/products" method="get" style="margin:0;">
+            <form th:action="@{/products}" method="get" style="margin:0;">
                 <input type="text" name="search" id="searchInput" class="search-input" placeholder="Search products...">
             </form>
         </div>
     </div>
     
     <div class="navbar-center">
-        <a href="/products" style="padding: 0;">
+        <a th:href="@{/products}" style="padding: 0;">
             <h1>Computer Store</h1>
         </a>
     </div>
@@ -131,10 +131,10 @@
     <div class="navbar-right">
         <span th:if="${userName}" th:text="'Welcome, ' + ${userName}" style="white-space: nowrap;"></span>
         
-        <a th:if="${isAdmin}" href="/admin" style="white-space: nowrap;">Admin Panel</a>
+        <a th:if="${isAdmin}" th:href="@{/admin}" style="white-space: nowrap;">Admin Panel</a>
 
         <!-- Wishlist Icon with Badge -->
-        <a href="/wishlist" class="nav-icon-link" title="Wishlist">
+        <a th:href="@{/wishlist}" class="nav-icon-link" title="Wishlist">
             <div class="nav-icon-container">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
                 <span class="badge" th:if="${wishlistCount > 0}" th:text="${wishlistCount}">0</span>
@@ -142,7 +142,7 @@
         </a>
 
         <!-- Cart Icon with Badge -->
-        <a href="/cart" class="nav-icon-link" title="Shopping Cart">
+        <a th:href="@{/cart}" class="nav-icon-link" title="Shopping Cart">
             <div class="nav-icon-container">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 <span class="badge" th:if="${cartCount > 0}" th:text="${cartCount}">0</span>
@@ -150,13 +150,13 @@
         </a>
 
         <!-- Account Icon -->
-        <a href="/account-settings" class="nav-icon-link" title="Account Settings">
+        <a th:href="@{/account-settings}" class="nav-icon-link" title="Account Settings">
             <div class="nav-icon-container">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </div>
         </a>
         <!-- Logout Icon -->
-        <a href="/logout" class="nav-icon-link" title="Logout">
+        <a th:href="@{/logout}" class="nav-icon-link" title="Logout">
             <div class="nav-icon-container">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
             </div>

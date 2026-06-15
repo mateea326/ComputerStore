@@ -60,6 +60,6 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         session.setAttribute("userName", user.getFirstName());
         session.setAttribute("userRole", user.getRole());
 
-        response.sendRedirect("/products");
+        response.sendRedirect(request.getContextPath() + "/products");
     }
 }

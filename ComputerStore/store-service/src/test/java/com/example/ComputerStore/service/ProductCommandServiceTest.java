@@ -52,7 +52,7 @@ public class ProductCommandServiceTest {
 
         Processor updated = new Processor();
         updated.setName("New Intel");
-        updated.setPrice(200.0);
+        updated.setPrice(200.0f);
         updated.setCoreCount(8);
 
         when(productQueryService.getProductDetails(1)).thenReturn(existing);

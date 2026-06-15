@@ -91,6 +91,7 @@ jobs:
           docker build -t computerstore/api-gateway:latest ./api-gateway
           docker build -t computerstore/store-service:latest ./store-service
           docker build -t computerstore/user-service:latest ./user-service
+          docker build -t computerstore/notification-service:latest ./notification-service
 
       - name: List Docker images
         run: docker images | grep computerstore
@@ -111,11 +112,12 @@ jobs:
           echo "============================================="
           echo "  Deploying ComputerStore to Staging..."
           echo "============================================="
-          echo "Config Server    → staging:8888"
-          echo "Discovery Server → staging:8761"
-          echo "API Gateway      → staging:8443"
-          echo "Store Service    → staging:8081"
-          echo "User Service     → staging:8082"
+          echo "Config Server        → staging:8888"
+          echo "Discovery Server     → staging:8761"
+          echo "API Gateway          → staging:8443"
+          echo "Store Service        → staging:8081"
+          echo "User Service         → staging:8082"
+          echo "Notification Service → staging:8084"
           echo "============================================="
           echo "  Deployment completed successfully!"
           echo "============================================="

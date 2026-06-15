@@ -258,7 +258,7 @@
 
             <div class="button-group">
                 <button type="submit" class="btn btn-primary">Save Changes</button>
-                <a href="/products" class="btn btn-secondary" style="text-align: center; line-height: 1.5; text-decoration: none;">Cancel</a>
+                <a th:href="@{/products}" class="btn btn-secondary" style="text-align: center; line-height: 1.5; text-decoration: none;">Cancel</a>
             </div>
         </form>
     </div>
@@ -268,7 +268,7 @@
             <h3 style="color: #333; margin-bottom: 8px;">Order History</h3>
             <p style="color: #666; font-size: 15px;">View your past orders, track delivery status, and review purchases.</p>
         </div>
-        <a href="/order-history" class="btn btn-primary" style="text-decoration: none; padding: 12px 24px; flex: none;">View Orders</a>
+        <a th:href="@{/order-history}" class="btn btn-primary" style="text-decoration: none; padding: 12px 24px; flex: none;">View Orders</a>
     </div>
 
     <div class="danger-zone">

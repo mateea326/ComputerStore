@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,7 +58,7 @@
         <div class="error-code">500</div>
         <h1 class="error-title">Internal Server Error</h1>
         <p class="error-message">Something went wrong on our end. Please try again later.</p>
-        <a href="/products" class="back-btn">Back to Store</a>
+        <a th:href="@{/products}" class="back-btn">Back to Store</a>
     </div>
 </body>
 </html>

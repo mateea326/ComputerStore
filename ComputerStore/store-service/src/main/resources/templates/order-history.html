@@ -216,7 +216,7 @@
     </div>
 
     <div class="top-controls" th:if="${orders != null and !orders.isEmpty()}">
-        <form id="pageSizeForm" method="get" action="/order-history" style="margin: 0;">
+        <form id="pageSizeForm" method="get" th:action="@{/order-history}" style="margin: 0;">
             <input type="hidden" name="sortBy" th:value="${sortBy}">
             <input type="hidden" name="direction" th:value="${direction}">
             <select name="size" id="size" onchange="document.getElementById('pageSizeForm').submit()" style="padding: 8px 15px; border-radius: 5px; border: 1px solid #ddd; color: #555; outline: none; cursor: pointer; background: white;">
@@ -256,7 +256,7 @@
     <div th:if="${orders == null or orders.isEmpty()}" class="empty-history">
         <h3>No orders yet</h3>
         <br>
-        <a href="/products" class="shop-link">Shop Now</a>
+        <a th:href="@{/products}" class="shop-link">Shop Now</a>
     </div>
 
     <!-- Orders List -->

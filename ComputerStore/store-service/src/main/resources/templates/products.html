@@ -269,17 +269,17 @@
 
 <!-- Filter Sub-Navbar -->
 <div class="filter-navbar">
-    <a href="/products" class="filter-link" th:classappend="${selectedType == null} ? 'active' : ''">All Products</a>
-    <a href="/products?type=processors" class="filter-link" th:classappend="${selectedType == 'processors'} ? 'active' : ''">Processors</a>
-    <a href="/products?type=motherboards" class="filter-link" th:classappend="${selectedType == 'motherboards'} ? 'active' : ''">Motherboards</a>
-    <a href="/products?type=graphics cards" class="filter-link" th:classappend="${selectedType == 'graphics cards'} ? 'active' : ''">Graphics Cards</a>
-    <a href="/products?type=cases" class="filter-link" th:classappend="${selectedType == 'cases'} ? 'active' : ''">Cases</a>
+    <a th:href="@{/products}" class="filter-link" th:classappend="${selectedType == null} ? 'active' : ''">All Products</a>
+    <a th:href="@{/products(type='processors')}" class="filter-link" th:classappend="${selectedType == 'processors'} ? 'active' : ''">Processors</a>
+    <a th:href="@{/products(type='motherboards')}" class="filter-link" th:classappend="${selectedType == 'motherboards'} ? 'active' : ''">Motherboards</a>
+    <a th:href="@{/products(type='graphics cards')}" class="filter-link" th:classappend="${selectedType == 'graphics cards'} ? 'active' : ''">Graphics Cards</a>
+    <a th:href="@{/products(type='cases')}" class="filter-link" th:classappend="${selectedType == 'cases'} ? 'active' : ''">Cases</a>
 </div>
 
 <div class="page-layout">
     
     <div class="top-controls">
-        <form id="pageSizeForm" method="get" action="/products" style="margin: 0;">
+        <form id="pageSizeForm" method="get" th:action="@{/products}" style="margin: 0;">
             <input type="hidden" name="sortBy" th:value="${sortBy}">
             <input type="hidden" name="direction" th:value="${direction}">
             <input type="hidden" name="type" th:value="${selectedType}">
@@ -333,10 +333,10 @@
             <div style="width: 100%; height: 150px; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
                 <!-- Custom image if uploaded, otherwise fallback to category default -->
                 <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" th:alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Processor')}" src="/images/processor.jpg" alt="Processor" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'GraphicsCard')}" src="/images/graphics_card.jpg" alt="Graphics Card" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Motherboard')}" src="/images/motherboard.jpg" alt="Motherboard" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" src="/images/case.jpg" alt="Case" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Processor')}" th:src="@{/images/processor.jpg}" alt="Processor" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'GraphicsCard')}" th:src="@{/images/graphics_card.jpg}" alt="Graphics Card" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Motherboard')}" th:src="@{/images/motherboard.jpg}" alt="Motherboard" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" th:src="@{/images/case.jpg}" alt="Case" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
 
             <div class="product-name" th:text="${product.name}"></div>

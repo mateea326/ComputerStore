@@ -210,17 +210,17 @@
 
     <div th:if="${cartProducts.isEmpty()}" class="empty-cart">
         <h3>Your cart is empty</h3>
-        <a href="/products" class="continue-shopping">Start Shopping</a>
+        <a th:href="@{/products}" class="continue-shopping">Start Shopping</a>
     </div>
 
     <div th:if="${!cartProducts.isEmpty()}">
         <div class="cart-item" th:each="product : ${cartProducts}">
         <div style="width: 80px; height: 80px; background: #f8f9fa; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-right: 20px; overflow: hidden; flex-shrink: 0;">
                 <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" alt="product" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Processor')}" src="/images/processor.jpg" alt="CPU" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'GraphicsCard')}" src="/images/graphics_card.jpg" alt="GPU" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Motherboard')}" src="/images/motherboard.jpg" alt="MB" style="width: 100%; height: 100%; object-fit: cover;">
-                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" src="/images/case.jpg" alt="Case" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Processor')}" th:src="@{/images/processor.jpg}" alt="CPU" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'GraphicsCard')}" th:src="@{/images/graphics_card.jpg}" alt="GPU" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Motherboard')}" th:src="@{/images/motherboard.jpg}" alt="MB" style="width: 100%; height: 100%; object-fit: cover;">
+                <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" th:src="@{/images/case.jpg}" alt="Case" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="item-info">
                 <div class="item-name" th:text="${product.name}"></div>
@@ -249,7 +249,7 @@
                 <span class="total-label">Total:</span>
                 <span class="total-amount" th:text="'$' + ${#numbers.formatDecimal(total, 1, 2)}"></span>
             </div>
-            <a href="/checkout">
+            <a th:href="@{/checkout}">
                 <button class="checkout-btn">Proceed to Checkout</button>
             </a>
         </div>
