@@ -127,4 +127,30 @@ class WishlistServiceTest {
 
         assertTrue(result);
     }
+
+    @Test
+    void getWishlistProducts_Success() {
+        testWishlist.addProduct(testProduct);
+        when(userService.findUserById(1)).thenReturn(testUser);
+        when(wishlistRepository.findByUser(testUser)).thenReturn(Optional.of(testWishlist));
+
+        java.util.Set<Product> products = wishlistService.getWishlistProducts(1);
+
+        assertNotNull(products);
+        assertEquals(1, products.size());
+        assertTrue(products.contains(testProduct));
+    }
+
+    @Test
+    void getWishlistProductIds_Success() {
+        testWishlist.addProduct(testProduct);
+        when(userService.findUserById(1)).thenReturn(testUser);
+        when(wishlistRepository.findByUser(testUser)).thenReturn(Optional.of(testWishlist));
+
+        java.util.Set<Integer> ids = wishlistService.getWishlistProductIds(1);
+
+        assertNotNull(ids);
+        assertEquals(1, ids.size());
+        assertTrue(ids.contains(100));
+    }
 }

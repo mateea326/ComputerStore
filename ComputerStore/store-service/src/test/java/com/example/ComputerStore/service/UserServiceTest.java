@@ -141,4 +141,69 @@ class UserServiceTest {
         assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, 
                 () -> userService.findUserById(999));
     }
+
+    @Test
+    void getAllUsers_Success() {
+        when(userServiceClient.getAllUsersList()).thenReturn(java.util.Collections.singletonList(testUser));
+        java.util.List<User> result = userService.getAllUsers();
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void changeUserRole_Success() {
+        doNothing().when(userServiceClient).changeUserRole(1, "ADMIN");
+        assertDoesNotThrow(() -> userService.changeUserRole(1, "ADMIN"));
+    }
+
+    @Test
+    void registerUserFallback_Success() {
+        UserRegistrationDTO dto = new UserRegistrationDTO();
+        dto.setUsername("user");
+        UserResponseDTO response = userService.registerUserFallback(dto, new RuntimeException("Service Down"));
+        assertEquals("SERVICE_UNAVAILABLE", response.getUsername());
+    }
+
+    @Test
+    void loginFallback_ThrowsException() {
+        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, () -> {
+            userService.loginFallback("user", "pass", new RuntimeException("Service Down"));
+        });
+    }
+
+    @Test
+    void updateUserFallback_Success() {
+        UserResponseDTO response = userService.updateUserFallback(1, new UserRegistrationDTO(), new RuntimeException("Service Down"));
+        assertEquals("SERVICE_UNAVAILABLE", response.getUsername());
+    }
+
+    @Test
+    void findUserByIdFallback_Success() {
+        User response = userService.findUserByIdFallback(1, new RuntimeException("Service Down"));
+        assertEquals(1, response.getUserId());
+        assertEquals("unavailable", response.getUsername());
+    }
+
+    @Test
+    void deleteUserFallback_Success() {
+        UserResponseDTO response = userService.deleteUserFallback(1, new RuntimeException("Service Down"));
+        assertEquals("SERVICE_UNAVAILABLE", response.getUsername());
+    }
+
+    @Test
+    void getAllUsersFallback_Success() {
+        java.util.List<User> response = userService.getAllUsersFallback(new RuntimeException("Service Down"));
+        assertTrue(response.isEmpty());
+    }
+
+    @Test
+    void changeUserRoleFallback_Success() {
+        assertDoesNotThrow(() -> userService.changeUserRoleFallback(1, "ADMIN", new RuntimeException("Service Down")));
+    }
+
+    @Test
+    void getAllUsersPaginatedFallback_Success() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 10);
+        org.springframework.data.domain.Page<User> response = userService.getAllUsersPaginatedFallback(pageable, new RuntimeException("Service Down"));
+        assertTrue(response.isEmpty());
+    }
 }

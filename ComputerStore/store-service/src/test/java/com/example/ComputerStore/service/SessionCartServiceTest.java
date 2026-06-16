@@ -131,7 +131,7 @@ class SessionCartServiceTest {
 
         assertNotNull(result);
         verify(orderService).createOrder(eq(1), anyMap());
-        verify(cartItemRepository).deleteByCartId(1);
+        assertTrue(testCart.getItems().isEmpty());
     }
 
     @Test

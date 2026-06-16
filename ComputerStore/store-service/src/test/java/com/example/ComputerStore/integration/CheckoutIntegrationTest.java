@@ -2,8 +2,10 @@ package com.example.ComputerStore.integration;
 
 import com.example.ComputerStore.client.UserServiceClient;
 import com.example.ComputerStore.model.User;
+import com.example.ComputerStore.model.Product;
 import com.example.ComputerStore.service.CartService;
 import com.example.ComputerStore.service.OrderService;
+import com.example.ComputerStore.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class CheckoutIntegrationTest {
 
     @MockBean
     private OrderService orderService;
+
+    @MockBean
+    private ProductService productService;
 
     private User mockUser;
 
@@ -86,11 +91,19 @@ public class CheckoutIntegrationTest {
         cart.put(1, 1); // 1 item of product 1
         when(cartService.getCart(any())).thenReturn(cart);
 
+        Product p = new Product();
+        p.setProductId(1);
+        p.setName("Test Product");
+        p.setPrice(100.0f);
+        when(productService.getProductDetails(1)).thenReturn(p);
+
         mockMvc.perform(get("/checkout").session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("checkout"))
-                .andExpect(model().attributeExists("cartItems"))
-                .andExpect(model().attributeExists("totalPrice"));
+                .andExpect(model().attributeExists("cartProducts"))
+                .andExpect(model().attributeExists("productMap"))
+                .andExpect(model().attributeExists("cart"))
+                .andExpect(model().attributeExists("total"));
     }
 
     @Test
@@ -105,9 +118,13 @@ public class CheckoutIntegrationTest {
         cart.put(1, 1);
         when(cartService.getCart(any())).thenReturn(cart);
         
-        mockMvc.perform(post("/checkout/process")
+        mockMvc.perform(post("/checkout")
                 .session(session)
-                .with(csrf()))
+                .with(csrf())
+                .param("cardNumber", "4111111111111111")
+                .param("cardName", "Checkout Tester")
+                .param("expiryDate", "12/28")
+                .param("cvv", "123"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/order-history"))
                 .andExpect(flash().attributeExists("success"));
