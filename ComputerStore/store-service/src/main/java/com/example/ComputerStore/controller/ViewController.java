@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+// controller mvc care se ocupa de afisarea paginilor html folosite in aplicatie
 @Controller
 public class ViewController {
 
@@ -47,22 +48,26 @@ public class ViewController {
         this.wishlistService = wishlistService;
     }
 
+    // redirectioneaza spre pagina de login
     @GetMapping("/")
     public String home() {
         return "redirect:/login";
     }
 
+    // afiseaza pagina de login
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
 
 
+    // afiseaza pagina de inregistrare
     @GetMapping("/register")
     public String registerPage() {
         return "register";
     }
 
+    // proceseaza formularul de inregistrare utilizator nou si valideaza datele
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") UserRegistrationDTO userDto,
                            BindingResult result,
@@ -86,6 +91,7 @@ public class ViewController {
         }
     }
 
+    // afiseaza catalogul de produse cu suport de filtrare, cautare si paginare
     @GetMapping("/products")
     public String productsPage(@RequestParam(required = false) String type,
                                @RequestParam(required = false) String search,
@@ -144,6 +150,7 @@ public class ViewController {
         return "products";
     }
 
+    // adauga un produs in cosul de cumparaturi
     @PostMapping("/cart/add/{productId}")
     public String addToCart(@PathVariable Integer productId,
                             @RequestParam(required = false) String returnType,
@@ -165,6 +172,7 @@ public class ViewController {
         return "redirect:/products";
     }
 
+    // afiseaza pagina cosului de cumparaturi si calculeaza pretul total
     @GetMapping("/cart")
     public String cartPage(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -194,6 +202,7 @@ public class ViewController {
         return "cart";
     }
 
+    // sterge un produs complet din cosul de cumparaturi
     @PostMapping("/cart/remove/{productId}")
     public String removeFromCart(@PathVariable Integer productId,
                                  HttpSession session) {
@@ -201,6 +210,7 @@ public class ViewController {
         return "redirect:/cart";
     }
 
+    // creste cantitatea unui produs din cos cu o unitate
     @PostMapping("/cart/increase/{productId}")
     public String increaseQuantity(@PathVariable Integer productId,
                                    HttpSession session,
@@ -209,6 +219,7 @@ public class ViewController {
         return "redirect:/" + redirect;
     }
 
+    // scade cantitatea unui produs din cos cu o unitate
     @PostMapping("/cart/decrease/{productId}")
     public String decreaseQuantity(@PathVariable Integer productId,
                                    HttpSession session,
@@ -217,6 +228,7 @@ public class ViewController {
         return "redirect:/" + redirect;
     }
 
+    // afiseaza pagina de finalizare comanda cu produsele din cos
     @GetMapping("/checkout")
     public String checkoutPage(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -256,6 +268,7 @@ public class ViewController {
         return "checkout";
     }
 
+    // valideaza datele cardului, proceseaza plata si plaseaza comanda
     @PostMapping("/checkout")
     public String processCheckout(@RequestParam(required = false) String cardNumber,
                                    @RequestParam(required = false) String cardName,
@@ -296,6 +309,7 @@ public class ViewController {
         }
     }
 
+    // afiseaza istoricul de comenzi al utilizatorului curent
     @GetMapping("/order-history")
     public String orderHistory(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "5") int size,
@@ -348,6 +362,7 @@ public class ViewController {
         }
     }
 
+    // afiseaza pagina de setari ale contului utilizatorului
     @GetMapping("/account-settings")
     public String accountSettingsPage(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -365,6 +380,7 @@ public class ViewController {
         return "account-settings";
     }
 
+    // actualizeaza datele de profil ale utilizatorului
     @PostMapping("/account-settings/update")
     public String updateAccount(@RequestParam String firstName,
                                 @RequestParam String lastName,
@@ -400,6 +416,7 @@ public class ViewController {
         return "redirect:/account-settings";
     }
 
+    // sterge contul utilizatorului si datele sale asociate
     @PostMapping("/account-settings/delete")
     public String deleteAccount(HttpSession session, RedirectAttributes redirectAttributes) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -418,6 +435,7 @@ public class ViewController {
         }
     }
 
+    // adauga sau sterge un produs din wishlist
     @PostMapping("/wishlist/toggle/{productId}")
     public String toggleWishlist(@PathVariable Integer productId,
                                  HttpSession session,
@@ -440,6 +458,7 @@ public class ViewController {
         return "redirect:/products";
     }
 
+    // afiseaza pagina cu produsele salvate in wishlist
     @GetMapping("/wishlist")
     public String wishlistPage(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");

@@ -11,6 +11,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderItemId;
 
+    // avem relatii M:1 cu Order si Product
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     @JsonIgnore
@@ -23,6 +24,9 @@ public class OrderItem {
     @Min(value = 1, message = "Quantity has to be at least 1")
     private Integer quantity;
 
+    // snapshot al pretului
+    // este salvat pretul unitar al produsului din momentul in care s-a dat comanda
+    // daca ulterior pretul de schimba nu afecteaza pretul comenzii
     private double unitPriceAtPurchase;
 
     public OrderItem() {}

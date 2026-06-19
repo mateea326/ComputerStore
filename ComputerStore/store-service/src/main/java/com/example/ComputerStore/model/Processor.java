@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "processors")
-public class Processor extends Product {
+public class Processor extends Product { // subclasa a clasei Product
     @NotNull(message = "Core count is required")
     @Min(value = 1, message = "Core count must be at least 1")
     private Integer coreCount;

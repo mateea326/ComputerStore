@@ -48,6 +48,7 @@ public class UserService {
     }
 
     // CREATE - inregistrare utilizator nou prin Feign Client
+    // verifica daca parola introdusa si parola de confirmare conincid
     @CircuitBreaker(name = "userService", fallbackMethod = "registerUserFallback")
     @Retry(name = "userService")
     public UserResponseDTO registerNewUser(UserRegistrationDTO registrationDTO) {
@@ -64,6 +65,8 @@ public class UserService {
     }
 
     // READ - autentificare manuala (folosit de API REST, nu de Spring Security)
+    // folosim CircuitBreaker ca in cazul in care user-service nu mai merge desi am incercat de 2-3ori
+    // sa nu blocam intreg store-service, ci doar o sa returneze o eroare de autentificare
     @CircuitBreaker(name = "userService", fallbackMethod = "loginFallback")
     @Retry(name = "userService")
     public UserResponseDTO login(String username, String password) {

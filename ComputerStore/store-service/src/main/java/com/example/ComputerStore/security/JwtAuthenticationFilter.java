@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import com.example.ComputerStore.client.UserServiceClient;
 
+// filtru care intercepteaza fiecare cerere http pentru a verifica prezenta tokenului jwt
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -34,19 +35,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userServiceClient = userServiceClient;
     }
 
+    // filtreaza cererea extrage tokenul jwt il valideaza si configureaza contextul de securitate
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String jwt = null;
 
-        // 1. Incercam sa luam JWT-ul din Header (pentru API calls / Feign)
+        // 1 incercam sa luam jwt-ul din header pentru apeluri api sau feign
         final String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
         }
 
-        // 2. Daca nu e in Header, incercam din Cookie (pentru UI Thymeleaf)
+        // 2 daca nu este in header cautam jwt-ul in cookie-uri pentru interfata web
         if (jwt == null && request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if (jwtCookieName.equals(cookie.getName())) {
@@ -56,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        // Daca avem token si nu e deja autentificat in context
+        // daca avem un token valid si utilizatorul nu este deja autentificat in context
         if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(jwt)) {
                 Claims claims = jwtUtil.extractAllClaims(jwt);
@@ -69,15 +71,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
+                // creeaza obiectul de autentificare pe baza datelor din token
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         username, null, authorities);
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 
-                // Setam securitatea in context (STATELESS)
+                // seteaza autentificarea in contextul spring security
                 SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                // Asiguram ca sesiunea are userId si userName populate (necesar pentru controller-ul legacy de Thymeleaf)
+                // salveaza detaliile utilizatorului in sesiune pentru controllerele mvc
                 jakarta.servlet.http.HttpSession session = request.getSession(true);
                 if (session.getAttribute("userId") == null) {
                     try {

@@ -16,6 +16,7 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
+    // relatie 1:M cu CartItem, un cos poate contine mai multe obiecte
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
 

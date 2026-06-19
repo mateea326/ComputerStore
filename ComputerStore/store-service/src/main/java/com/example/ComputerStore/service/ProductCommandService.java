@@ -31,6 +31,8 @@ public class ProductCommandService {
         this.cartItemRepository = cartItemRepository;
     }
 
+    // de fiecare data cand adaugam un produs nou cache-urile de citire devin vechi
+    // asa ca stergem datele din cache-uri facand ca urmatoarele apeluri sa faca interogari SQL si sa refaca cache-ul
     @CacheEvict(value = {"products_all", "products_by_type", "product"}, allEntries = true)
     public Product saveProduct(Product product) {
         Product saved = productRepository.save(product);
@@ -47,6 +49,7 @@ public class ProductCommandService {
             existing.setImageUrl(updated.getImageUrl());
         }
 
+        // converteste automat produsul la subclasa sa
         if (existing instanceof Processor p && updated instanceof Processor u) {
             p.setCoreCount(u.getCoreCount());
             p.setCoreClock(u.getCoreClock());
@@ -69,6 +72,8 @@ public class ProductCommandService {
         log.info("Product updated via CommandService: id={}", id);
         return saved;
     }
+
+    // inainte de a sterge un produs trebuie sa stergem toate referintele sale la celelalte tabele
 
     @Transactional
     @CacheEvict(value = {"products_all", "products_by_type", "product"}, allEntries = true)

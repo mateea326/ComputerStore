@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// partea pentru caching si citiri
 @Service
 public class ProductQueryService {
 
@@ -31,11 +32,14 @@ public class ProductQueryService {
         this.caseRepository = caseRepository;
     }
 
+    // spring spune sa salveze in cache rezultatul listei
+    // la urmatorul apel va returna lista direct din cache ca sa nu mai faca interogare sql
     @Cacheable(value = "products_all")
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    // metoda de citire cu suport de paginare
     public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
@@ -44,6 +48,7 @@ public class ProductQueryService {
         return productRepository.findByNameContainingIgnoreCase(search, pageable);
     }
 
+    // salveaza detaliile unui singur produs in cache folosind id-ul ca si cheie
     @Cacheable(value = "product", key = "#id")
     public Product getProductDetails(Integer id) {
         return productRepository.findById(id)

@@ -18,6 +18,7 @@ public interface WishlistRepository extends JpaRepository<Wishlist, Integer> {
     @Query(value = "DELETE FROM wishlist_products WHERE product_id = :productId", nativeQuery = true)
     void removeProductFromAllWishlists(Integer productId);
 
+    // facem o interogare nativa deoarece avem un tabela asociativa pentru wishlist si produse, iar aceasta tabela nu este mapata ca o entitate in JPA
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM wishlist_products WHERE wishlist_id = :wishlistId", nativeQuery = true)

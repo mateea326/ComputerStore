@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "products")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED) // facem mostenirea
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,

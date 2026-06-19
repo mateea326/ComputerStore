@@ -11,6 +11,7 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartItemId;
 
+    // are relatii de tip M:1 cu Cart si Product
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
     @JsonIgnore

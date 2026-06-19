@@ -16,9 +16,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
 
+    // relatie M:1 cu User, deoarece mai multe comenzi pot fi facute de acelasi user
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
+    @JsonIgnore // previne buclele infinite de serializare JSON
     private User user;
 
     @Column(name = "order_date", nullable = false)
@@ -27,6 +28,9 @@ public class Order {
     @Min(value = 0, message = "Total price has to be positive")
     private double totalPrice;
 
+
+    // avem o relatie 1:M cu OrderItem, o comanda contine o lista de obiecte
+    // daca stergem o comanda toate obiectele asociate vor fi sterse in cascada
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
@@ -56,7 +60,7 @@ public class Order {
         item.setOrder(this);
     }
 
-    @Transient
+    @Transient // spune ca aceasta metoda nu trebuie pusa in baza de date si ca e doar o structura ce returneaza id-urile produselor si cantitatilor
     public Map<Integer, Integer> getProductQuantities() {
         if (orderItems == null || orderItems.isEmpty()) {
             return Map.of();

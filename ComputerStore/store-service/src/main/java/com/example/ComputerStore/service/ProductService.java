@@ -22,47 +22,47 @@ public class ProductService {
         this.productCommandService = productCommandService;
     }
 
-    // CREATE / UPDATE - CQRS Command
+    // CREATE / UPDATE
     public Product saveProduct(Product product) {
         return productCommandService.saveProduct(product);
     }
 
-    // READ - CQRS Query
+    // READ
     public List<Product> getAllProducts() {
         return productQueryService.getAllProducts();
     }
 
-    // READ - CQRS Query
+    // READ
     public Page<Product> getAllProducts(Pageable pageable) {
         return productQueryService.getAllProducts(pageable);
     }
 
-    // READ - CQRS Query
+    // READ
     public Product getProductDetails(Integer id) {
         return productQueryService.getProductDetails(id);
     }
 
-    // READ - CQRS Query
+    // READ
     public Page<Product> getAllProductsOrderByPopularity(Pageable pageable) {
         return productQueryService.getAllProductsOrderByPopularity(pageable);
     }
 
-    // READ - CQRS Query
+    // READ
     public Page<Product> searchProducts(String search, Pageable pageable) {
         return productQueryService.searchProducts(search, pageable);
     }
 
-    // UPDATE - CQRS Command
+    // UPDATE
     public Product updateProduct(Integer id, Product updated) {
         return productCommandService.updateProduct(id, updated);
     }
 
-    // DELETE - CQRS Command
+    // DELETE
     public void deleteProduct(Integer id) {
         productCommandService.deleteProduct(id);
     }
 
-    // READ - CQRS Query
+    // READ
     public List<? extends Product> filterProductsByType(String type) {
         return productQueryService.filterProductsByType(type);
     }

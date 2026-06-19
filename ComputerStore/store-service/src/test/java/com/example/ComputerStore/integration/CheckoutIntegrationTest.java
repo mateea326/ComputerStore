@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+// test de integrare pentru fluxul de finalizare comanda folosind mockmvc
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -57,6 +58,7 @@ public class CheckoutIntegrationTest {
         mockUser.setEmail("test@test.com");
     }
 
+    // verifica daca un utilizator neautentificat este redirectionat la login cand acceseaza checkout
     @Test
     void checkoutPage_Unauthenticated_RedirectsToLogin() throws Exception {
         mockMvc.perform(get("/checkout"))
@@ -64,6 +66,7 @@ public class CheckoutIntegrationTest {
                 .andExpect(redirectedUrlPattern("**/login"));
     }
 
+    // verifica daca un utilizator autentificat cu cosul gol este trimis inapoi la cos
     @Test
     @WithMockUser(username = "testuser", roles = {"USER"})
     void checkoutPage_Authenticated_EmptyCart_RedirectsToCart() throws Exception {
@@ -79,6 +82,7 @@ public class CheckoutIntegrationTest {
                 .andExpect(redirectedUrl("/cart"));
     }
 
+    // verifica daca se afiseaza corect pagina de checkout cand cosul contine produse
     @Test
     @WithMockUser(username = "testuser", roles = {"USER"})
     void checkoutPage_Authenticated_WithItems_ReturnsView() throws Exception {
@@ -106,6 +110,7 @@ public class CheckoutIntegrationTest {
                 .andExpect(model().attributeExists("total"));
     }
 
+    // verifica daca procesarea comenzii cu date valide redirectioneaza la istoricul de comenzi
     @Test
     @WithMockUser(username = "testuser", roles = {"USER"})
     void processCheckout_ValidCart_RedirectsToOrderHistory() throws Exception {
