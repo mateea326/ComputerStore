@@ -40,6 +40,7 @@ public class ProductCommandService {
         return saved;
     }
 
+    @Transactional
     @CacheEvict(value = {"products_all", "products_by_type", "product"}, allEntries = true)
     public Product updateProduct(Integer id, Product updated) {
         Product existing = productQueryService.getProductDetails(id);

@@ -72,3 +72,23 @@ docker compose -f docker-compose-monitoring.yml up -d
 For an in-depth view of the entities, relationship definitions, and business requirements: [MVP Requirements Document](ComputerStore/MVP_Requirements_Document.md).
 
 For a summary of how AI agents were used during development: [AI Usage Report](ComputerStore/AI_usage_report.md).
+
+## Team Contributions
+
+**Mateea**
+- Core backend: Order History, Shopping Cart, Wishlist, Sort and Pagination
+- Spring Security: CSRF protection, role-based authorization
+- Frontend and UI: Thymeleaf templates
+- Image upload and static file serving
+- API Gateway, Design Patterns (CQRS)
+- Docker containerization, CI/CD pipeline (GitHub Actions)
+- Unit tests and Integration tests (JUnit 5, Mockito)
+
+**Alexandra**
+- Centralized Configuration (Spring Cloud Config Server)
+- Service Discovery and Load Balancing (Eureka Server)
+- Eureka Load Balancing configuration
+- NoSQL and Caching (Redis integration)
+- Admin panel CRUD operations
+- Spring Security setup (authentication, roles)
+- ER Diagram design
