@@ -92,3 +92,12 @@ For a summary of how AI agents were used during development: [AI Usage Report](C
 - Admin panel CRUD operations
 - Spring Security setup (authentication, roles)
 - ER Diagram design
+
+## Screenshots
+
+![Products](screenshots/products.png)
+![Wishlist](screenshots/wishlist.png)
+![Cart](screenshots/cart.png)
+![Admin Panel](screenshots/admin_panel.png)
+![Admin Edit Product](screenshots/admin_edit.png)
+
