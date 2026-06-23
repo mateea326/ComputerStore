@@ -2,6 +2,7 @@ package com.example.ComputerStore.service;
 
 import com.example.ComputerStore.model.*;
 import com.example.ComputerStore.repo.*;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
@@ -43,7 +44,12 @@ public class ProductCommandService {
     @Transactional
     @CacheEvict(value = {"products_all", "products_by_type", "product"}, allEntries = true)
     public Product updateProduct(Integer id, Product updated) {
-        Product existing = productQueryService.getProductDetails(id);
+        // Hibernate.unproxy() returneaza subclasa reala pentru a evita ClassCastException cu JOINED inheritance
+        Product existing = (Product) Hibernate.unproxy(
+                productRepository.findById(id)
+                        .orElseThrow(() -> new com.example.ComputerStore.exception.ResourceNotFoundException("Product", "id", id))
+        );
+
         existing.setName(updated.getName());
         existing.setPrice(updated.getPrice());
         if (updated.getImageUrl() != null && !updated.getImageUrl().isBlank()) {

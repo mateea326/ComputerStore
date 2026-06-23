@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,6 +97,14 @@ public class GlobalExceptionHandler {
         mav.addObject("message", ex.getMessage());
         mav.setStatus(HttpStatus.BAD_REQUEST);
         return mav;
+    }
+
+    // favicon.ico si alte resurse statice lipsa sunt cerute automat de browser
+    // le tratam separat ca sa nu poluam log-ul cu false ERROR-uri
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Void> handleNoResourceFound(NoResourceFoundException ex) {
+        log.debug("Static resource not found: {}", ex.getMessage());
+        return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(Exception.class)

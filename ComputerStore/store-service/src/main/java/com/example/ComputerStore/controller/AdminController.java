@@ -1,9 +1,12 @@
 package com.example.ComputerStore.controller;
 
+import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.*;
+import com.example.ComputerStore.repo.ProductRepository;
 import com.example.ComputerStore.service.OrderService;
 import com.example.ComputerStore.service.ProductService;
 import com.example.ComputerStore.service.UserService;
+import org.hibernate.Hibernate;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,16 +37,19 @@ public class AdminController {
     private final ProductService productService;
     private final UserService userService;
     private final OrderService orderService;
+    private final ProductRepository productRepository;
 
     @Value("${upload.path:uploads/products}")
     private String uploadPath;
 
     public AdminController(ProductService productService,
                            UserService userService,
-                           OrderService orderService) {
+                           OrderService orderService,
+                           ProductRepository productRepository) {
         this.productService = productService;
         this.userService = userService;
         this.orderService = orderService;
+        this.productRepository = productRepository;
     }
 
     /**
@@ -221,7 +227,13 @@ public class AdminController {
 
     @GetMapping("/products/edit/{id}")
     public String editProductForm(@PathVariable Integer id, Model model) {
-        Product product = productService.getProductDetails(id);
+        // Hibernate.unproxy() forteaza initializarea si returneaza subclasa reala (Processor, GraphicsCard etc.)
+        // findById singur poate returna un HibernateProxy de tip Product generic cu JOINED inheritance
+        Product product = (Product) Hibernate.unproxy(
+                productRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id))
+        );
+
         model.addAttribute("product", product);
         String className = product.getClass().getName();
         String type = "processor";
