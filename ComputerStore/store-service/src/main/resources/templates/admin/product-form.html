@@ -15,10 +15,10 @@
         .form-card { background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
         .form-card h2 { margin-bottom: 20px; color: #333; }
         .error { background: #fee; color: #dc3580; padding: 12px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #dc3580; }
-        .type-selector { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-        .type-btn { padding: 10px 20px; border: 2px solid #7bb8b4; background: white; color: #7bb8b4; border-radius: 5px; text-decoration: none; font-weight: 600; transition: all 0.3s; }
-        .type-btn:hover, .type-btn.active { background: #7bb8b4; color: white; }
-        .type-btn.disabled { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #ccc; }
+        .type-selector { display: flex; background: #eef2f5; padding: 6px; border-radius: 12px; margin-bottom: 30px; gap: 5px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03); }
+        .type-btn { flex: 1; text-align: center; padding: 12px 5px; border: none; background: transparent; color: #6c7a89; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 14px; }
+        .type-btn:hover { color: #5a9e9a; background: rgba(123, 184, 180, 0.1); }
+        .type-btn.active { background: white; color: #7bb8b4; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transform: translateY(-1px); }
         .form-group { margin-bottom: 18px; }
         label { display: block; margin-bottom: 5px; color: #555; font-weight: 500; }
         input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; font-family: inherit; }
