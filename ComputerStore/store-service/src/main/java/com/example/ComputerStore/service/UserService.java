@@ -2,6 +2,7 @@ package com.example.ComputerStore.service;
 
 import com.example.ComputerStore.dto.UserRegistrationDTO;
 import com.example.ComputerStore.dto.UserResponseDTO;
+import com.example.ComputerStore.exception.DuplicateResourceException;
 import com.example.ComputerStore.exception.ResourceNotFoundException;
 import com.example.ComputerStore.model.User;
 import com.example.ComputerStore.client.UserServiceClient;
@@ -25,13 +26,16 @@ public class UserService {
     private final UserServiceClient userServiceClient;
     private final PasswordEncoder passwordEncoder;
     private final com.example.ComputerStore.repo.UserRepository userRepository;
+    private final jakarta.persistence.EntityManager entityManager;
 
     public UserService(UserServiceClient userServiceClient,
                        PasswordEncoder passwordEncoder,
-                       com.example.ComputerStore.repo.UserRepository userRepository) {
+                       com.example.ComputerStore.repo.UserRepository userRepository,
+                       jakarta.persistence.EntityManager entityManager) {
         this.userServiceClient = userServiceClient;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.entityManager = entityManager;
     }
 
     // MAPPER: Entity -> DTO raspuns (fara parola)
@@ -53,15 +57,21 @@ public class UserService {
     @Retry(name = "userService")
     public UserResponseDTO registerNewUser(UserRegistrationDTO registrationDTO) {
         log.info("Registering user via Feign Client: {}", registrationDTO.getUsername());
-        return userServiceClient.registerUser(registrationDTO);
+        try {
+            return userServiceClient.registerUser(registrationDTO);
+        } catch (feign.FeignException e) {
+            handleFeignException(e);
+            throw e;
+        }
     }
 
     // Fallback pentru registerNewUser
     public UserResponseDTO registerUserFallback(UserRegistrationDTO registrationDTO, Exception ex) {
+        if (ex instanceof ResourceNotFoundException || ex instanceof DuplicateResourceException || ex instanceof IllegalArgumentException) {
+            throw (RuntimeException) ex;
+        }
         log.error("[CIRCUIT BREAKER] registerNewUser fallback activat pentru user={}: {}", registrationDTO.getUsername(), ex.getMessage());
-        UserResponseDTO fallback = new UserResponseDTO();
-        fallback.setUsername("SERVICE_UNAVAILABLE");
-        return fallback;
+        throw new ResourceNotFoundException("Serviciul de inregistrare este temporar indisponibil. Va rugam sa incercati mai tarziu.");
     }
 
     // READ - autentificare manuala (folosit de API REST, nu de Spring Security)
@@ -73,6 +83,9 @@ public class UserService {
         User user = null;
         try {
             user = userServiceClient.getUserByUsernameInternal(username);
+        } catch (feign.FeignException e) {
+            handleFeignException(e);
+            throw e;
         } catch (Exception e) {
             throw new ResourceNotFoundException("Invalid username or password");
         }
@@ -92,6 +105,9 @@ public class UserService {
 
     // Fallback pentru login
     public UserResponseDTO loginFallback(String username, String password, Exception ex) {
+        if (ex instanceof ResourceNotFoundException || ex instanceof DuplicateResourceException || ex instanceof IllegalArgumentException) {
+            throw (RuntimeException) ex;
+        }
         log.error("[CIRCUIT BREAKER] login fallback activat pentru user={}: {}", username, ex.getMessage());
         throw new ResourceNotFoundException("Serviciul de autentificare este temporar indisponibil. Incercati din nou.");
     }
@@ -101,20 +117,24 @@ public class UserService {
     @Retry(name = "userService")
     public UserResponseDTO updateUser(Integer userId, UserRegistrationDTO updatedDetails) {
         log.info("Updating user id={} via Feign Client", userId);
-        return userServiceClient.updateUser(userId, updatedDetails);
+        try {
+            return userServiceClient.updateUser(userId, updatedDetails);
+        } catch (feign.FeignException e) {
+            handleFeignException(e);
+            throw e;
+        }
     }
 
     // Fallback pentru updateUser
     public UserResponseDTO updateUserFallback(Integer userId, UserRegistrationDTO updatedDetails, Exception ex) {
+        if (ex instanceof ResourceNotFoundException || ex instanceof DuplicateResourceException || ex instanceof IllegalArgumentException) {
+            throw (RuntimeException) ex;
+        }
         log.error("[CIRCUIT BREAKER] updateUser fallback activat pentru id={}: {}", userId, ex.getMessage());
-        UserResponseDTO fallback = new UserResponseDTO();
-        fallback.setUsername("SERVICE_UNAVAILABLE");
-        return fallback;
+        throw new ResourceNotFoundException("Serviciul de actualizare profil este temporar indisponibil.");
     }
 
     // READ - gasire utilizator dupa ID (pentru alte servicii)
-    @CircuitBreaker(name = "userService", fallbackMethod = "findUserByIdFallback")
-    @Retry(name = "userService")
     public User findUserById(Integer id) {
         log.info("Fetching user id={} from local DB", id);
         return userRepository.findById(id)
@@ -137,15 +157,45 @@ public class UserService {
     @Retry(name = "userService")
     public UserResponseDTO deleteUser(Integer id) {
         log.info("Deleting user id={} via Feign Client", id);
-        return userServiceClient.deleteUser(id);
+        try {
+            return userServiceClient.deleteUser(id);
+        } catch (feign.FeignException e) {
+            handleFeignException(e);
+            throw e;
+        }
     }
 
     // Fallback pentru deleteUser
     public UserResponseDTO deleteUserFallback(Integer id, Exception ex) {
+        if (ex instanceof ResourceNotFoundException || ex instanceof DuplicateResourceException || ex instanceof IllegalArgumentException) {
+            throw (RuntimeException) ex;
+        }
         log.error("[CIRCUIT BREAKER] deleteUser fallback activat pentru id={}: {}", id, ex.getMessage());
-        UserResponseDTO fallback = new UserResponseDTO();
-        fallback.setUsername("SERVICE_UNAVAILABLE");
-        return fallback;
+        throw new ResourceNotFoundException("Serviciul de stergere cont este temporar indisponibil.");
+    }
+
+    @Transactional
+    public void deleteUserDependencies(Integer userId) {
+        log.info("Deleting user dependencies in store-service for userId={}", userId);
+        entityManager.createNativeQuery("DELETE FROM computer_store.wishlist_products WHERE wishlist_id IN (SELECT wishlist_id FROM computer_store.wishlists WHERE user_id = :userId)")
+                .setParameter("userId", userId)
+                .executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM computer_store.wishlists WHERE user_id = :userId")
+                .setParameter("userId", userId)
+                .executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM computer_store.cart_items WHERE cart_id IN (SELECT cart_id FROM computer_store.carts WHERE user_id = :userId)")
+                .setParameter("userId", userId)
+                .executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM computer_store.carts WHERE user_id = :userId")
+                .setParameter("userId", userId)
+                .executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM computer_store.order_items WHERE order_id IN (SELECT order_id FROM computer_store.orders WHERE user_id = :userId)")
+                .setParameter("userId", userId)
+                .executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM computer_store.orders WHERE user_id = :userId")
+                .setParameter("userId", userId)
+                .executeUpdate();
+        entityManager.flush();
     }
 
     // READ - toti utilizatorii (fara paginare) prin Feign Client
@@ -153,11 +203,18 @@ public class UserService {
     @Retry(name = "userService")
     public List<User> getAllUsers() {
         log.info("Fetching all users via Feign Client");
-        return userServiceClient.getAllUsersList();
+        try {
+            return userServiceClient.getAllUsersList();
+        } catch (feign.FeignException e) {
+            throw e;
+        }
     }
 
     // Fallback pentru getAllUsers
     public List<User> getAllUsersFallback(Exception ex) {
+        if (ex instanceof ResourceNotFoundException || ex instanceof DuplicateResourceException || ex instanceof IllegalArgumentException) {
+            throw (RuntimeException) ex;
+        }
         log.error("[CIRCUIT BREAKER] getAllUsers fallback activat: {}", ex.getMessage());
         return Collections.emptyList();
     }
@@ -191,11 +248,54 @@ public class UserService {
     @Retry(name = "userService")
     public void changeUserRole(Integer userId, String newRole) {
         log.info("Changing role for user id={} to {} via Feign Client", userId, newRole);
-        userServiceClient.changeUserRole(userId, newRole);
+        try {
+            userServiceClient.changeUserRole(userId, newRole);
+        } catch (feign.FeignException e) {
+            handleFeignException(e);
+            throw e;
+        }
     }
 
     // Fallback pentru changeUserRole
     public void changeUserRoleFallback(Integer userId, String newRole, Exception ex) {
+        if (ex instanceof ResourceNotFoundException || ex instanceof DuplicateResourceException || ex instanceof IllegalArgumentException) {
+            throw (RuntimeException) ex;
+        }
         log.error("[CIRCUIT BREAKER] changeUserRole fallback activat pentru id={}: {}", userId, ex.getMessage());
+        throw new ResourceNotFoundException("Serviciul de modificare rol este temporar indisponibil.");
+    }
+
+    private void handleFeignException(feign.FeignException e) {
+        int status = e.status();
+        String body = e.contentUTF8();
+        log.warn("Feign exception caught: status={}, body={}", status, body);
+        String message = extractMessageFromJson(body);
+        if (message == null || message.isEmpty()) {
+            message = e.getMessage();
+        }
+        if (status == 409) {
+            throw new DuplicateResourceException(message);
+        } else if (status == 404) {
+            throw new ResourceNotFoundException(message);
+        } else if (status >= 400 && status < 500) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    private String extractMessageFromJson(String json) {
+        if (json == null || json.isEmpty()) return null;
+        try {
+            int msgIndex = json.indexOf("\"message\":\"");
+            if (msgIndex != -1) {
+                int start = msgIndex + 11;
+                int end = json.indexOf("\"", start);
+                if (end != -1) {
+                    return json.substring(start, end);
+                }
+            }
+        } catch (Exception e) {
+            // ignore JSON parse errors
+        }
+        return null;
     }
 }

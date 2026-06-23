@@ -98,11 +98,11 @@ public class OrderService {
             Map<String, Object> notificationPayload = new HashMap<>();
             notificationPayload.put("recipient", user.getEmail());
             notificationPayload.put("type", "EMAIL");
-            notificationPayload.put("message", "Comanda ta cu ID-ul " + savedOrder.getOrderId() + " a fost inregistrata cu succes! Total: " + savedOrder.getTotalPrice() + " RON.");
+            notificationPayload.put("message", "Your order with ID " + savedOrder.getOrderId() + " has been successfully registered! Total: " + savedOrder.getTotalPrice() + " USD.");
             notificationServiceClient.sendNotification(notificationPayload);
             log.info("Notification sent for order: id={}", savedOrder.getOrderId());
         } catch (Exception e) {
-            log.error("Nu s-a putut trimite notificarea pentru comanda ID={}: {}", savedOrder.getOrderId(), e.getMessage());
+            log.error("Failed to send notification for order ID={}: {}", savedOrder.getOrderId(), e.getMessage());
         }
 
         return savedOrder;

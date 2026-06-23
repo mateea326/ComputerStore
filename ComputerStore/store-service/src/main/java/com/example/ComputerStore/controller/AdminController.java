@@ -6,6 +6,9 @@ import com.example.ComputerStore.repo.ProductRepository;
 import com.example.ComputerStore.service.OrderService;
 import com.example.ComputerStore.service.ProductService;
 import com.example.ComputerStore.service.UserService;
+import com.example.ComputerStore.repo.CartRepository;
+import com.example.ComputerStore.repo.WishlistRepository;
+import com.example.ComputerStore.repo.OrderRepository;
 import org.hibernate.Hibernate;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -38,6 +41,9 @@ public class AdminController {
     private final UserService userService;
     private final OrderService orderService;
     private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final WishlistRepository wishlistRepository;
+    private final OrderRepository orderRepository;
 
     @Value("${upload.path:uploads/products}")
     private String uploadPath;
@@ -45,11 +51,17 @@ public class AdminController {
     public AdminController(ProductService productService,
                            UserService userService,
                            OrderService orderService,
-                           ProductRepository productRepository) {
+                           ProductRepository productRepository,
+                           CartRepository cartRepository,
+                           WishlistRepository wishlistRepository,
+                           OrderRepository orderRepository) {
         this.productService = productService;
         this.userService = userService;
         this.orderService = orderService;
         this.productRepository = productRepository;
+        this.cartRepository = cartRepository;
+        this.wishlistRepository = wishlistRepository;
+        this.orderRepository = orderRepository;
     }
 
     /**
@@ -377,6 +389,14 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error", "Admin accounts cannot be deleted!");
             return "redirect:/admin/users";
         }
+        
+        try {
+            // Stergem dependentele locale inainte sa cerem stergerea user-ului pentru a evita Foreign Key Constraints
+            userService.deleteUserDependencies(id);
+        } catch (Exception e) {
+            log.error("Error deleting user dependencies locally: {}", e.getMessage());
+        }
+
         userService.deleteUser(id);
         log.info("Admin deleted user: id={}", id);
         redirectAttributes.addFlashAttribute("success", "User deleted successfully!");

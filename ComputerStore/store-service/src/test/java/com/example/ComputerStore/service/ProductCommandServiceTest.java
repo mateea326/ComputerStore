@@ -55,7 +55,7 @@ public class ProductCommandServiceTest {
         updated.setPrice(200.0f);
         updated.setCoreCount(8);
 
-        when(productQueryService.getProductDetails(1)).thenReturn(existing);
+        when(productRepository.findById(1)).thenReturn(java.util.Optional.of(existing));
         when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product result = productCommandService.updateProduct(1, updated);
@@ -65,7 +65,7 @@ public class ProductCommandServiceTest {
         assertEquals(200.0, result.getPrice());
         assertEquals(8, ((Processor) result).getCoreCount());
         
-        verify(productQueryService, times(1)).getProductDetails(1);
+        verify(productRepository, times(1)).findById(1);
         verify(productRepository, times(1)).save(existing);
     }
 
@@ -78,7 +78,7 @@ public class ProductCommandServiceTest {
         updated.setName("RTX");
         updated.setMemorySize(8);
 
-        when(productQueryService.getProductDetails(2)).thenReturn(existing);
+        when(productRepository.findById(2)).thenReturn(java.util.Optional.of(existing));
         when(productRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product result = productCommandService.updateProduct(2, updated);
@@ -95,7 +95,7 @@ public class ProductCommandServiceTest {
         Motherboard updated = new Motherboard();
         updated.setSlots(4);
 
-        when(productQueryService.getProductDetails(3)).thenReturn(existing);
+        when(productRepository.findById(3)).thenReturn(java.util.Optional.of(existing));
         when(productRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product result = productCommandService.updateProduct(3, updated);
@@ -112,7 +112,7 @@ public class ProductCommandServiceTest {
         Case updated = new Case();
         updated.setType("ATX");
 
-        when(productQueryService.getProductDetails(4)).thenReturn(existing);
+        when(productRepository.findById(4)).thenReturn(java.util.Optional.of(existing));
         when(productRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product result = productCommandService.updateProduct(4, updated);
@@ -130,7 +130,7 @@ public class ProductCommandServiceTest {
         Processor updated = new Processor();
         updated.setImageUrl("new.jpg");
 
-        when(productQueryService.getProductDetails(1)).thenReturn(existing);
+        when(productRepository.findById(1)).thenReturn(java.util.Optional.of(existing));
         when(productRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product result = productCommandService.updateProduct(1, updated);

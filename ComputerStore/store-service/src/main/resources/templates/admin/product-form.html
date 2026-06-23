@@ -44,10 +44,10 @@
     <div class="form-card">
         <h2 th:text="${isEdit ? 'Product Details' : 'Select Product Type'}"></h2>
         <div class="type-selector" th:if="${!isEdit}">
-            <a href="/admin/products/add?type=processor" class="type-btn" th:classappend="${productType == 'processor'} ? 'active' : ''">Processor</a>
-            <a href="/admin/products/add?type=gpu" class="type-btn" th:classappend="${productType == 'gpu'} ? 'active' : ''">Graphics Card</a>
-            <a href="/admin/products/add?type=motherboard" class="type-btn" th:classappend="${productType == 'motherboard'} ? 'active' : ''">Motherboard</a>
-            <a href="/admin/products/add?type=case" class="type-btn" th:classappend="${productType == 'case'} ? 'active' : ''">Case</a>
+            <a th:href="@{/admin/products/add?type=processor}" class="type-btn" th:classappend="${productType == 'processor'} ? 'active' : ''">Processor</a>
+            <a th:href="@{/admin/products/add?type=gpu}" class="type-btn" th:classappend="${productType == 'gpu'} ? 'active' : ''">Graphics Card</a>
+            <a th:href="@{/admin/products/add?type=motherboard}" class="type-btn" th:classappend="${productType == 'motherboard'} ? 'active' : ''">Motherboard</a>
+            <a th:href="@{/admin/products/add?type=case}" class="type-btn" th:classappend="${productType == 'case'} ? 'active' : ''">Case</a>
         </div>
         <div th:if="${isEdit}" style="margin-bottom: 20px; color: #666;">
             Editing <strong th:text="${productType.toUpperCase()}"></strong>: <span th:text="${product.name}"></span>
@@ -55,7 +55,7 @@
 
         <!-- Processor Form -->
         <form th:if="${productType == 'processor'}" method="post" enctype="multipart/form-data"
-              th:action="${isEdit ? '/admin/products/edit/processor/' + product.productId : '/admin/products/add/processor'}" 
+              th:action="@{${isEdit ? '/admin/products/edit/processor/' + product.productId : '/admin/products/add/processor'}}"
               th:object="${product}">
             <div class="form-group">
                 <label for="name">Name *</label>
@@ -91,7 +91,7 @@
 
         <!-- Graphics Card Form -->
         <form th:if="${productType == 'gpu'}" method="post" enctype="multipart/form-data"
-              th:action="${isEdit ? '/admin/products/edit/gpu/' + product.productId : '/admin/products/add/gpu'}" 
+              th:action="@{${isEdit ? '/admin/products/edit/gpu/' + product.productId : '/admin/products/add/gpu'}}"
               th:object="${product}">
             <div class="form-group">
                 <label for="name">Name *</label>
@@ -126,7 +126,7 @@
 
         <!-- Motherboard Form -->
         <form th:if="${productType == 'motherboard'}" method="post" enctype="multipart/form-data"
-              th:action="${isEdit ? '/admin/products/edit/motherboard/' + product.productId : '/admin/products/add/motherboard'}" 
+              th:action="@{${isEdit ? '/admin/products/edit/motherboard/' + product.productId : '/admin/products/add/motherboard'}}"
               th:object="${product}">
             <div class="form-group">
                 <label for="name">Name *</label>
@@ -161,7 +161,7 @@
 
         <!-- Case Form -->
         <form th:if="${productType == 'case'}" method="post" enctype="multipart/form-data"
-              th:action="${isEdit ? '/admin/products/edit/case/' + product.productId : '/admin/products/add/case'}" 
+              th:action="@{${isEdit ? '/admin/products/edit/case/' + product.productId : '/admin/products/add/case'}}"
               th:object="${product}">
             <div class="form-group">
                 <label for="name">Name *</label>
@@ -194,7 +194,7 @@
             <button type="submit" th:text="${isEdit ? 'Update Case' : 'Add Case'}"></button>
         </form>
         
-        <a href="/admin/products" class="back-link">← Back to Products</a>
+        <a th:href="@{/admin/products}" class="back-link">← Back to Products</a>
     </div>
 </div>
 

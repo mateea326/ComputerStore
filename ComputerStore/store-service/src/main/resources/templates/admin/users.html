@@ -46,7 +46,7 @@
 
     <div class="header-row">
         <h2>All Users</h2>
-        <form id="pageSizeForm" method="get" action="/admin/users" style="display: flex; align-items: center; gap: 10px;">
+        <form id="pageSizeForm" method="get" th:action="@{/admin/users}" style="display: flex; align-items: center; gap: 10px;">
             <input type="hidden" name="sortBy" th:value="${sortBy}">
             <input type="hidden" name="direction" th:value="${direction}">
             <label for="size" style="font-weight: 600; margin: 0;">Per page:</label>
