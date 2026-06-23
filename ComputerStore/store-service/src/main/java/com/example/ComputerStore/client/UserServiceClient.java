@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 // daca user-service este offline, se va folosi clasa de fallback.
 
 // il folosim ca sa simplificam apelurile http intre servicii fara sa scriem cod manual de retea
-@FeignClient(name = "user-service", fallback = UserServiceFallback.class)
+@FeignClient(name = "user-service")
 public interface UserServiceClient {
 
     // obtine detaliile unui utilizator dupa id direct din user-service pentru uz intern

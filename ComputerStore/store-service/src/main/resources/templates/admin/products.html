@@ -76,10 +76,10 @@
                 <td th:text="${product.productId}"></td>
                 <td style="text-align: center;">
                     <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" alt="Product" style="height: 40px; border-radius: 4px;">
-                    <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Processor')}" src="/images/processor.jpg" alt="Processor" style="height: 40px; border-radius: 4px;">
-                    <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'GraphicsCard')}" src="/images/graphics_card.jpg" alt="Graphics Card" style="height: 40px; border-radius: 4px;">
-                    <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Motherboard')}" src="/images/motherboard.jpg" alt="Motherboard" style="height: 40px; border-radius: 4px;">
-                    <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" src="/images/case.jpg" alt="Case" style="height: 40px; border-radius: 4px;">
+                    <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Processor')}" th:src="@{/images/processor.jpg}" alt="Processor" style="height: 40px; border-radius: 4px;">
+                    <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'GraphicsCard')}" th:src="@{/images/graphics_card.jpg}" alt="Graphics Card" style="height: 40px; border-radius: 4px;">
+                    <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Motherboard')}" th:src="@{/images/motherboard.jpg}" alt="Motherboard" style="height: 40px; border-radius: 4px;">
+                    <img th:if="${product.imageUrl == null and #strings.contains(product.class.name, 'Case')}" th:src="@{/images/case.jpg}" alt="Case" style="height: 40px; border-radius: 4px;">
                 </td>
                 <td>
                     <div style="font-weight: 600;" th:text="${product.name}"></div>

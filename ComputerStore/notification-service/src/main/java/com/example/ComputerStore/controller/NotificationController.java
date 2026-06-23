@@ -14,10 +14,10 @@ public class NotificationController {
 
     @PostMapping("/send")
     public ResponseEntity<String> sendNotification(@RequestBody NotificationRequest request) {
-        log.info("[NOTIFICATION SERVICE] Se trimite notificare tip [{}] catre '{}': {}", 
+        log.info("[NOTIFICATION SERVICE] Sending notification of type [{}] to '{}': {}", 
                  request.getType(), request.getRecipient(), request.getMessage());
         
         // Simulam trimiterea cu succes si raspundem cu HTTP 200 OK
-        return ResponseEntity.ok("Notificare trimisa cu succes catre " + request.getRecipient());
+        return ResponseEntity.ok("Notification sent successfully to " + request.getRecipient());
     }
 }

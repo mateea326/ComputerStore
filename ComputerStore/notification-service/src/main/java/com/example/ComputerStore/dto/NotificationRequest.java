@@ -1,7 +1,5 @@
 package com.example.ComputerStore.dto;
 
-import lombok.Data;
-
 public class NotificationRequest {
     private String recipient;
     private String type;

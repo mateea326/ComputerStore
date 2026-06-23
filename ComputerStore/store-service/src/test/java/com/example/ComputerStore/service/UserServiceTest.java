@@ -25,6 +25,9 @@ class UserServiceTest {
     @Mock
     private com.example.ComputerStore.repo.UserRepository userRepository;
 
+    @Mock
+    private jakarta.persistence.EntityManager entityManager;
+
     private UserService userService;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -32,7 +35,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userServiceClient, passwordEncoder, userRepository);
+        userService = new UserService(userServiceClient, passwordEncoder, userRepository, entityManager);
         
         testUser = new User();
         testUser.setUserId(1);
@@ -156,11 +159,12 @@ class UserServiceTest {
     }
 
     @Test
-    void registerUserFallback_Success() {
+    void registerUserFallback_ThrowsException() {
         UserRegistrationDTO dto = new UserRegistrationDTO();
         dto.setUsername("user");
-        UserResponseDTO response = userService.registerUserFallback(dto, new RuntimeException("Service Down"));
-        assertEquals("SERVICE_UNAVAILABLE", response.getUsername());
+        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, () -> {
+            userService.registerUserFallback(dto, new RuntimeException("Service Down"));
+        });
     }
 
     @Test
@@ -171,9 +175,10 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUserFallback_Success() {
-        UserResponseDTO response = userService.updateUserFallback(1, new UserRegistrationDTO(), new RuntimeException("Service Down"));
-        assertEquals("SERVICE_UNAVAILABLE", response.getUsername());
+    void updateUserFallback_ThrowsException() {
+        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, () -> {
+            userService.updateUserFallback(1, new UserRegistrationDTO(), new RuntimeException("Service Down"));
+        });
     }
 
     @Test
@@ -184,9 +189,10 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteUserFallback_Success() {
-        UserResponseDTO response = userService.deleteUserFallback(1, new RuntimeException("Service Down"));
-        assertEquals("SERVICE_UNAVAILABLE", response.getUsername());
+    void deleteUserFallback_ThrowsException() {
+        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, () -> {
+            userService.deleteUserFallback(1, new RuntimeException("Service Down"));
+        });
     }
 
     @Test
@@ -196,8 +202,10 @@ class UserServiceTest {
     }
 
     @Test
-    void changeUserRoleFallback_Success() {
-        assertDoesNotThrow(() -> userService.changeUserRoleFallback(1, "ADMIN", new RuntimeException("Service Down")));
+    void changeUserRoleFallback_ThrowsException() {
+        assertThrows(com.example.ComputerStore.exception.ResourceNotFoundException.class, () -> {
+            userService.changeUserRoleFallback(1, "ADMIN", new RuntimeException("Service Down"));
+        });
     }
 
     @Test
