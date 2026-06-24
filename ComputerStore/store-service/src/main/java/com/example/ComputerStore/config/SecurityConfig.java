@@ -48,23 +48,45 @@ public class SecurityConfig {
                 // dezactiveaza protectia csrf pentru login register si apelurile de tip rest api
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-                .ignoringRequestMatchers("/login", "/register", "/api/**", "/swagger-ui/**", "/v3/api-docs/**", "/cart/**", "/wishlist/**", "/order-history/**", "/account-settings/**", "/checkout/**", "/admin/**")
+                .ignoringRequestMatchers(
+                    AntPathRequestMatcher.antMatcher("/login"),
+                    AntPathRequestMatcher.antMatcher("/register"),
+                    AntPathRequestMatcher.antMatcher("/api/**"),
+                    AntPathRequestMatcher.antMatcher("/api/store/**"),
+                    AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
+                    AntPathRequestMatcher.antMatcher("/v3/api-docs/**"),
+                    AntPathRequestMatcher.antMatcher("/cart/**"),
+                    AntPathRequestMatcher.antMatcher("/wishlist/**"),
+                    AntPathRequestMatcher.antMatcher("/order-history/**"),
+                    AntPathRequestMatcher.antMatcher("/account-settings/**"),
+                    AntPathRequestMatcher.antMatcher("/checkout/**"),
+                    AntPathRequestMatcher.antMatcher("/admin/**")
+                )
             )
             // seteaza modul stateless pentru sesiuni deoarece folosim tokenuri jwt
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             // defineste regulile de acces pe baza de roluri pentru rutele din aplicatie
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/register", "/login", "/", "/css/**", "/js/**", "/images/**", "/error").permitAll()
-                .requestMatchers("/actuator", "/actuator/**").permitAll()
-                .requestMatchers("/api/v1/users/register", "/api/v1/users/login").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/products/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/v1/products/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/products/**").permitAll()
-                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/v1/users/**").authenticated()
-                .requestMatchers("/api/v1/orders/**").authenticated()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/register")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/login")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/js/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/images/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/products/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/error")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/register")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/login")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN")
+                .requestMatchers(AntPathRequestMatcher.antMatcher(org.springframework.http.HttpMethod.POST, "/api/v1/products/**")).hasRole("ADMIN")
+                .requestMatchers(AntPathRequestMatcher.antMatcher(org.springframework.http.HttpMethod.PUT, "/api/v1/products/**")).hasRole("ADMIN")
+                .requestMatchers(AntPathRequestMatcher.antMatcher(org.springframework.http.HttpMethod.DELETE, "/api/v1/products/**")).hasRole("ADMIN")
+                .requestMatchers(AntPathRequestMatcher.antMatcher(org.springframework.http.HttpMethod.GET, "/api/v1/products/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher(org.springframework.http.HttpMethod.DELETE, "/api/v1/users/**")).hasRole("ADMIN")
+                .requestMatchers(AntPathRequestMatcher.antMatcher(org.springframework.http.HttpMethod.PUT, "/api/v1/users/**")).authenticated()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/orders/**")).authenticated()
                 .anyRequest().authenticated()
             )
             // configureaza pagina si handlerul de login

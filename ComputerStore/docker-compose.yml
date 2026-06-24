@@ -128,6 +128,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/computer_store?currentSchema=computer_store
       SPRING_DATA_REDIS_HOST: redis
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+    volumes:
+      - ../uploads:/app/uploads
 
   # ── API Gateway ──
   api-gateway:
