@@ -40,6 +40,9 @@ public class CheckoutIntegrationTest {
     @org.springframework.boot.test.mock.mockito.MockBean
     private com.example.ComputerStore.client.UserServiceClient userServiceClient;
 
+    @org.springframework.boot.test.mock.mockito.MockBean
+    private com.example.ComputerStore.client.NotificationServiceClient notificationServiceClient;
+
     private int savedUserId;
     private int savedProductId;
 

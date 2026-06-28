@@ -17,21 +17,9 @@ jobs:
   build-and-test:
     name: Build & Test All Microservices
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_DB: computer_store
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    defaults:
+      run:
+        working-directory: ./ComputerStore
 
     steps:
       - name: Checkout code
@@ -52,13 +40,14 @@ jobs:
 
       - name: Generate JaCoCo coverage report
         run: ./mvnw jacoco:report --batch-mode -pl store-service
+        if: always()
 
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-report
-          path: store-service/target/site/jacoco/
+          path: ComputerStore/store-service/target/site/jacoco/
           retention-days: 14
 
       - name: Package all modules (create JARs)
@@ -69,6 +58,9 @@ jobs:
     name: Build Docker Images
     runs-on: ubuntu-latest
     needs: build-and-test
+    defaults:
+      run:
+        working-directory: ./ComputerStore
 
     steps:
       - name: Checkout code
@@ -102,6 +94,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker-build
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    defaults:
+      run:
+        working-directory: ./ComputerStore
 
     steps:
       - name: Checkout code

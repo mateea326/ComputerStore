@@ -46,11 +46,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Micrometer Prometheus (for metrics) -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

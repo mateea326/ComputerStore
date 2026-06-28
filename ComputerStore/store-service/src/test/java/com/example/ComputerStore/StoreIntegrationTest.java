@@ -37,6 +37,9 @@ public class StoreIntegrationTest {
     @org.springframework.boot.test.mock.mockito.MockBean
     private com.example.ComputerStore.client.UserServiceClient userServiceClient;
 
+    @org.springframework.boot.test.mock.mockito.MockBean
+    private com.example.ComputerStore.client.NotificationServiceClient notificationServiceClient;
+
     private int savedUserId;
 
     @BeforeEach
@@ -88,7 +91,7 @@ public class StoreIntegrationTest {
     void testUnauthenticatedRedirect() throws Exception {
         mockMvc.perform(get("/products"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test
